@@ -6,7 +6,6 @@ import {updateRegDataPostQuery} from "./Registration.reducer";
 
 const Registration = (registration) => {
 
-    debugger;
     const dispatch = useDispatch();
 
     const changeFio = (fioInput) => {

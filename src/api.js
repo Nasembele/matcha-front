@@ -24,7 +24,6 @@ const instance = axios.create(
 export const usersAPI = {
 
     createAccount(registration) {
-        debugger;
         return instance.post('registration', registration.registration)
     },
 

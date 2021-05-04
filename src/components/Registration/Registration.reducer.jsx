@@ -18,7 +18,6 @@ export default function RegistrationReducer(state = initialState, action) {
 }
 
 export const updateRegDataPostQuery = (registration) => (dispatch) => {
-    debugger;
     usersAPI.createAccount(registration)
         .then(response => {
             dispatch(setUserAccount(response.data));
