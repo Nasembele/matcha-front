@@ -17,11 +17,11 @@ function App() {
 
             {/*<div className='app-wrapper'>*/}
             {/*    /!*<HeaderContainer/>*!/*/}
-            {/*    <Navbar/>*/}
-            {/*    <div className='app-wrapper-content'>*/}
-            {/*        <Route path='/login' render={() => <Login/>}/>*/}
-            {/*        <Route path='/registration' render={() => <Registration/>}/>*/}
-            {/*    </div>*/}
+            {/*    /!*<Navbar/>*!/*/}
+                <div className='app-wrapper-content'>
+                    <Route path='/login' render={() => <Login/>}/>
+                    <Route path='/registration' render={() => <Registration/>}/>
+                </div>
             {/*</div>*/}
         </BrowserRouter>
     );
