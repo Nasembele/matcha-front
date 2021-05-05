@@ -19,7 +19,23 @@ const Registration = (registration) => {
     return (
         <div className={style.wraper}>
             <div>
-                <label>ФИО   </label>
+                <label>Фамилия   </label>
+                <input type={'text'} onChange={changeFio} value={registration.fio}/>
+            </div>
+            <div>
+                <label>Имя   </label>
+                <input type={'text'} onChange={changeFio} value={registration.fio}/>
+            </div>
+            <div>
+                <label>Отчество   </label>
+                <input type={'text'} onChange={changeFio} value={registration.fio}/>
+            </div>
+            <div>
+                <label>Отчество   </label>
+                <input type={'text'} onChange={changeFio} value={registration.fio}/>
+            </div>
+            <div>
+                <label>email   </label>
                 <input type={'text'} onChange={changeFio} value={registration.fio}/>
             </div>
             <p>email</p>

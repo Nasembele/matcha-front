@@ -9,8 +9,10 @@ import thunkMiddleware from 'redux-thunk';
 import RegistrationReducer from "./components/Registration/Registration.reducer";
 import {Provider} from 'react-redux';
 import {composeWithDevTools} from "redux-devtools-extension";
+import LoginReducer from "./components/Login/Login.reducer";
 
 let reducers = combineReducers({
+    login: LoginReducer,
     registration: RegistrationReducer,
 });
 

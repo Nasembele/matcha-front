@@ -1,0 +1,37 @@
+.html {
+    /*// height: 100vh;*/
+}
+
+.header {
+    height: 90px;
+    background-color: #e84a67;
+}
+
+.body {
+    background-image: url('./images/slide.jpg');
+    height: calc(100vh - 90px);
+    /*width: 500px;*/
+    /*//height: 100vh;*/
+    /*width: 100%;*/
+    background-size: cover;
+}
+
+.content {
+    float: right !important;
+    width: 370px;
+    height: 500px;
+    background-color: white;
+    margin-top: 150px;
+    margin-right: 265px;
+}
+
+.title {
+    color: #e84a67;
+    font-size: 35px;
+    text-align: center;
+}
+
+.form_header {
+    font-size: 15px;
+    margin-bottom: 5px;
+}
