@@ -4,23 +4,23 @@ import React from 'react';
 import {BrowserRouter, Route} from 'react-router-dom';
 
 import Navbar from "./components/Navbar/Navbar";
-import Registration from "./components/Registration/RegistrationPropsContainer";
 import Login from "./components/Login/LoginPropsContainer";
+import ResetPassword from "./components/Login/ResetPassword/ResetPasswordPropsContainer";
+import {Redirect} from "react-router";
 
 
 function App() {
     return (
         <BrowserRouter>
             {/*авторизация пройдена?*/}
-            <Login/>
-
-
+            {/*<Login/>*/}
+            {/*<Redirect to={'/login'}/>*/}
+            {/*какое-то условие для проверки*/}
             <div className='app-wrapper'>
-                {/*<HeaderContainer/>*/}
                 {/*<Navbar/>*/}
                 <div className='app-wrapper-content'>
                     <Route path='/login' render={() => <Login/>}/>
-                    <Route path='/registration' render={() => <Registration/>}/>
+                    <Route path='/resetpasschange' render={() => <ResetPassword/>}/>
                     <Route path='/main' render={() => <div>main page</div>}/>
                 </div>
             </div>

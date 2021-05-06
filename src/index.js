@@ -3,17 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {applyMiddleware, combineReducers, createStore, compose} from "redux";
+import {applyMiddleware, combineReducers, createStore} from "redux";
 import thunkMiddleware from 'redux-thunk';
 //import Provider from "react-redux/lib/components/Provider";
-import RegistrationReducer from "./components/Registration/Registration.reducer";
 import {Provider} from 'react-redux';
 import {composeWithDevTools} from "redux-devtools-extension";
 import LoginReducer from "./components/Login/Login.reducer";
 
 let reducers = combineReducers({
     login: LoginReducer,
-    registration: RegistrationReducer,
 });
 
 const composeEnhancers = composeWithDevTools({});

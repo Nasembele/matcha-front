@@ -1,6 +1,4 @@
 import axios from "axios";
-import {setUserAccount} from "./components/Registration/RegistrationAC";
-import {Redirect} from "react-router";
 import {setIsAuthAC} from "./components/Login/LoginAC";
 
 const instance = axios.create(
@@ -27,11 +25,19 @@ const instance = axios.create(
 export const usersAPI = {
 
     signIn(login) {
-            return instance.post('login', login)
-        },
+        return instance.post('login', login)
+    },
 
-    createAccount(registration) {
-        return instance.post('registration', registration.registration)
+    recoveryPassword(email) {
+        return instance.post('resetpassend', email)
+    },
+
+    resetPassword(resetPass) {
+        return instance.post('resetpasschange', resetPass)
+    },
+
+    createAccount(regData) {
+        return instance.post('registration', regData)
     },
 
     // fetch('http://localhost:8080/registration', {
@@ -46,7 +52,7 @@ export const usersAPI = {
     //     return instance.post(`follow/${userId}`)
     // },
 
-   // getUsers  (currentPage = 1, pageSize = 10)  {
+    // getUsers  (currentPage = 1, pageSize = 10)  {
 
     //     return (instance.get(`users?page=${currentPage}&count=${pageSize}`,
     //     ))
@@ -73,4 +79,22 @@ export const signInPostQuery = (login) => (dispatch) => {
         .catch(() => {
             dispatch(setIsAuthAC(true));
         });
+}
+
+export const recoveryPasswordPostQuery = (email) => (dispatch) => {
+    usersAPI.recoveryPassword(email) //валидация на успешный ответ и на появление сообщения
+        .then(response => {})
+        .catch(() => {});
+}
+
+export const resetPasswordPostQuery = (resetPass) => (dispatch) => {
+    usersAPI.resetPassword(resetPass)
+        .then(response => {}) //валидация на успешный ответ и на появление сообщения
+        .catch(() => {});
+}
+
+export const updateRegDataPostQuery = (regData) => (dispatch) => {
+    usersAPI.createAccount(regData)
+        .then(response => {}) //валидация на успешный ответ и на появление сообщения
+        .catch(() => {});
 }
