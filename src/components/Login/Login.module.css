@@ -4,7 +4,7 @@
 
 .header {
     height: 90px;
-    background-color: #e84a67;
+    background-color: #f52758;
 }
 
 .body {
@@ -16,22 +16,45 @@
     background-size: cover;
 }
 
-.content {
+.whole_form {
     float: right !important;
     width: 370px;
     height: 500px;
     background-color: white;
-    margin-top: 150px;
-    margin-right: 265px;
+    margin-top: 22vh;
+    margin-right: 17vw;
 }
 
 .title {
     color: #e84a67;
     font-size: 35px;
     text-align: center;
+    font-weight: bold;
 }
 
 .form_header {
     font-size: 15px;
-    margin-bottom: 5px;
+    margin-bottom: 7px;
+    margin-top: 7px;
+}
+
+.form_input {
+    width: 100%;
+}
+
+.content {
+    padding: 0 30px 20px;
+}
+
+.button {
+    color: #ffffff;
+    display: inline-block;
+    background: #f52758;
+    border-radius: 5px;
+    font-size: 19px;
+    line-height: 22px;
+    padding: 10px 18px 14px 20px;
+    font-weight: bold;
+    border: 1px solid #f52758;
+    margin-top: 15px;
 }

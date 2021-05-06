@@ -20,13 +20,26 @@ export const Login = (login) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        // dispatch(signIn(login))
-        //     .then(() => {
-        //         setIsSuccessSubmit(true);
-        //     })
-        //     .catch(() => {
-        //         setIsSuccessSubmit(false);
-        //     })
+//         dispatch(userAPI.signIn(login))
+//             .then(() => {
+//                 setIsSuccessSubmit(true);
+//           //
+ //
+//             .catch(() => {
+//                 setIsSuccessSubmit(false);
+//
+
+
+            const signIn = (login) => (dispatch) => {
+                usersAPI.signIn(login)
+                    .then(response => {
+                        alert('ок');
+                       // dispatch(setUserAccount(response.data));
+                    })
+                    .catch(() => {
+                        alert('error');
+                    });
+
     };
 
     // if (login.login) {
@@ -36,21 +49,23 @@ export const Login = (login) => {
         <div>
             <header className={style.header}>Матча</header>
             <body className={style.body}>
-            <div className={style.content}>
-                <h1 className={style.title}>Join and start dating today!</h1>
+            <div className={style.whole_form}>
+                <p className={style.title}>Join and start dating today!</p>
+                <div className={style.content}>
                 <form onSubmit={onSubmit}>
-                    <div className={style.form_header}>Login</div>
-                    <input type={'text'} onChange={changeLogin}/>
-                    <div className={style.form_header}>Password</div>
-                    <input type={'password'} onChange={changePassword}/>
-                    <button type={'submit'}>
-                        Log In
-                    </button>
+                    <div className={style.form_header}>Логин</div>
+                    <input type={'text'} onChange={changeLogin} className={style.form_input}/>
+                    <div className={style.form_header}>Пароль</div>
+                    <input type={'password'} onChange={changePassword} className={style.form_input}/>
+                    <div>
+                        <button type={'submit'} className={style.button}>
+                            Войти
+                        </button>
+                    </div>
                 </form>
+                </div>
             </div>
             </body>
         </div>
     )
 }
-
-export default Login;

@@ -23,6 +23,10 @@ const instance = axios.create(
 
 export const usersAPI = {
 
+    signIn(login) {
+            return instance.post('login', login)
+        },
+
     createAccount(registration) {
         return instance.post('registration', registration.registration)
     },
