@@ -15,14 +15,15 @@ function App() {
             <Login/>
 
 
-            {/*<div className='app-wrapper'>*/}
-            {/*    /!*<HeaderContainer/>*!/*/}
-            {/*    /!*<Navbar/>*!/*/}
+            <div className='app-wrapper'>
+                {/*<HeaderContainer/>*/}
+                {/*<Navbar/>*/}
                 <div className='app-wrapper-content'>
                     <Route path='/login' render={() => <Login/>}/>
                     <Route path='/registration' render={() => <Registration/>}/>
+                    <Route path='/main' render={() => <div>main page</div>}/>
                 </div>
-            {/*</div>*/}
+            </div>
         </BrowserRouter>
     );
 }

@@ -5,8 +5,9 @@ import {changeLoginAC, changePasswordAC} from "./LoginAC";
 import {Route} from "react-router-dom";
 import Registration from "../Registration/RegistrationPropsContainer";
 import {Redirect} from "react-router";
+import {signInPostQuery, usersAPI} from "../../api";
 
-export const Login = (login) => {
+const Login = (login) => {
 
     const dispatch = useDispatch();
 
@@ -18,33 +19,14 @@ export const Login = (login) => {
         dispatch(changePasswordAC(password.target.value));
     };
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-//         dispatch(userAPI.signIn(login))
-//             .then(() => {
-//                 setIsSuccessSubmit(true);
-//           //
- //
-//             .catch(() => {
-//                 setIsSuccessSubmit(false);
-//
-
-
-            const signIn = (login) => (dispatch) => {
-                usersAPI.signIn(login)
-                    .then(response => {
-                        alert('ок');
-                       // dispatch(setUserAccount(response.data));
-                    })
-                    .catch(() => {
-                        alert('error');
-                    });
-
+    const signInButton = () => {
+        dispatch(signInPostQuery({login: login.login, password: login.password}));
     };
 
-    // if (login.login) {
-    //     return <Redirect to={'/registration'}/>
-    // }
+    if (login.isAuth) {
+        return  <Redirect to={'/main'}/>
+    }
+
     return (
         <div>
             <header className={style.header}>Матча</header>
@@ -52,20 +34,28 @@ export const Login = (login) => {
             <div className={style.whole_form}>
                 <p className={style.title}>Join and start dating today!</p>
                 <div className={style.content}>
-                <form onSubmit={onSubmit}>
                     <div className={style.form_header}>Логин</div>
                     <input type={'text'} onChange={changeLogin} className={style.form_input}/>
                     <div className={style.form_header}>Пароль</div>
                     <input type={'password'} onChange={changePassword} className={style.form_input}/>
                     <div>
-                        <button type={'submit'} className={style.button}>
+                        <button type={'button'} className={style.submit_button} onClick={signInButton}>
                             Войти
                         </button>
+                        <button type={'button'} className={style.negative_button} onClick={signInButton}>
+                            Забыли пароль?
+                        </button>
+                        {login.isAuth === false &&
+                        <p className={style.error}>Не удается войти. Проверьте правильность написания логина и пароля</p>}
                     </div>
-                </form>
+                    <button type={'button'} className={style.reg_button} onClick={signInButton}>
+                        Регистрация
+                    </button>
                 </div>
             </div>
             </body>
         </div>
     )
 }
+
+export default Login;

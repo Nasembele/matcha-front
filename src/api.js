@@ -1,4 +1,7 @@
 import axios from "axios";
+import {setUserAccount} from "./components/Registration/RegistrationAC";
+import {Redirect} from "react-router";
+import {setIsAuthAC} from "./components/Login/LoginAC";
 
 const instance = axios.create(
     {
@@ -60,4 +63,14 @@ export const usersAPI = {
     // getProfile(userId) {
     //     return instance.get(`profile/` + userId)
     // }
+}
+
+export const signInPostQuery = (login) => (dispatch) => {
+    usersAPI.signIn(login)
+        .then(response => {
+            dispatch(setIsAuthAC(true));
+        })
+        .catch(() => {
+            dispatch(setIsAuthAC(true));
+        });
 }

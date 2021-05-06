@@ -1,4 +1,5 @@
 export const initialState = {
     login: '',
-    password: ''
+    password: '',
+    isAuth: undefined
 };

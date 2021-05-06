@@ -13,6 +13,11 @@ export default function LoginReducer(state = initialState, action) {
                 ...state,
                 password: action.payload
             };
+        case constants.SET_IS_AUTH:
+            return {
+                ...state,
+                isAuth: action.payload
+            };
         default:
             return state;
     }
