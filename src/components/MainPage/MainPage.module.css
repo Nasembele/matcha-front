@@ -1,0 +1,52 @@
+.content_wrapper {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-auto-rows: 100vh;
+
+}
+
+.chat {
+    background-color: #e84a67;
+}
+
+.main_field {
+    background-color: floralwhite;
+
+}
+
+.button_acc {
+    /*text-align: right;*/
+}
+
+.content {
+    padding: 0 30px 30px;
+}
+
+.form_header {
+    font-size: 15px;
+    margin-bottom: 7px;
+    margin-top: 7px;
+    font-weight: bold;
+}
+
+.form_input {
+    width: 100%;
+}
+
+.change_button {
+    color: #ffffff;
+    display: inline-block;
+    background: rgb(53, 138, 217);
+    border-radius: 5px;
+    /*//font-size: 19px;*/
+    line-height: 20px;
+    /*padding: 10px 18px 14px 20px;*/
+    font-weight: bold;
+    border: 1px solid #ffffff;
+    margin-top: 25px;
+    width: 50%;
+}
+
+.tags {
+    display: flex;
+}

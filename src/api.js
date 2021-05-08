@@ -1,5 +1,6 @@
 import axios from "axios";
 import {setIsAuthAC} from "./components/Login/LoginAC";
+import {setUserAccountAC} from "./components/MainPage/MainPageAC";
 
 const instance = axios.create(
     {
@@ -39,6 +40,10 @@ export const usersAPI = {
     createAccount(regData) {
         return instance.post('registration', regData)
     },
+
+    getAccount() {
+        return instance.get('myaccount')
+    }
 
     // fetch('http://localhost:8080/registration', {
     // method: 'POST',
@@ -96,5 +101,13 @@ export const resetPasswordPostQuery = (resetPass) => (dispatch) => {
 export const updateRegDataPostQuery = (regData) => (dispatch) => {
     usersAPI.createAccount(regData)
         .then(response => {}) //валидация на успешный ответ и на появление сообщения
+        .catch(() => {});
+}
+
+export const getUserAccountGetQuery = () => (dispatch) => {
+    usersAPI.getAccount()
+        .then(response => {
+            dispatch(setUserAccountAC(response));
+        }) //валидация на успешный ответ и на появление сообщения
         .catch(() => {});
 }

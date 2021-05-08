@@ -9,9 +9,11 @@ import thunkMiddleware from 'redux-thunk';
 import {Provider} from 'react-redux';
 import {composeWithDevTools} from "redux-devtools-extension";
 import LoginReducer from "./components/Login/Login.reducer";
+import MainPageReducer from "./components/MainPage/MainPage.reducer";
 
 let reducers = combineReducers({
     login: LoginReducer,
+    mainPage: MainPageReducer
 });
 
 const composeEnhancers = composeWithDevTools({});
