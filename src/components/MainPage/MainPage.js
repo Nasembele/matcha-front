@@ -70,6 +70,8 @@ const MainPage = (account) => {
     return (
         <div className={style.content_wrapper}>
             <div className={style.chat}>
+            </div>
+            <div className={style.main_field}>
                 {chosenIndex === 1 &&
                 <>
                     <div className={style.button_acc} onClick={closeAccountSetting}>Выйти из настроек аккаунта</div>
@@ -164,8 +166,8 @@ const MainPage = (account) => {
                 </>}
                 {chosenIndex === 0 && <div className={style.button_acc} onClick={openAccountSetting}>Аккаунт</div>}
             </div>
-            <div className={style.main_field}>
-            </div>
+            {/*<div className={style.main_field}>*/}
+            {/*</div>*/}
         </div>
     )
 }
