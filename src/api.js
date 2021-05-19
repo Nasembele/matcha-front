@@ -1,6 +1,6 @@
 import axios from "axios";
 import {setIsAuthAC} from "./components/Login/LoginAC";
-import {setUserAccountAC} from "./components/MainPage/MainPageAC";
+import {setLikeUserAC, setUserAccountAC, setUsersAC} from "./components/MainPage/MainPageAC";
 
 const instance = axios.create(
     {
@@ -30,11 +30,11 @@ export const usersAPI = {
     },
 
     recoveryPassword(email) {
-        return instance.post('resetpassend', email)
+        return instance.post('resetPasswd', email)
     },
 
     resetPassword(resetPass) {
-        return instance.post('resetpasschange', resetPass)
+        return instance.post('resetPassChange', resetPass)
     },
 
     createAccount(regData) {
@@ -42,8 +42,20 @@ export const usersAPI = {
     },
 
     getAccount() {
-        return instance.get('myaccount')
-    }
+        return instance.get('account')
+    },
+
+    saveAccountChanges(account) {
+        return instance.post('accountSave', account)
+    },
+
+    getUsers() {
+        return instance.get('getUsers')
+    },
+
+    likeUser (userId) {
+        return  instance.post(`like/${userId}`)
+    },
 
     // fetch('http://localhost:8080/registration', {
     // method: 'POST',
@@ -110,4 +122,30 @@ export const getUserAccountGetQuery = () => (dispatch) => {
             dispatch(setUserAccountAC(response));
         }) //валидация на успешный ответ и на появление сообщения
         .catch(() => {});
+}
+
+export const saveChangeAccPostQuery = (account) => (dispatch) => {
+    usersAPI.saveAccountChanges(account)
+        .then(response => {
+            //dispatch(setUserAccountAC(response));
+        }) //валидация на успешный ответ
+        .catch(() => {});
+}
+
+export const getUsersGetQuery = () => (dispatch) => {
+    usersAPI.getUsers()
+        .then(response => {
+            dispatch(setUsersAC(response));
+        })
+        .catch(() => {});
+}
+
+export const likeUserPostQuery = (userId) => (dispatch) => {
+    usersAPI.likeUser(userId)
+        .then(response => { //валидация?
+            dispatch(setLikeUserAC());
+        })
+        .catch(() => {
+            dispatch(setLikeUserAC()); //потом убрать
+        });
 }

@@ -8,6 +8,9 @@ export const initialState = {
         name: '',
         lastName: '',
         middleName: '',
+        dateOfBirth: '',
+        gender: '',
+        orientation: '',
         login: '',
         email: '',
         password: ''

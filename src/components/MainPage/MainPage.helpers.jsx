@@ -9,7 +9,11 @@ export const initialState = {
         position: '',
         biography: '',
         tags: [],
-    }
+    },
+    users: {
+        us: []
+    },
+    likeUsers: [],
 };
 
 export const tagsArray = ['Настольные игры', 'Геймер(ша)', 'Скалолазание', 'Бег', 'Блогинг',
@@ -30,4 +34,14 @@ export const getArrayWithNewEl = (mass, newEl) => {
     }
     mass.push(newEl);
     return mass;
+}
+
+export const setLikeUser = (likeUsers, user) => {
+    likeUsers.push(user);
+    return likeUsers
+}
+
+export const giveNextUsers = (likeUsers) => {
+    likeUsers.shift();
+    return likeUsers
 }

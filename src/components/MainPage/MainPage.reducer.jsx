@@ -1,5 +1,6 @@
-import {getArrayWithNewEl, initialState} from "./MainPage.helpers";
+import {getArrayWithNewEl, giveNextUsers, initialState, setLikeUser} from "./MainPage.helpers";
 import * as constants from "./MainPage.consts";
+import {setLikeUserAC} from "./MainPageAC";
 
 export default function MainPageReducer(state = initialState, action) {
     switch (action.type) {
@@ -63,6 +64,29 @@ export default function MainPageReducer(state = initialState, action) {
                     ...state.account,
                     tags: []
                 }
+            };
+        case constants.SET_USERS:
+            return {
+                ...state,
+                users: {
+                    ...state.users,
+                    us: action.payload,
+                }
+            };
+        case constants.SET_LIKE_USER:
+            return {
+                ...state,
+                likeUsers: setLikeUser(state.likeUsers, state.users.us[0]),
+                users: {
+                    ...state.users,
+                    us: giveNextUsers(state.users.us)},
+            };
+        case constants.DELETE_NOT_LIKE_USER:
+            return {
+                ...state,
+                users: {
+                    ...state.users,
+                    us: giveNextUsers(state.users.us)},
             };
         default:
             return state;

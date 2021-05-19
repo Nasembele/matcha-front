@@ -38,3 +38,16 @@ export const changeTagsAC = (tag) => ({
 export const deleteTagsAC = () => ({
     type: constants.DELETE_USER_TAGS,
 });
+
+export const setUsersAC = (users) => ({
+    type: constants.SET_USERS,
+    payload: users
+});
+
+export const setLikeUserAC = () => ({
+    type: constants.SET_LIKE_USER,
+});
+
+export const deleteNotLikeUserAC = () => ({
+    type: constants.DELETE_NOT_LIKE_USER,
+});
