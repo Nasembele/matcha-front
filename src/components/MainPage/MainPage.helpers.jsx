@@ -1,9 +1,6 @@
 export const initialState = {
     account: {
         rating: 'Cамый красивый',
-        // foto: [],
-        //gender: 'man',
-        //sexual_preference: '',
         education: '',
         workPlace: '',
         position: '',

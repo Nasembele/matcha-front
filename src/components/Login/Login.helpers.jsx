@@ -10,7 +10,7 @@ export const initialState = {
         middleName: '',
         dateOfBirth: '',
         gender: '',
-        orientation: '',
+        sexual_preference: '',
         login: '',
         email: '',
         password: ''
