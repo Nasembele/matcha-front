@@ -118,7 +118,7 @@ const MainPage = (state) => {
             </div>
             <div className={style.main_field}>
                 {chosenIndex === 1 &&
-                <>
+                <div>
                     <div className={style.button_acc} onClick={closeAccountSetting}>Выйти из настроек аккаунта</div>
                     <div>
                         <div className={style.content}>
@@ -187,8 +187,8 @@ const MainPage = (state) => {
                             </div>
                         </div>
                     </div>
-                </>}
-                {chosenIndex === 0 && <>
+                </div>}
+                {chosenIndex === 0 && <div>
                     <div className={style.button_acc} onClick={openAccountSetting}>Аккаунт</div>
 
                     {/*// fakeUsers.map(u => <div key={u.id}>*/}
@@ -228,7 +228,7 @@ const MainPage = (state) => {
                         <button onClick={onClickNotLikeUser}>Next</button>
                     </div>
 
-                </>}
+                </div>}
             </div>
             {/*<div className={style.main_field}>*/}
             {/*</div>*/}
