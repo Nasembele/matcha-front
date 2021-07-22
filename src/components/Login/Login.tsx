@@ -1,96 +1,96 @@
-import React, {useState} from "react";
+import React, {ChangeEvent, useState} from "react";
 import style from './Login.module.css';
-import {useDispatch} from "react-redux";
-import {
-    changeEmailAC,
-    changeLoginAC,
-    changePasswordAC, changeRegEmailAC,
-    changeRegLastNameAC, changeRegLoginAC,
-    changeRegMiddleNameAC,
-    changeRegNameAC, changeRegPasswordAC
-} from "./LoginAC";
-import {Redirect} from "react-router";
-import {recoveryPasswordPostQuery, signInPostQuery, updateRegDataPostQuery} from "../../api";
+import {useDispatch, useSelector} from "react-redux";
 
-const Login = (login) => {
+import {Redirect} from "react-router";
+import {ILogin, IState} from "../../types";
+import {changeLoginAC, changePasswordAC} from "./LoginAC";
+import {signInPostQuery} from "../../api";
+
+const Login = () => {
 
     const dispatch = useDispatch();
 
-    const [chosenIndex, setChosenIndex] = useState(0);
-    const [isResetPassword, setIsResetPassword] = useState(false);
-    const [isRegSuccess, setIsRegSuccess] = useState(false);
+    // const loginAuth = (state: IState) => state.login.isAuth;
+    const login = useSelector((state: IState) => state.login);
+    const error = useSelector((state: IState) => state.error);
 
-    const changeLogin = (login) => {
-        dispatch(changeLoginAC(login.target.value));
+   const [chosenIndex, setChosenIndex] = useState(0);
+   const [isResetPassword, setIsResetPassword] = useState(false);
+   const [isRegSuccess, setIsRegSuccess] = useState(false);
+
+    const changeLogin = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+       dispatch(changeLoginAC(value));
     };
 
-    const changePassword = (password) => {
-        dispatch(changePasswordAC(password.target.value));
+    const changePassword = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+       dispatch(changePasswordAC(value));
     };
 
-    const changeEmail = (email) => {
-        dispatch(changeEmailAC(email.target.value));
+    const changeEmail = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+      //  dispatch(changeEmailAC(value));
     };
 
     const signInButton = () => {
-        dispatch(signInPostQuery({login: login.login, password: login.password}));
+       dispatch(signInPostQuery(login.authData)); //1
     };
 
     const recoveryPassword = () => {
-        dispatch(recoveryPasswordPostQuery({email: login.email}));
-        setIsResetPassword(true);
+        // dispatch(recoveryPasswordPostQuery({email: login.email})); 2
+      //  setIsResetPassword(true);
     };
 
     const changeChosenIndex = () => {
-        setChosenIndex(1);
+      //  setChosenIndex(1);
     }
 
     const RegButton = () => {
-        setChosenIndex(2);
+      //  setChosenIndex(2);
     }
 
-    const changeRegName = (nameInput) => {
-        dispatch(changeRegNameAC(nameInput.target.value));
+    const changeRegName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+     //   dispatch(changeRegNameAC(value));
     }
 
-    const changeRegLastName = (lastNameInput) => {
-        dispatch(changeRegLastNameAC(lastNameInput.target.value));
+    const changeRegLastName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+       // dispatch(changeRegLastNameAC(value));
     }
 
-    const changeRegMiddleName = (middleNameInput) => {
-        dispatch(changeRegMiddleNameAC(middleNameInput.target.value));
+    const changeRegMiddleName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+     //   dispatch(changeRegMiddleNameAC(value));
     }
 
-    const changeRegEmail = (emailInput) => {
-        dispatch(changeRegEmailAC(emailInput.target.value));
+    const changeRegEmail = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+      //  dispatch(changeRegEmailAC(value));
     }
 
-    const changeRegLogin = (loginInput) => {
-        dispatch(changeRegLoginAC(loginInput.target.value));
+    const changeRegLogin = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+      //  dispatch(changeRegLoginAC(value));
     }
 
-    const changeRegPassword = (passwordInput) => {
-        dispatch(changeRegPasswordAC(passwordInput.target.value));
+    const changeRegPassword = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+     //   dispatch(changeRegPasswordAC(value));
     }
 
     const updateRegData = () => {
-        dispatch(updateRegDataPostQuery(login.regData));
-        setIsRegSuccess(true);
+       // dispatch(updateRegDataPostQuery(login.regData));
+      //  setIsRegSuccess(true);
     }
 
-    if (login.isAuth) {
-        return <Redirect to={'/main'}/>
-    }
+    // if (login.isAuth) {
+    //     return <Redirect to={'/main'}/>
+    // }
 
     return (
         <div>
+            {login.isAuth && <Redirect to={'/main'}/>}
             <header className={style.header}>Матча</header>
             <body className={style.body}>
             <div className={style.whole_form}>
                 {chosenIndex === 0 && <div>
                     <p className={style.title}>Join and start dating today!</p>
                     <div className={style.content}>
-                        <div className={style.form_header}>Логин или email</div>
+                        <div className={style.form_header}>email</div>
                         <input type={'text'} onChange={changeLogin} className={style.form_input}/>
                         <div className={style.form_header}>Пароль</div>
                         <input type={'password'} onChange={changePassword} className={style.form_input}/>
@@ -101,9 +101,11 @@ const Login = (login) => {
                             <button type={'button'} className={style.negative_button} onClick={changeChosenIndex}>
                                 Забыли пароль?
                             </button>
-                            {login.isAuth === false &&
-                            <p className={style.error}>Не удается войти. Проверьте правильность написания email и
-                                пароля</p>}
+                            {/*{error.isServerError === true &&*/}
+                            {/*<p className={style.error}>Ошибка сервера</p>}*/}
+                            {/*{error.isServerError === true &&*/}
+                            {/*<p className={style.error}>Не удается войти. Проверьте правильность написания email и*/}
+                            {/*    пароля</p>}*/}
                         </div>
                         <button type={'button'} className={style.reg_button} onClick={RegButton}>
                             Регистрация

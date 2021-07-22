@@ -1,0 +1,2 @@
+export const SET_SERVER_ERROR = 'ERROR/SET_SERVER_ERROR';
+

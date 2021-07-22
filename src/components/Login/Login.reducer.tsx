@@ -1,28 +1,40 @@
 import {initialState} from "./Login.helpers";
 import * as constants from './Login.consts';
+import {IAction, ILogin} from "../../types";
 
-export default function LoginReducer(state = initialState, action) {
+export default function LoginReducer(state: ILogin = initialState, action: IAction) {
     switch (action.type) {
-        case constants.SET_USER_LOGIN:
+        case constants.SET_USER_EMAIL:
             return {
                 ...state,
-                login: action.payload
+                authData: {
+                    ...state.authData,
+                    email: action.payload
+                }
             };
         case constants.SET_USER_PASSWORD:
             return {
                 ...state,
-                password: action.payload
+                authData: {
+                    ...state.authData,
+                    password: action.payload
+                }
             };
-        case constants.SET_IS_AUTH:
+        case constants.SET_IS_AUTH_USER:
             return {
                 ...state,
                 isAuth: action.payload
             };
-        case constants.SET_USER_EMAIL:
+        case constants.SET_IS_AUTH_USER_DATA:
             return {
                 ...state,
-                email: action.payload
+                userData: action.payload
             };
+        // case constants.SET_USER_EMAIL:
+        //     return {
+        //         ...state,
+        //         email: action.payload
+        //     };
         case constants.SET_USER_RESET_PASSWORD:
             return {
                 ...state,
@@ -32,7 +44,7 @@ export default function LoginReducer(state = initialState, action) {
             return {
                 ...state,
                 regData: {
-                    ...state.regData,
+                    // ...state.regData,
                     name: action.payload
                 }
             };
@@ -40,7 +52,7 @@ export default function LoginReducer(state = initialState, action) {
             return {
                 ...state,
                 regData: {
-                    ...state.regData,
+                    // ...state.regData,
                     lastName: action.payload
                 }
             };
@@ -48,7 +60,7 @@ export default function LoginReducer(state = initialState, action) {
             return {
                 ...state,
                 regData: {
-                    ...state.regData,
+                    // ...state.regData,
                     middleName: action.payload
                 }
             };
@@ -56,7 +68,7 @@ export default function LoginReducer(state = initialState, action) {
             return {
                 ...state,
                 regData: {
-                    ...state.regData,
+                    // ...state.regData,
                     email: action.payload
                 }
             };
@@ -64,7 +76,7 @@ export default function LoginReducer(state = initialState, action) {
             return {
                 ...state,
                 regData: {
-                    ...state.regData,
+                    // ...state.regData,
                     login: action.payload
                 }
             };
@@ -72,7 +84,7 @@ export default function LoginReducer(state = initialState, action) {
             return {
                 ...state,
                 regData: {
-                    ...state.regData,
+                    // ...state.regData,
                     password: action.payload
                 }
             };

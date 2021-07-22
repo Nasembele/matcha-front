@@ -1,7 +1,5 @@
 import {useDispatch} from "react-redux";
 import React, {useState} from "react";
-import {changeResetPasswordAC} from "../LoginAC";
-import {resetPasswordPostQuery} from "../../../api";
 import style from "../Login.module.css";
 import {Redirect} from "react-router";
 

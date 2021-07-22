@@ -1,14 +1,7 @@
 import {useDispatch} from "react-redux";
 import React, {useEffect, useState} from "react";
 import style from './MainPage.module.css';
-import {changeRegNameAC} from "../Login/LoginAC";
-import {
-    getUserAccountGetQuery,
-    getUsersGetQuery,
-    likeUserPostQuery,
-    saveChangeAccPostQuery,
-    updateRegDataPostQuery
-} from "../../api";
+
 import {
     changeBiographyAC,
     changeEducationAC,
@@ -45,7 +38,7 @@ const MainPage = (state) => {
     const [hasChangeTags, setHasChangeTags] = useState(false); //выключать при логауте
     const [userIndex, setUserIndex] = useState(0); //возможно просто задать 0?
 
-    const countUsers = state.users.us.length;
+    const countUsers = state.users?.us.length;
 
     useEffect(() => {
         if (chosenIndex === 0 && countUsers === 0) {
@@ -56,7 +49,7 @@ const MainPage = (state) => {
 
     const openAccountSetting = () => {
         setChosenIndex(1);
-        !hasGetUser && dispatch(getUserAccountGetQuery());
+     //   !hasGetUser && dispatch(getUserAccountGetQuery());
         setHasGetUser(true);
     }
 
@@ -101,11 +94,11 @@ const MainPage = (state) => {
     };
 
     const onClickSaveChangesAcc = () => {
-        dispatch(saveChangeAccPostQuery(state.account));
+      //  dispatch(saveChangeAccPostQuery(state.account));
     };
 
     const onClickLikeUser = () => {
-        dispatch(likeUserPostQuery(state.users.us[userIndex].id));
+     //   dispatch(likeUserPostQuery(state.users.us[userIndex].id));
     };
 
     const onClickNotLikeUser = () => {
@@ -123,7 +116,7 @@ const MainPage = (state) => {
                     <div>
                         <div className={style.content}>
                             <div className={style.form_header}>Рейтинг</div>
-                            <span>{state.account.rating}</span>
+                            <span>{state?.account.rating}</span>
                             <div className={style.form_header}>Фото</div>
                             {/*<div className={style.form_header}>Ориентация</div>*/}
                             {/*{account.account.gender === 'man' &&*/}
@@ -195,17 +188,17 @@ const MainPage = (state) => {
                     <span>
                 <div>
                     <img
-                        src={state.users.us[userIndex]?.photoUrl != null ? state.users.us[userIndex]?.photoUrl : './images/account.png'} height={'100px'}/>
+                        src={state?.users?.us[userIndex]?.photoUrl != null ? state.users.us[userIndex]?.photoUrl : './images/account.png'} height={'100px'}/>
                 </div>
                        </span>
                     <span>
                     <span>
-                        <div>{state.users.us[userIndex]?.fullName}</div>
-                        <div>{state.users.us[userIndex]?.status}</div>
+                        <div>{state.users?.us[userIndex]?.fullName}</div>
+                        <div>{state.users?.us[userIndex]?.status}</div>
                 </span>
                     <span>
-                        <div>{state.users.us[userIndex]?.location.country}</div>
-                        <div>{state.users.us[userIndex]?.location.city}</div>
+                        <div>{state.users?.us[userIndex]?.location.country}</div>
+                        <div>{state.users?.us[userIndex]?.location.city}</div>
                     </span>
                 </span>
 
