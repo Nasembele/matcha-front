@@ -128,10 +128,20 @@ export const authGetUserQuery = () => (dispatch: Dispatch) => {
 export const signInPostQuery = (isAuthData: IAuthData) => (dispatch: Dispatch) => {
     usersAPI.signIn(isAuthData)
         .then((res: any) => {
-            dispatch(setIsAuthUserDataAC(res));
+            // debugger;
+            if (res.data !== 'INVALID LOGIN OR PASSWORD') { //поправить на новый лад?
+                // добавить ошибку error jwt
+                dispatch(setIsAuthUserDataAC(res));
+                dispatch(setIsAuthUserAC(true));
+            }
+            // dispatch(setIsAuthUserDataAC(res));
+            // dispatch(setIsAuthUserAC(true));
+
         })
         .catch(() => {
             dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
+            // dispatch(setIsAuthUserAC(true));
+
         });
 }
 
