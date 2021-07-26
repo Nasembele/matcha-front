@@ -5,10 +5,10 @@ import {BrowserRouter, Route} from 'react-router-dom';
 
 import Navbar from "./components/Navbar/Navbar";
 import Login from "./components/Login/LoginPropsContainer";
-import ResetPassword from "./components/Login/ResetPassword/ResetPasswordPropsContainer";
 import {Redirect, Switch} from "react-router";
 import MainPage from "./components/MainPage/MainPagePropsContainer";
 import ErrorWrapper from "./components/ErrorWrapper/ErrorWrapper";
+import ResetPassword from "./components/Login/ResetPassword/ResetPassword";
 
 
 function App() {

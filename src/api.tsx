@@ -1,8 +1,8 @@
 import axios from "axios";
 import {setLikeUserAC, setUserAccountAC, setUsersAC} from "./components/MainPage/MainPageAC";
-import {IAuthData, IUserData} from "./types";
+import {IAuthData, IRegData, IUserData} from "./types";
 import {Dispatch} from "redux";
-import {setIsAuthUserAC, setIsAuthUserDataAC} from "./components/Login/LoginAC";
+import {setIsAuthUserAC, setIsAuthUserDataAC, setIsRegUserAC, setIsResetUserAC} from "./components/Login/LoginAC";
 import {setServerErrorAC} from "./components/ErrorWrapper/ErrorWrapperAC";
 
 const instance = axios.create(
@@ -35,18 +35,21 @@ export const usersAPI = {
     signIn(isAuthData: IAuthData) {
         return instance.post('login', isAuthData)
     },
-    //
-    // recoveryPassword(email) {
-    //     return instance.post('resetPasswd', email)
-    // },
-    //
-    // resetPassword(resetPass) {
-    //     return instance.post('resetPassChange', resetPass)
-    // },
-    //
-    // createAccount(regData) {
-    //     return instance.post('registration', regData)
-    // },
+
+    recoveryPassword(email: Object) {
+        return instance.post('resetpassend', email)
+    },
+
+    resetPassword(resetPass: Object) {
+        return instance.post('resetpasschange', resetPass)
+    },
+
+    createAccount(regData: IRegData) {
+        return instance.post('registration', regData)
+    },
+    logout() {
+        return instance.get('logout')
+    },
     //
     // getAccount() {
     //     return instance.get('account')
@@ -110,18 +113,22 @@ export const authGetUserQuery = () => (dispatch: Dispatch) => {
     //     body: JSON.stringify({})
     // })
         .then((res: any) => {
-            if (res === 'Error JWT') { //поправить на новый лад?
+            // debugger;
+
+            if (res.data === 'Error JWT') { //поправить на новый лад?
+                // debugger;
                 dispatch(setIsAuthUserAC(false));
                 // добавить ошибку error jwt
+            } else {
+                dispatch(setIsAuthUserAC(true));
+                dispatch(setIsAuthUserDataAC(res));
             }
-            dispatch(setIsAuthUserAC(true));
-            dispatch(setIsAuthUserDataAC(res));
             // dispatch(setIsAuthAC(true));
         })
         .catch(() => {
             console.log('error');
             dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
-            // dispatch(setIsAuthUserAC(true));
+            // dispatch(setIsAuthUserAC(true));//todo потом убрать
         });
 }
 
@@ -140,29 +147,65 @@ export const signInPostQuery = (isAuthData: IAuthData) => (dispatch: Dispatch) =
         })
         .catch(() => {
             dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
-            // dispatch(setIsAuthUserAC(true));
+            dispatch(setIsAuthUserAC(true)); //todo потом убрать
 
         });
 }
 
 
-// export const recoveryPasswordPostQuery = (email) => (dispatch) => {
-//     usersAPI.recoveryPassword(email) //валидация на успешный ответ и на появление сообщения
-//         .then(response => {})
-//         .catch(() => {});
-// }
-//
-// export const resetPasswordPostQuery = (resetPass) => (dispatch) => {
-//     usersAPI.resetPassword(resetPass)
-//         .then(response => {}) //валидация на успешный ответ и на появление сообщения
-//         .catch(() => {});
-// }
-//
-// export const updateRegDataPostQuery = (regData) => (dispatch) => {
-//     usersAPI.createAccount(regData)
-//         .then(response => {}) //валидация на успешный ответ и на появление сообщения
-//         .catch(() => {});
-// }
+export const recoveryPasswordPostQuery = (email: Object) => (dispatch: Dispatch) => {
+    usersAPI.recoveryPassword(email) //валидация на успешный ответ и на появление сообщения
+        .then((res: any) => {
+            if (res.data === 'SUCCESS') { //поправить на новый лад?
+                dispatch(setIsResetUserAC(true));
+            }
+            // dispatch(setIsResetUserAC(true));
+
+        })
+        .catch(() => {
+            dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
+        });
+}
+
+export const resetPasswordPostQuery = (resetPass: Object) => (dispatch: Dispatch) => {
+    usersAPI.resetPassword(resetPass)
+        .then((res: any) => {
+            if (res.data === 'SUCCESS') { //поправить на новый лад?
+                dispatch(setIsResetUserAC(true));
+            }
+        }) //валидация на успешный ответ и на появление сообщения
+        .catch(() => {
+
+        });
+}
+
+export const updateRegDataPostQuery = (regData: IRegData) => (dispatch: Dispatch) => {
+    usersAPI.createAccount(regData)
+        .then((res: any) => {
+            if (res.data === 'SUCCESS') { //поправить на новый лад?
+                dispatch(setIsRegUserAC(true));
+            }
+        })
+        .catch(() => {
+            dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
+            // dispatch(setIsRegUserAC(true)); //todo потом убрать
+        });
+}
+
+export const logoutGetQuery = () => (dispatch: Dispatch) => {
+    usersAPI.logout()
+        .then((res: any) => {
+            // if (res.data === 'SUCCESS') { //поправить на новый лад?
+            //     dispatch(setIsRegUserAC(true));
+            // }
+            dispatch(setIsAuthUserAC(false));
+        })
+        .catch(() => {
+            dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
+            // dispatch(setIsRegUserAC(true)); //todo потом убрать
+        });
+}
+
 //
 // export const getUserAccountGetQuery = () => (dispatch) => {
 //     usersAPI.getAccount()

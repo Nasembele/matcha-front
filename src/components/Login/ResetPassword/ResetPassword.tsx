@@ -1,22 +1,25 @@
-import {useDispatch} from "react-redux";
-import React, {useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import React, {ChangeEvent, useState} from "react";
 import style from "../Login.module.css";
 import {Redirect} from "react-router";
+import {changeResetPasswordAC} from "../LoginAC";
+import {IState} from "../../../types";
+import {resetPasswordPostQuery} from "../../../api";
 
-const ResetPassword = (resetPassword) => {
+const ResetPassword = () => {
 
     const dispatch = useDispatch();
 
-    const [isRecoveryPassword, setIsRecoveryPassword] = useState(false);
+    const resetData = useSelector((state: IState) => state.login.resetData);
+
     const [iIsGoToLogin, setIsGoToLogin] = useState(false);
 
-    const changeResetPassword = (password) => {
-        dispatch(changeResetPasswordAC(password.target.value));
+    const changeResetPassword = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+        dispatch(changeResetPasswordAC(value));
     };
 
     const onClickResetPassword = () => {
-        dispatch(resetPasswordPostQuery({resetPassword: resetPassword.resetPassword}));
-        setIsRecoveryPassword(true);
+        dispatch(resetPasswordPostQuery({resetPassword: resetData!.resetPassword}));
     }
 
     const onClickGoToLogin = () => {
@@ -43,11 +46,14 @@ const ResetPassword = (resetPassword) => {
                         <button type={'button'} className={style.reg_button} onClick={onClickResetPassword}>
                             Сохранить
                         </button>
-                        {isRecoveryPassword && <p className={style.reset_password}>Пароль обновлен</p>}
-                        {isRecoveryPassword &&
-                        <button type={'button'} className={style.login_button} onClick={onClickGoToLogin}>
-                            Войти
-                        </button>}
+                        {resetData?.isResetUser &&
+                        <div>
+                            <p className={style.reset_password}>Пароль обновлен</p>
+                            <button type={'button'} className={style.login_button} onClick={onClickGoToLogin}>
+                                Войти
+                            </button>
+                        </div>
+                        }
                     </div>
                 </div>
             </div>

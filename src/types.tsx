@@ -5,7 +5,8 @@ export interface IAction {
 
 export interface IResetData {
     email: string,
-    resetPassword: string
+    resetPassword: string,
+    isResetUser: boolean,
 }
 
 export interface IUserCard {
@@ -39,6 +40,7 @@ export interface IRegData {
     sexualPreference: 'getero' | 'gay' | 'bisexual' | 'lesbi',
     email: string,
     password: string,
+    isRegUser: boolean,
 }
 
 export interface IAuthData {

@@ -11,6 +11,7 @@ import {
     changeWorkPlaceAC, deleteNotLikeUserAC, deleteTagsAC, setLikeUserAC, setUsersAC
 } from "./MainPageAC";
 import {tagsArray} from "./MainPage.helpers";
+import {logoutGetQuery} from "../../api";
 
 const MainPage = (state) => {
 
@@ -103,6 +104,10 @@ const MainPage = (state) => {
 
     const onClickNotLikeUser = () => {
         dispatch(deleteNotLikeUserAC());
+    }
+
+    const onClickLogout = () => {
+        dispatch(logoutGetQuery());
     }
 
     return (
@@ -222,6 +227,8 @@ const MainPage = (state) => {
                     </div>
 
                 </div>}
+                <p className={style.logout} onClick={onClickLogout}>Выйти</p>
+
             </div>
             {/*<div className={style.main_field}>*/}
             {/*</div>*/}

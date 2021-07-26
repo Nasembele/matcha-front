@@ -1,6 +1,7 @@
 import {initialState} from "./Login.helpers";
 import * as constants from './Login.consts';
 import {IAction, ILogin} from "../../types";
+import {prepareDateToSendServer} from "../../helpers";
 
 export default function LoginReducer(state: ILogin = initialState, action: IAction) {
     switch (action.type) {
@@ -38,21 +39,24 @@ export default function LoginReducer(state: ILogin = initialState, action: IActi
         case constants.SET_USER_RESET_PASSWORD:
             return {
                 ...state,
-                resetPassword: action.payload
+                resetData: {
+                    ...state.resetData,
+                    resetPassword: action.payload
+                }
             };
-        case constants.SET_REG_NAME:
+        case constants.SET_REG_FIRST_NAME:
             return {
                 ...state,
                 regData: {
-                    // ...state.regData,
-                    name: action.payload
+                    ...state.regData,
+                    firstName: action.payload
                 }
             };
         case constants.SET_REG_LAST_NAME:
             return {
                 ...state,
                 regData: {
-                    // ...state.regData,
+                    ...state.regData,
                     lastName: action.payload
                 }
             };
@@ -60,15 +64,63 @@ export default function LoginReducer(state: ILogin = initialState, action: IActi
             return {
                 ...state,
                 regData: {
-                    // ...state.regData,
+                    ...state.regData,
                     middleName: action.payload
+                }
+            };
+        case constants.SET_REG_BIRTHDAY:
+            return {
+                ...state,
+                regData: {
+                    ...state.regData,
+                    birthday: prepareDateToSendServer(action.payload)
+                }
+            };
+        case constants.SET_REG_GENDER:
+            return {
+                ...state,
+                regData: {
+                    ...state.regData,
+                    gender: action.payload
+                }
+            };
+        case constants.SET_IS_REG_USER:
+            return {
+                ...state,
+                regData: {
+                    ...state.regData,
+                    isRegUser: action.payload
+                }
+            };
+        case constants.SET_REG_SEXUAL_PREFERENCE:
+            return {
+                ...state,
+                regData: {
+                    ...state.regData,
+                    sexualPreference: action.payload
+                }
+            };
+        case constants.SET_USER_RESET_EMAIL:
+            return {
+                ...state,
+                resetData: {
+                    ...state.regData,
+                    email: action.payload
+                }
+            };
+        case constants.SET_IS_RESET_USER:
+            return {
+                ...state,
+                resetData: {
+                    ...state.regData,
+                    isResetUser: action.payload
                 }
             };
         case constants.SET_REG_EMAIL:
             return {
                 ...state,
                 regData: {
-                    // ...state.regData,
+                     ...state.regData,
                     email: action.payload
                 }
             };
@@ -84,7 +136,7 @@ export default function LoginReducer(state: ILogin = initialState, action: IActi
             return {
                 ...state,
                 regData: {
-                    // ...state.regData,
+                    ...state.regData,
                     password: action.payload
                 }
             };

@@ -5,6 +5,7 @@ import * as React from "react";
 import {Switch, BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
 import {ILogin, IState} from "./types";
 import {authGetUserQuery} from "./api";
+import ResetPassword from "./components/Login/ResetPassword/ResetPassword";
 
 // const App = Loadable({
 //     loader: () => import('App'),
@@ -43,8 +44,9 @@ function Auth() {
     return (
         <Router>
             <Switch>
-                <Route path={'/login'} component={Login}>
-                </Route>
+                <Route path={'/login'} component={Login}/>
+                <Route path='/resetpasschange' component={ResetPassword} exact/>
+
                 <Route path='/' render={() => (
                     isAuthorised
                         ? (<App />)
