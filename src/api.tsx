@@ -7,7 +7,7 @@ import {setServerErrorAC} from "./components/ErrorWrapper/ErrorWrapperAC";
 
 const instance = axios.create(
     {
-        // withCredentials: true,
+        withCredentials: true,
         baseURL: `http://localhost:8080`,
         // headers: {
         //    // "API-KEY":  '8cf7dc5c-b03e-40ad-81de-b8c8ff761cb4'
