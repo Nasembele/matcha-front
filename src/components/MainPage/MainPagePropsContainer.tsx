@@ -1,8 +1,9 @@
 import React from "react";
 import {connect} from "react-redux";
 import MainPage from "./MainPage";
+import {IState} from "../../types";
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: IState) => ({
       // account: state.mainPage?.account,
       // users: state.mainPage?.users,
       // likeUsers: state?.mainPage?.likeUsers,

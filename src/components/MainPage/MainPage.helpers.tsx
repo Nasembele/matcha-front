@@ -1,15 +1,28 @@
-export const initialState = {
-    account: {
-        rating: 'Cамый красивый',
-        education: '',
+import {IUserCard, IUserData} from "../../types";
+
+export const initialUserData = {
+    id: 0,
+    firstName: '',
+    lastName: '',
+    middleName: '',
+    yearsOld: 0,
+    location: '',
+    card: {
+        biography: '',
         workPlace: '',
         position: '',
-        biography: '',
+        education: '',
+        rating: 0,
+        gender: null,
+        sexualPreference: null,
         tags: [],
     },
-    users: {
-        us: []
-    },
+    match: false,
+}
+
+export const initialState = {
+    account: initialUserData,
+    users: [],
     likeUsers: [],
 };
 
@@ -23,7 +36,7 @@ export const tagsArray = ['Настольные игры', 'Геймер(ша)',
     'Instagram', 'Языковой обмен', 'Садоводство', 'Видеоблогинг', 'Комедия',
     'Велоспорт', 'Крафотовое пиво', 'Пеший туризм', 'Netflix'];
 
-export const getArrayWithNewEl = (mass, newEl) => {
+export const getArrayWithNewEl = (mass: any, newEl: any) => {
     if (mass.length > 0) {
         if (mass.includes(newEl)) {
             return mass;
@@ -33,12 +46,12 @@ export const getArrayWithNewEl = (mass, newEl) => {
     return mass;
 }
 
-export const setLikeUser = (likeUsers, user) => {
+export const setLikeUser = (likeUsers: IUserData[], user: IUserData) => {
     likeUsers.push(user);
     return likeUsers
 }
 
-export const giveNextUsers = (likeUsers) => {
+export const giveNextUsers = (likeUsers: IUserData[]) => {
     likeUsers.shift();
     return likeUsers
 }

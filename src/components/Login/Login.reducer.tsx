@@ -104,16 +104,40 @@ export default function LoginReducer(state: ILogin = initialState, action: IActi
             return {
                 ...state,
                 resetData: {
-                    ...state.regData,
+                    ...state.resetData,
                     email: action.payload
                 }
             };
-        case constants.SET_IS_RESET_USER:
+        case constants.SET_IS_VALID_EMAIL:
             return {
                 ...state,
                 resetData: {
-                    ...state.regData,
-                    isResetUser: action.payload
+                    ...state.resetData,
+                    isValidEmail: action.payload
+                }
+            };
+        case constants.SET_IS_VALID_LINK:
+            return {
+                ...state,
+                resetData: {
+                    ...state.resetData,
+                    isValidLink: action.payload
+                }
+            };
+        case constants.SET_IS_VALID_PASS:
+            return {
+                ...state,
+                resetData: {
+                    ...state.resetData,
+                    isValidPass: action.payload
+                }
+            };
+        case constants.SET_ID_RESET_USER:
+            return {
+                ...state,
+                resetData: {
+                    ...state.resetData,
+                    id: action.payload
                 }
             };
         case constants.SET_REG_EMAIL:

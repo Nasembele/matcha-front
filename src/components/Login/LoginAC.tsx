@@ -83,7 +83,22 @@ export const setIsRegUserAC = (isRegUser: boolean) => ({
     payload: isRegUser
 });
 
-export const setIsResetUserAC = (isResetUser: boolean) => ({
-    type: constants.SET_IS_RESET_USER,
-    payload: isResetUser
+export const setIsValidEmailResetUserAC = (isValidEmail: boolean | null) => ({
+    type: constants.SET_IS_VALID_EMAIL,
+    payload: isValidEmail
+});
+
+export const setIsValidLinkResetUserAC = (isValidLink: boolean | null) => ({
+    type: constants.SET_IS_VALID_LINK,
+    payload: isValidLink
+});
+
+export const setIsValidPassResetUserAC = (isValidPass: boolean | null | 'old_pass') => ({
+    type: constants.SET_IS_VALID_PASS,
+    payload: isValidPass
+});
+
+export const setIdResetUserAC = (id: number) => ({
+    type: constants.SET_ID_RESET_USER,
+    payload: id
 });

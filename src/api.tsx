@@ -1,8 +1,13 @@
 import axios from "axios";
-import {setLikeUserAC, setUserAccountAC, setUsersAC} from "./components/MainPage/MainPageAC";
-import {IAuthData, IRegData, IUserData} from "./types";
+import {setLikeUserAC, setUserAccountAC, setUserDataAC, setUsersAC} from "./components/MainPage/MainPageAC";
+import {IAuthData, IRegData, IUserCard, IUserData} from "./types";
 import {Dispatch} from "redux";
-import {setIsAuthUserAC, setIsAuthUserDataAC, setIsRegUserAC, setIsResetUserAC} from "./components/Login/LoginAC";
+import {
+    setIsAuthUserAC,
+    setIsAuthUserDataAC,
+    setIsRegUserAC,
+    setIsValidEmailResetUserAC, setIsValidLinkResetUserAC, setIsValidPassResetUserAC
+} from "./components/Login/LoginAC";
 import {setServerErrorAC} from "./components/ErrorWrapper/ErrorWrapperAC";
 
 const instance = axios.create(
@@ -50,15 +55,18 @@ export const usersAPI = {
     logout() {
         return instance.get('logout')
     },
+    validateResetLink(currentURL: string) {
+        return instance.get(currentURL)
+    },
     //
     // getAccount() {
     //     return instance.get('account')
     // },
-    //
-    // saveAccountChanges(account) {
-    //     return instance.post('accountSave', account)
-    // },
-    //
+
+    saveAccountChanges(newCard: IUserCard) {
+        return instance.post('main/account?act=card', newCard)
+    },
+
     // getUsers() {
     //     return instance.get('getUsers')
     // },
@@ -121,7 +129,8 @@ export const authGetUserQuery = () => (dispatch: Dispatch) => {
                 // добавить ошибку error jwt
             } else {
                 dispatch(setIsAuthUserAC(true));
-                dispatch(setIsAuthUserDataAC(res));
+                // dispatch(setIsAuthUserDataAC(res.data));
+                dispatch(setUserDataAC(res.data));
             }
             // dispatch(setIsAuthAC(true));
         })
@@ -138,7 +147,8 @@ export const signInPostQuery = (isAuthData: IAuthData) => (dispatch: Dispatch) =
             // debugger;
             if (res.data !== 'INVALID LOGIN OR PASSWORD') { //поправить на новый лад?
                 // добавить ошибку error jwt
-                dispatch(setIsAuthUserDataAC(res));
+                // dispatch(setIsAuthUserDataAC(res.data));
+                dispatch(setUserDataAC(res.data));
                 dispatch(setIsAuthUserAC(true));
             }
             // dispatch(setIsAuthUserDataAC(res));
@@ -147,7 +157,7 @@ export const signInPostQuery = (isAuthData: IAuthData) => (dispatch: Dispatch) =
         })
         .catch(() => {
             dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
-            dispatch(setIsAuthUserAC(true)); //todo потом убрать
+            // dispatch(setIsAuthUserAC(true)); //todo потом убрать
 
         });
 }
@@ -157,9 +167,9 @@ export const recoveryPasswordPostQuery = (email: Object) => (dispatch: Dispatch)
     usersAPI.recoveryPassword(email) //валидация на успешный ответ и на появление сообщения
         .then((res: any) => {
             if (res.data === 'SUCCESS') { //поправить на новый лад?
-                dispatch(setIsResetUserAC(true));
+                dispatch(setIsValidEmailResetUserAC(true));
             }
-            // dispatch(setIsResetUserAC(true));
+            dispatch(setIsValidEmailResetUserAC(false));
 
         })
         .catch(() => {
@@ -171,11 +181,17 @@ export const resetPasswordPostQuery = (resetPass: Object) => (dispatch: Dispatch
     usersAPI.resetPassword(resetPass)
         .then((res: any) => {
             if (res.data === 'SUCCESS') { //поправить на новый лад?
-                dispatch(setIsResetUserAC(true));
+                dispatch(setIsValidPassResetUserAC(true));
             }
+            if (res.data === 'NEW PASS NOT DIFFERENT BY OLD') { //поправить на новый лад?
+                dispatch(setIsValidPassResetUserAC('old_pass'));
+            }
+            dispatch(setIsValidPassResetUserAC(false));
+
         }) //валидация на успешный ответ и на появление сообщения
         .catch(() => {
-
+            dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
+            dispatch(setIsValidPassResetUserAC(false));
         });
 }
 
@@ -206,6 +222,22 @@ export const logoutGetQuery = () => (dispatch: Dispatch) => {
         });
 }
 
+export const validateResetLinkGetQuery = (currentURL: string) => (dispatch: Dispatch) => {
+    currentURL = 'http://localhost:8080' + currentURL.substr(21);
+    usersAPI.validateResetLink(currentURL)
+        .then((res: any) => {
+            if (res.data === 'SUCCESS') { //поправить на новый лад?
+                dispatch(setIsValidLinkResetUserAC(true));
+            }
+            dispatch(setIsValidLinkResetUserAC(true)); //false
+        })
+        .catch(() => {
+            dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
+            dispatch(setIsValidLinkResetUserAC(false));
+            // dispatch(setIsRegUserAC(true)); //todo потом убрать
+        });
+}
+
 //
 // export const getUserAccountGetQuery = () => (dispatch) => {
 //     usersAPI.getAccount()
@@ -214,15 +246,18 @@ export const logoutGetQuery = () => (dispatch: Dispatch) => {
 //         }) //валидация на успешный ответ и на появление сообщения
 //         .catch(() => {});
 // }
-//
-// export const saveChangeAccPostQuery = (account) => (dispatch) => {
-//     usersAPI.saveAccountChanges(account)
-//         .then(response => {
-//             //dispatch(setUserAccountAC(response));
-//         }) //валидация на успешный ответ
-//         .catch(() => {});
-// }
-//
+
+export const saveChangeAccPostQuery = (newCard: IUserCard) => (dispatch: Dispatch) => {
+    usersAPI.saveAccountChanges(newCard)
+        .then((res: any) => {
+            // dispatch(setUserAccountAC(response));
+        }) //валидация на успешный ответ
+        .catch(() => {
+        dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
+
+    });
+}
+
 // export const getUsersGetQuery = () => (dispatch) => {
 //     usersAPI.getUsers()
 //         .then(response => {

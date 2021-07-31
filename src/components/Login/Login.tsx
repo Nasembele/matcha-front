@@ -7,10 +7,18 @@ import {ILogin, IState} from "../../types";
 import {
     changeEmailAC,
     changeLoginAC,
-    changePasswordAC, changeRegBirthdayAC, changeRegEmailAC,
-    changeRegFirstNameAC, changeRegGenderAC,
+    changePasswordAC,
+    changeRegBirthdayAC,
+    changeRegEmailAC,
+    changeRegFirstNameAC,
+    changeRegGenderAC,
     changeRegLastNameAC,
-    changeRegMiddleNameAC, changeRegPasswordAC, changeRegSexualPreferenceAC, setIsRegUserAC, setIsResetUserAC
+    changeRegMiddleNameAC,
+    changeRegPasswordAC,
+    changeRegSexualPreferenceAC,
+    setIsRegUserAC, setIsValidEmailResetUserAC,
+    setIsValidLinkResetUserAC,
+    setIsValidPassResetUserAC
 } from "./LoginAC";
 import {recoveryPasswordPostQuery, signInPostQuery, updateRegDataPostQuery} from "../../api";
 
@@ -20,29 +28,29 @@ const Login = () => {
 
     // const loginAuth = (state: IState) => state.login.isAuth;
     const login = useSelector((state: IState) => state.login);
-    const error = useSelector((state: IState) => state.error);
+    // const error = useSelector((state: IState) => state.error);
 
-   const [chosenIndex, setChosenIndex] = useState(0);
-   // const [isResetPassword, setIsResetPassword] = useState(false);
-   // const [isRegSuccess, setIsRegSuccess] = useState(false);
-   const [password, setPassword] = useState('');
-   const [isNotMatchPassword, setIsNotMatchPassword] = useState(false);
+    const [chosenIndex, setChosenIndex] = useState(0);
+    // const [isResetPassword, setIsResetPassword] = useState(false);
+    // const [isRegSuccess, setIsRegSuccess] = useState(false);
+    const [password, setPassword] = useState('');
+    const [isNotMatchPassword, setIsNotMatchPassword] = useState(false);
 
 
     const changeLogin = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-       dispatch(changeLoginAC(value));
+        dispatch(changeLoginAC(value));
     };
 
     const changePassword = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-       dispatch(changePasswordAC(value));
+        dispatch(changePasswordAC(value));
     };
 
     const changeEmail = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-       dispatch(changeEmailAC(value));
+        dispatch(changeEmailAC(value));
     };
 
     const signInButton = () => {
-       dispatch(signInPostQuery(login.authData));
+        dispatch(signInPostQuery(login.authData));
     };
 
     const recoveryPassword = () => {
@@ -55,7 +63,10 @@ const Login = () => {
 
     const changeChosenIndex = (value: number) => () => {
         if (chosenIndex === 1) {
-            dispatch(setIsResetUserAC(false));
+            dispatch(setIsValidPassResetUserAC(null));
+            dispatch(setIsValidLinkResetUserAC(null));
+            dispatch(setIsValidEmailResetUserAC(null));
+
         }
         if (chosenIndex === 2) {
             dispatch(setIsRegUserAC(false));
@@ -64,15 +75,15 @@ const Login = () => {
     }
 
     const changeFirstRegName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-       dispatch(changeRegFirstNameAC(value));
+        dispatch(changeRegFirstNameAC(value));
     }
 
     const changeRegLastName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-       dispatch(changeRegLastNameAC(value));
+        dispatch(changeRegLastNameAC(value));
     }
 
     const changeRegMiddleName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-       dispatch(changeRegMiddleNameAC(value));
+        dispatch(changeRegMiddleNameAC(value));
     }
 
     const changeRegBirthday = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
@@ -80,11 +91,11 @@ const Login = () => {
     }
 
     const changeRegEmail = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-       dispatch(changeRegEmailAC(value));
+        dispatch(changeRegEmailAC(value));
     }
 
     const changeRegLogin = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-      //  dispatch(changeRegLoginAC(value));
+        //  dispatch(changeRegLoginAC(value));
     }
 
     const changeRegPassword = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
@@ -97,8 +108,8 @@ const Login = () => {
     }
 
     const updateRegData = () => {
-       dispatch(updateRegDataPostQuery(login.regData!));
-       // setIsRegSuccess(true);
+        dispatch(updateRegDataPostQuery(login.regData!));
+        // setIsRegSuccess(true);
     }
 
     // if (login.isAuth) {
@@ -120,6 +131,7 @@ const Login = () => {
     const changeValidatePassword = () => {
         setIsNotMatchPassword(false);
     }
+
 
     return (
         <div>
@@ -161,14 +173,20 @@ const Login = () => {
                             <button type={'button'} className={style.reg_button} onClick={recoveryPassword}>
                                 Отправить
                             </button>
-                            {login.resetData?.isResetUser &&
-                                <div>
-                            <p className={style.reset_password}>На указанный адрес отправлено письмо для восстановления
-                                пароля</p>
+                            {login.resetData.isValidEmail === false &&
+                            <div>
+                                <p className={style.reset_password}>Неправильный email</p>
+                            </div>
+                            }
+                            {login.resetData.isValidEmail &&
+                            <div>
+                                <p className={style.reset_password}>На указанный адрес отправлено письмо для
+                                    восстановления
+                                    пароля</p>
                                 <button type={'button'} className={style.submit_button} onClick={changeChosenIndex(0)}>
-                                Войти
+                                    Войти
                                 </button>
-                                </div>
+                            </div>
                             }
                         </div>
                     </div>
@@ -200,18 +218,20 @@ const Login = () => {
                             <option>{'Не выбрано'}</option>
                             <option value={'getero'}>{'гетеро'}</option>
                             <option value={'bisexual'}>{'би'}</option>
-                            {login.regData?.gender === 'male' && <option  value={'gay'}>{'гей'}</option>}
-                            {login.regData?.gender === 'female' && <option  value={'lesbi'}>{'лесби'}</option>}
+                            {login.regData?.gender === 'male' && <option value={'gay'}>{'гей'}</option>}
+                            {login.regData?.gender === 'female' && <option value={'lesbi'}>{'лесби'}</option>}
                         </select>
 
                         <div className={style.form_header}>email</div>
                         <input type={'text'} onBlur={changeRegEmail} className={style.form_input}/>
 
                         <div className={style.form_header}>Пароль</div>
-                        <input type={'text'} onChange={changeValidatePassword} onBlur={onChangeSetPassword} className={style.form_input}/>
+                        <input type={'password'} onChange={changeValidatePassword} onBlur={onChangeSetPassword}
+                               className={style.form_input}/>
 
                         <div className={style.form_header}>Повторите пароль</div>
-                        <input type={'text'} onChange={changeValidatePassword} onBlur={changeRegPassword} className={style.form_input}/>
+                        <input type={'password'} onChange={changeValidatePassword} onBlur={changeRegPassword}
+                               className={style.form_input}/>
                         {isNotMatchPassword &&
                         <p className={style.reset_password}>Пароли не совпадают</p>}
                         <div>
@@ -219,12 +239,13 @@ const Login = () => {
                                 Зарегистрироваться
                             </button>
                             {login.regData?.isRegUser &&
-                                <div>
-                            <p className={style.reset_password}>На указанный адрес отправлено письмо для подтверждения регистрации</p>
-                                    <button type={'button'} className={style.submit_button} onClick={changeChosenIndex(0)}>
-                                        Войти
-                                    </button>
-                                </div>}
+                            <div>
+                                <p className={style.reset_password}>На указанный адрес отправлено письмо для
+                                    подтверждения регистрации</p>
+                                <button type={'button'} className={style.submit_button} onClick={changeChosenIndex(0)}>
+                                    Войти
+                                </button>
+                            </div>}
                         </div>
                     </div>
                 </span>}

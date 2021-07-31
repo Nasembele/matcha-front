@@ -15,7 +15,7 @@ import ErrorWrapperReducer from "./components/ErrorWrapper/ErrorWrapper.reducer"
 let reducers = combineReducers({
     login: LoginReducer,
     error: ErrorWrapperReducer,
-    // mainPage: MainPageReducer
+    mainPage: MainPageReducer
 });
 
 const composeEnhancers = composeWithDevTools({});
