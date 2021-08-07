@@ -140,29 +140,29 @@ const Login = () => {
             <body className={style.body}>
             <div className={style.whole_form}>
                 {chosenIndex === 0 && <div>
-                    <p className={style.title}>Join and start dating today!</p>
-                    <div className={style.content}>
-                        <div className={style.form_header}>email</div>
-                        <input type={'text'} onChange={changeLogin} className={style.form_input}/>
-                        <div className={style.form_header}>Пароль</div>
-                        <input type={'password'} onChange={changePassword} className={style.form_input}/>
-                        <div>
-                            <button type={'button'} className={style.submit_button} onClick={signInButton}>
-                                Войти
-                            </button>
-                            <button type={'button'} className={style.negative_button} onClick={changeChosenIndex(1)}>
-                                Забыли пароль?
-                            </button>
-                            {/*{error.isServerError === true &&*/}
-                            {/*<p className={style.error}>Ошибка сервера</p>}*/}
-                            {/*{error.isServerError === true &&*/}
-                            {/*<p className={style.error}>Не удается войти. Проверьте правильность написания email и*/}
-                            {/*    пароля</p>}*/}
-                        </div>
-                        <button type={'button'} className={style.reg_button} onClick={changeChosenIndex(2)}>
-                            Регистрация
-                        </button>
+                  <p className={style.title}>Join and start dating today!</p>
+                  <div className={style.content}>
+                    <div className={style.form_header}>email</div>
+                    <input type={'text'} onChange={changeLogin} className={style.form_input}/>
+                    <div className={style.form_header}>Пароль</div>
+                    <input type={'password'} onChange={changePassword} className={style.form_input}/>
+                    <div>
+                      <button type={'button'} className={style.submit_button} onClick={signInButton}>
+                        Войти
+                      </button>
+                      <button type={'button'} className={style.negative_button} onClick={changeChosenIndex(1)}>
+                        Забыли пароль?
+                      </button>
+                        {/*{error.isServerError === true &&*/}
+                        {/*<p className={style.error}>Ошибка сервера</p>}*/}
+                        {/*{error.isServerError === true &&*/}
+                        {/*<p className={style.error}>Не удается войти. Проверьте правильность написания email и*/}
+                        {/*    пароля</p>}*/}
                     </div>
+                    <button type={'button'} className={style.reg_button} onClick={changeChosenIndex(2)}>
+                      Регистрация
+                    </button>
+                  </div>
                 </div>}
                 {chosenIndex === 1 && <span>
                     <p className={style.title}>Восстановление пароля</p>
@@ -175,17 +175,17 @@ const Login = () => {
                             </button>
                             {login.resetData.isValidEmail === false &&
                             <div>
-                                <p className={style.reset_password}>Неправильный email</p>
+                              <p className={style.reset_password}>Неправильный email</p>
                             </div>
                             }
-                            {login.resetData.isValidEmail &&
+                            {login.resetData.isValidEmail === true &&
                             <div>
-                                <p className={style.reset_password}>На указанный адрес отправлено письмо для
-                                    восстановления
-                                    пароля</p>
-                                <button type={'button'} className={style.submit_button} onClick={changeChosenIndex(0)}>
-                                    Войти
-                                </button>
+                              <p className={style.reset_password}>
+                                На указанный адрес отправлено письмо для восстановления пароля
+                              </p>
+                              <button type={'button'} className={style.submit_button} onClick={changeChosenIndex(0)}>
+                                Войти
+                              </button>
                             </div>
                             }
                         </div>
@@ -234,18 +234,19 @@ const Login = () => {
                                className={style.form_input}/>
                         {isNotMatchPassword &&
                         <p className={style.reset_password}>Пароли не совпадают</p>}
-                        <div>
+                      <div>
                             <button type={'button'} className={style.reg_button} onClick={updateRegData}>
                                 Зарегистрироваться
                             </button>
-                            {login.regData?.isRegUser &&
-                            <div>
-                                <p className={style.reset_password}>На указанный адрес отправлено письмо для
-                                    подтверждения регистрации</p>
-                                <button type={'button'} className={style.submit_button} onClick={changeChosenIndex(0)}>
-                                    Войти
-                                </button>
-                            </div>}
+                          {login.regData?.isRegUser &&
+                          <div>
+                            <p className={style.reset_password}>
+                              На указанный адрес отправлено письмо для подтверждения регистрации
+                            </p>
+                            <button type={'button'} className={style.submit_button} onClick={changeChosenIndex(0)}>
+                              Войти
+                            </button>
+                          </div>}
                         </div>
                     </div>
                 </span>}

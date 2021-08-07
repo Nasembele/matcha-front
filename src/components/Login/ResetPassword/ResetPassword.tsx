@@ -35,10 +35,11 @@ const ResetPassword = () => {
     };
 
     const onClickResetPassword = () => {
-        const index = currentURL.indexOf('&linkId=');
-        const id = Number(currentURL.substr(index + 8));
-        dispatch(setIdResetUserAC(id));
+        const startIndex = currentURL.indexOf('?id=');
+        const endIndex = currentURL.indexOf('&passtoken');
+        const id = Number(currentURL.substr(startIndex + 4, endIndex - startIndex - 4));
 
+        dispatch(setIdResetUserAC(id));
         dispatch(resetPasswordPostQuery({id: id, password: resetData.resetPassword}));
     }
 
