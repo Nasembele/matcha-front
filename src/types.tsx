@@ -3,6 +3,16 @@ export interface IAction {
     payload: any
 }
 
+export interface IPhotos {
+
+        content: string,
+        format: string,
+        name: string,
+        action: 'add' | 'delete' | null,
+        number: string
+
+}
+
 export interface IResetData {
     id: number,
     email: string,
@@ -13,14 +23,15 @@ export interface IResetData {
 }
 
 export interface IUserCard {
-    biography: string,
-    workPlace: string,
-    position: string,
-    education: string,
+    biography?: string,
+    workPlace?: string,
+    position?: string,
+    education?: string,
     rating: number,
-    gender: 'male' | 'female' | null,
-    sexualPreference: 'getero' | 'gay' | 'bisexual' | 'lesbi' | null,
-    tags: Array<string>,
+    gender: 'MALE' | 'FEMALE' | null,
+    sexualPreference: 'GETERO' | 'GAY' | 'BISEXUAL' | 'LESBI' | null,
+    tags?: Array<string>,
+    photos: Array<IPhotos>
 }
 
 export interface IUserData {
@@ -59,10 +70,18 @@ export interface ILogin {
     resetData: IResetData
 }
 
+export interface IUserFilter {
+    ageBy?: string,
+    ageTo?: string,
+    rating?: string,
+    commonTagsCount?: string
+}
+
 export interface IMainPage {
     account: IUserData,
     users: IUserData[],
     likeUsers: IUserData[],
+    userFilters: IUserFilter,
 }
 
 export interface IError {

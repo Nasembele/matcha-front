@@ -1,7 +1,14 @@
-import {getArrayWithNewEl, giveNextUsers, initialState, setLikeUser} from "./MainPage.helpers";
+import {
+    getArrayWithNewEl,
+    giveNextUsers,
+    initialState,
+    setLikeUser,
+    setPhotoParamHelp
+} from "./MainPage.helpers";
 import * as constants from "./MainPage.consts";
-import {setLikeUserAC} from "./MainPageAC";
-import {IAction, IMainPage} from "../../types";
+import {setLikeUserAC, setPhotoParam} from "./MainPageAC";
+import {IAction, IMainPage, IPhotos} from "../../types";
+import {SET_FILTER_COMMON_TAGS, SET_FILTER_RATING} from "./MainPage.consts";
 
 export default function MainPageReducer(state: IMainPage = initialState, action: IAction) {
     switch (action.type) {
@@ -87,25 +94,18 @@ export default function MainPageReducer(state: IMainPage = initialState, action:
         case constants.SET_USERS:
             return {
                 ...state,
-                users: {
-                    ...state.users,
-                    us: action.payload,
-                }
+                users: action.payload,
             };
         case constants.SET_LIKE_USER:
             return {
                 ...state,
                 likeUsers: setLikeUser(state.likeUsers, state.users[0]),
-                users: {
-                    ...state.users,
-                    us: giveNextUsers(state.users)},
+                users: giveNextUsers(state.users)
             };
         case constants.DELETE_NOT_LIKE_USER:
             return {
                 ...state,
-                users: {
-                    ...state.users,
-                    us: giveNextUsers(state.users)},
+                users: giveNextUsers(state.users)
             };
         case constants.SET_USER_DATA:
             return {
@@ -132,6 +132,89 @@ export default function MainPageReducer(state: IMainPage = initialState, action:
                         ...state.account.card,
                         sexualPreference: action.payload
                     }
+                }
+            };
+        case constants.SET_PHOTO_CONTENT:
+            return {
+                ...state,
+                account: {
+                    ...state.account,
+                    card: {
+                        ...state.account.card,
+                        // photos: setPhotoContentToArray(state.account.card.photos, action.payload)
+                        photos: state.account.card.photos?.map((el: IPhotos, index: number) => {
+                            if (index === action.payload?.number) {
+                                return {
+                                    ...el,
+                                    // displayContent: `data:${el.data.format};base64,${action.payload?.photo}`,
+                                    // data: {
+                                        ...el,
+                                        content: action.payload?.photo
+                                    // },
+                                }
+                            } else {
+                                return el
+                            }
+                        })
+                    }
+                }
+            };
+        case constants.SET_PHOTO_PARAM:
+            return {
+                ...state,
+                account: {
+                    ...state.account,
+                    card: {
+                        ...state.account.card,
+                        // photos:
+                        photos: setPhotoParamHelp(state.account.card.photos, action.payload)
+                        //   state.account.card.photos.map((el: IPhotos, index: number) => {
+                        //     if (index === action.payload?.number) {
+                        //         return {
+                        //             ...el,
+                        //             data: {
+                        //                 ...el.data,
+                        //                 name: action.payload?.name,
+                        //                 format: action.payload?.format
+                        //             },
+                        //         }
+                        //     } else {
+                        //         return el
+                        //     }
+                        // })
+                    }
+                }
+            };
+        case constants.SET_START_FILTER_AGE:
+            return {
+                ...state,
+                userFilters: {
+                    ...state.userFilters,
+                    ageBy: action.payload
+                }
+            };
+        case constants.SET_END_FILTER_AGE:
+            return {
+                ...state,
+                userFilters: {
+                    ...state.userFilters,
+                    ageTo: action.payload
+                }
+            };
+        case constants.SET_FILTER_RATING:
+            return {
+                ...state,
+                userFilters: {
+                    ...state.userFilters,
+                    rating: action.payload
+                }
+            };
+        case constants.SET_FILTER_COMMON_TAGS:
+            return {
+                ...state,
+                userFilters: {
+                    ...state.userFilters,
+                    commonTagsCount: action.payload
                 }
             };
         default:

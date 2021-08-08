@@ -67,3 +67,40 @@ export const changeSexualPreferenceAC = (sexualPreference: string) => ({
     type: constants.SET_NEW_SEXUAL_PREFERENCE,
     payload: sexualPreference
 });
+
+export const setPhotoContent = (photo: any, number: number) => ({
+    type: constants.SET_PHOTO_CONTENT,
+    payload: {
+        number: number,
+        photo: photo
+    }
+});
+
+export const setPhotoParam = (number: number, name: string, format: string) => ({
+    type: constants.SET_PHOTO_PARAM,
+    payload: {
+        number: number,
+        name: name,
+        format: format
+    }
+});
+
+export const setStartFilterAgeAC = (startAge: string) => ({
+    type: constants.SET_START_FILTER_AGE,
+    payload: startAge
+});
+
+export const setEndFilterAgeAC = (endAge: string) => ({
+    type: constants.SET_END_FILTER_AGE,
+    payload: endAge
+});
+
+export const setFilterRatingAC = (rating: string) => ({
+    type: constants.SET_FILTER_RATING,
+    payload: rating
+});
+
+export const setFilterCommonTagsAC = (commonTags: string) => ({
+    type: constants.SET_FILTER_COMMON_TAGS,
+    payload: commonTags
+});
