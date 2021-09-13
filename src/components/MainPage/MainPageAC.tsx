@@ -104,3 +104,23 @@ export const setFilterCommonTagsAC = (commonTags: string) => ({
     type: constants.SET_FILTER_COMMON_TAGS,
     payload: commonTags
 });
+
+export const changeAccFirstNameAC = (name: string) => ({
+    type: constants.SET_ACC_FIRST_NAME,
+    payload: name
+});
+
+export const changeAccLastNameAC = (lastName: string) => ({
+    type: constants.SET_ACC_LAST_NAME,
+    payload: lastName
+});
+
+export const changeAccMiddleNameAC = (middleName: string) => ({
+    type: constants.SET_ACC_MIDDLE_NAME,
+    payload: middleName
+});
+
+export const changeAccBirthdayAC = (date: string) => ({
+    type: constants.SET_ACC_BIRTHDAY,
+    payload: date
+});

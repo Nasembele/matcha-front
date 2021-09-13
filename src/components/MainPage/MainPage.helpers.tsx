@@ -5,6 +5,7 @@ export const initialUserData = {
     firstName: '',
     lastName: '',
     middleName: '',
+    birthday: '',
     yearsOld: 0,
     location: '',
     card: {

@@ -9,6 +9,7 @@ import {
     setIsValidEmailResetUserAC, setIsValidLinkResetUserAC, setIsValidPassResetUserAC
 } from "./components/Login/LoginAC";
 import {setServerErrorAC} from "./components/ErrorWrapper/ErrorWrapperAC";
+import {prepareDateToSendServer} from "./helpers";
 
 const instance = axios.create(
     {
@@ -82,6 +83,16 @@ export const usersAPI = {
     likeUser (userId: number) {
         return  instance.post(`like/${userId}`)
     },
+
+  updateAccSettings (data: Object) {
+    return instance.put(`main/accountsettings`, data)
+  },
+
+  changeEmail (data: Object) {
+    return instance.post(`main/emailchange`, data)
+  },
+
+
 
     // fetch('http://localhost:8080/registration', {
     // method: 'POST',
@@ -302,6 +313,8 @@ export const getUsersPostQuery = () => (dispatch: Dispatch, getState: any) => {
 
           "yearsOld": 18,
 
+          "birthday": '01.01.2001',
+
           "location": "Moscow",
 
           "card": {
@@ -384,6 +397,8 @@ export const getUsersPostQuery = () => (dispatch: Dispatch, getState: any) => {
           "lastName": "Матвеева",
 
           "middleName": "Геннадьевна",
+          "birthday": '01.01.2001',
+
 
           "yearsOld": 24,
 
@@ -441,6 +456,7 @@ export const getUsersPostQuery = () => (dispatch: Dispatch, getState: any) => {
           "lastName": "Ковалёва",
 
           "middleName": "Куприяновна",
+          "birthday": '01.01.2001',
 
           "yearsOld": 31,
 
@@ -485,6 +501,7 @@ export const getUsersPostQuery = () => (dispatch: Dispatch, getState: any) => {
           "lastName": "Константинова",
 
           "middleName": "Игнатьевна",
+          "birthday": '01.01.2001',
 
           "yearsOld": 36,
 
@@ -529,6 +546,7 @@ export const getUsersPostQuery = () => (dispatch: Dispatch, getState: any) => {
           "lastName": "Калашникова",
 
           "middleName": "Донатовна",
+          "birthday": '01.01.2001',
 
           "yearsOld": 40,
 
@@ -584,4 +602,45 @@ export const likeUserPostQuery = (userId: number) => (dispatch: Dispatch) => {
         .catch(() => {
             dispatch(setLikeUserAC()); //потом убрать
         });
+}
+
+export const changeAccEmailPostQuery = () => (dispatch: Dispatch) => {
+  const data = {"act": "emailRqSend"};
+
+  usersAPI.changeEmail(data)
+    .then(response => { //валидация?
+
+    })
+    .catch(() => {
+      dispatch(setLikeUserAC()); //потом убрать
+    });
+}
+
+export const updateAccountSettings = (field: string, value: string) => (dispatch: Dispatch, getState: any) => {
+  const userId = getState().mainPage.account.id;
+  let data;
+  switch (field) {
+    case "fio":
+       data = {
+        id: userId,
+        field: field,
+        fio: value,
+      };
+       break;
+    case "birthDate":
+    default:
+       data = {
+        id: userId,
+        field: field,
+        birthDate: prepareDateToSendServer(value),
+      };
+       break;
+  }
+  usersAPI.updateAccSettings(data)
+    .then(response => { //валидация?
+      // dispatch(setLikeUserAC());
+    })
+    .catch(() => {
+      dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
+    });
 }

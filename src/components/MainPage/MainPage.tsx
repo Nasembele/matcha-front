@@ -1,8 +1,10 @@
 import {useDispatch, useSelector} from "react-redux";
-import React, {useEffect, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import style from './MainPage.module.css';
 
 import {
+  changeAccBirthdayAC,
+  changeAccFirstNameAC, changeAccLastNameAC, changeAccMiddleNameAC,
   changeBiographyAC,
   changeEducationAC,
   changeGenderAC,
@@ -19,14 +21,20 @@ import {
 } from "./MainPageAC";
 import {tagsArray} from "./MainPage.helpers";
 import {
-  authGetUserQuery,
+  authGetUserQuery, changeAccEmailPostQuery,
   changePhotoPostQuery,
   getUsersPostQuery, likeUserPostQuery,
   logoutGetQuery,
-  saveChangeAccPostQuery
+  saveChangeAccPostQuery, updateAccountSettings
 } from "../../api";
 import {IPhotos, IState} from "../../types";
-import {changeRegGenderAC, changeRegSexualPreferenceAC} from "../Login/LoginAC";
+import {
+  changeRegBirthdayAC,
+  changeRegFirstNameAC,
+  changeRegGenderAC,
+  changeRegLastNameAC, changeRegMiddleNameAC,
+  changeRegSexualPreferenceAC
+} from "../Login/LoginAC";
 
 const getBase64 = (file: File) => {
   return new Promise((resolve, reject) => {
@@ -65,6 +73,8 @@ const MainPage = (state: IState) => {
   const dispatch = useDispatch();
 
   const mainPage = useSelector((state: IState) => state.mainPage);
+  const login = useSelector((state: IState) => state.login);
+
   // const userData = useSelector((state: IState) => state.login.userData);
 
   const [chosenIndex, setChosenIndex] = useState(0);
@@ -98,6 +108,13 @@ const MainPage = (state: IState) => {
     setHasGetUser(true);
   }
 
+  const openAccountProperties = () => {
+    // dispatch(setUserDataAC(userData));
+    setChosenIndex(2);
+    //   !hasGetUser && dispatch(getUserAccountGetQuery());
+    // setHasGetUser(true);
+  }
+
   const openUserFilter = () => {
     setIsOpenFilter(true);
 
@@ -108,14 +125,14 @@ const MainPage = (state: IState) => {
 
   }
   const setFilterAge = (parameter: string) => (e: any) => {
-if (parameter === 'start') {
-  dispatch(setStartFilterAgeAC(e.target.value));
-}
+    if (parameter === 'start') {
+      dispatch(setStartFilterAgeAC(e.target.value));
+    }
     if (parameter === 'end') {
       dispatch(setEndFilterAgeAC(e.target.value));
 
     }
-   }
+  }
 
 
   const setFilterRating = (e: any) => {
@@ -172,7 +189,7 @@ if (parameter === 'start') {
   };
 
   const onClickLikeUser = () => {
-      dispatch(likeUserPostQuery(mainPage.users[userIndex]?.id));
+    dispatch(likeUserPostQuery(mainPage.users[userIndex]?.id));
   };
 
   const onClickNotLikeUser = () => {
@@ -191,11 +208,6 @@ if (parameter === 'start') {
     dispatch(changeSexualPreferenceAC(e.currentTarget.value));
   };
 
-  const set = (r: any) => {
-    return r;
-  }
-
-
   const changePhoto = (number: number) => (e: any) => {
     dispatch(setPhotoParam(number, e.target.files[0].name, e.target.files[0].type));
     getBase64(e.target.files[0]).then(
@@ -206,20 +218,48 @@ if (parameter === 'start') {
       }
     );
   }
-    const deletePhoto = (number: number) => (e: any) => {
-      dispatch(changePhotoPostQuery(number, 'delete'));
-      dispatch(authGetUserQuery());
-    };
+  const deletePhoto = (number: number) => (e: any) => {
+    dispatch(changePhotoPostQuery(number, 'delete'));
+    dispatch(authGetUserQuery());
+  };
 
+  const saveChangedFIO = () => {
+    const newFio = `${mainPage.account.lastName} ${mainPage.account.firstName} ${mainPage.account.middleName}`;
+    dispatch(updateAccountSettings("fio", newFio));
+  }
 
+  const saveChangedBirthday = () => {
+    dispatch(updateAccountSettings("birthDate", mainPage.account.birthday));
+  }
 
-    // dispatch(changePhotoPostQuery(number));
+  // dispatch(changePhotoPostQuery(number));
 //отправлять на сервер каждую фотку
 //     обновлять всю инфу
-    //сделать кнопук удаления каждой отдельной фотки и после этого обновлять инфу
+  //сделать кнопук удаления каждой отдельной фотки и после этого обновлять инфу
 
 
   // const pnh = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAADgAAAAjACAYAAABL
+
+  const changeFirstAccName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+    dispatch(changeAccFirstNameAC(value));
+  }
+
+  const changeAccLastName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+    dispatch(changeAccLastNameAC(value));
+  }
+
+  const changeAccMiddleName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+    dispatch(changeAccMiddleNameAC(value));
+  }
+
+  const changeAccBirthday = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+    dispatch(changeAccBirthdayAC(value));
+  }
+
+  const changeAccEmail = () => {
+    dispatch(changeAccEmailPostQuery());
+
+  }
 
   return (
     <div className={style.content_wrapper}>
@@ -249,7 +289,9 @@ if (parameter === 'start') {
 
               {mainPage.account.card.photos[0] &&
               <span>
-                <img height='100px' src={`data:${mainPage.account.card.photos[0]?.format};base64,${mainPage.account.card.photos[0]?.content}`} alt='фото 1'/>
+                <img height='100px'
+                     src={`data:${mainPage.account.card.photos[0]?.format};base64,${mainPage.account.card.photos[0]?.content}`}
+                     alt='фото 1'/>
                 <div onClick={deletePhoto(0)}>Удалить фото</div>
 
                 <div className={style.form_header}>Фото 2</div>
@@ -260,36 +302,40 @@ if (parameter === 'start') {
 
               {mainPage.account.card.photos[1] &&
               <span>
-                            <img height='100px' src={`data:${mainPage.account.card.photos[1]?.format};base64,${mainPage.account.card.photos[1]?.content}`}
+                            <img height='100px'
+                                 src={`data:${mainPage.account.card.photos[1]?.format};base64,${mainPage.account.card.photos[1]?.content}`}
                                  alt='фото 2'/>
 
                             <div className={style.form_header}>Фото 3</div>
                 {!mainPage.account.card.photos[2] &&
-                            <input type="file" id="file" name="file" onChange={changePhoto(2)}/>}
+                <input type="file" id="file" name="file" onChange={changePhoto(2)}/>}
                                   </span>}
 
               {mainPage.account.card.photos[2] &&
               <span>
-                            <img height='100px' src={`data:${mainPage.account.card.photos[2]?.format};base64,${mainPage.account.card.photos[2]?.content}`}
+                            <img height='100px'
+                                 src={`data:${mainPage.account.card.photos[2]?.format};base64,${mainPage.account.card.photos[2]?.content}`}
                                  alt='фото 3'/>
 
                             <div className={style.form_header}>Фото 4</div>
                 {!mainPage.account.card.photos[3] &&
-                            <input type="file" id="file" name="file" onChange={changePhoto(3)}/>}
+                <input type="file" id="file" name="file" onChange={changePhoto(3)}/>}
 </span>}
               {mainPage.account.card.photos[3] &&
               <span>
-                            <img height='100px' src={`data:${mainPage.account.card.photos[3]?.format};base64,${mainPage.account.card.photos[3]?.content}`}
+                            <img height='100px'
+                                 src={`data:${mainPage.account.card.photos[3]?.format};base64,${mainPage.account.card.photos[3]?.content}`}
                                  alt='фото 4'/>
 
                             <div className={style.form_header}>Фото 5</div>
                 {!mainPage.account.card.photos[4] &&
-                            <input type="file" id="file" name="file" onChange={changePhoto(4)}/>}
+                <input type="file" id="file" name="file" onChange={changePhoto(4)}/>}
                                     </span>}
 
               {mainPage.account.card.photos[4] &&
               <span>
-                            <img height='100px' src={`data:${mainPage.account.card.photos[4]?.format};base64,${mainPage.account.card.photos[4]?.content}`}
+                            <img height='100px'
+                                 src={`data:${mainPage.account.card.photos[4]?.format};base64,${mainPage.account.card.photos[4]?.content}`}
                                  alt='фото 5'/>
 </span>}
               <div className={style.form_header}>Месторасположение</div>
@@ -373,38 +419,86 @@ if (parameter === 'start') {
             </div>
           </div>
         </div>}
+
+        {chosenIndex === 2 &&
+        <div>
+          <div className={style.button_acc} onClick={closeAccountSetting}>Выйти из настроек аккаунта</div>
+          <div>
+            <div className={style.content}>
+
+              <div className={style.form_header}>Имя</div>
+              <input type={'text'} onChange={changeFirstAccName} className={style.form_input}
+                     value={mainPage.account.firstName}/>
+
+              <div className={style.form_header}>Отчество</div>
+              <input type={'text'} onChange={changeAccMiddleName} className={style.form_input}
+                     value={mainPage.account.middleName}/>
+
+
+              <div className={style.form_header}>Фамилия</div>
+              <input type={'text'} onChange={changeAccLastName} className={style.form_input}
+                     value={mainPage.account.lastName}/>
+
+              <button onClick={saveChangedFIO}>
+                Сохранить изменения
+              </button>
+
+              <div className={style.form_header}>Дата рождения</div>
+              <input className={style.form_input} type={'date'}
+                     onChange={changeAccBirthday}
+                     value={mainPage.account.birthday}/>
+
+                <button onClick={saveChangedBirthday}>
+                  Сохранить изменения
+                </button>
+
+
+              <div className={style.form_header}>e-mail</div>
+
+              <button onClick={changeAccEmail}>
+                Поменять email
+              </button>
+
+              {/*<input className={style.form_input}*/}
+              {/*       value={login.authData.email}/>*/}
+
+            </div>
+          </div>
+        </div>}
+
         {chosenIndex === 0 && <div>
           <div className={style.button_acc} onClick={openAccountSetting}>Аккаунт</div>
+          <div className={style.button_acc} onClick={openAccountProperties}>Настройки аккаунта</div>
           <div className={style.button_acc} onClick={openUserFilter}>Фильтр</div>
           {/*{<div className={style.button_acc} onClick={closeUserFilter}>Закрыть фильтр</div>}*/}
 
           {isOpenFilter &&
-            <div>
-          <div className={style.button_acc} onClick={closeUserFilter}>Закрыть фильтр</div>
-          <div className={style.userFilter}>
-            <p>Фильтр
-            </p>
-            <p>Возраст
-              <div>От
-              <input type = 'number' onChange={setFilterAge("start")} value={mainPage.userFilters.ageBy}/>
-              </div>
-              <div>До
-                <input type = 'number' onChange={setFilterAge("end")} value={mainPage.userFilters.ageTo}/>
-              </div>
-            </p>
-            <p>Рейтинг
-              <div>
-                <input type = 'number' onChange={setFilterRating} value={mainPage.userFilters.rating}/>
-              </div>
-            </p>
-            <p>Количество общих интересов
-              <div>
-                <input type = 'number' onChange={setFilterCommonTags} value={mainPage.userFilters.commonTagsCount}/>
-              </div>
-            </p>
+          <div>
+            <div className={style.button_acc} onClick={closeUserFilter}>Закрыть фильтр</div>
+            <div className={style.userFilter}>
+              <p>Фильтр
+              </p>
+              <p>Возраст
+                <div>От
+                  <input type='number' onChange={setFilterAge("start")} value={mainPage.userFilters.ageBy}/>
+                </div>
+                <div>До
+                  <input type='number' onChange={setFilterAge("end")} value={mainPage.userFilters.ageTo}/>
+                </div>
+              </p>
+              <p>Рейтинг
+                <div>
+                  <input type='number' onChange={setFilterRating} value={mainPage.userFilters.rating}/>
+                </div>
+              </p>
+              <p>Количество общих интересов
+                <div>
+                  <input type='number' onChange={setFilterCommonTags} value={mainPage.userFilters.commonTagsCount}/>
+                </div>
+              </p>
 
-          </div>
             </div>
+          </div>
           }
 
           {/*// fakeUsers.map(u => <div key={u.id}>*/}
@@ -420,16 +514,16 @@ if (parameter === 'start') {
                         <div>{mainPage.users[userIndex]?.middleName}</div>
                         <div>{mainPage.users[userIndex]?.lastName}</div>
 
-                      {mainPage.users[userIndex]?.card.photos?.map((el: IPhotos) =>
-                      {return el &&
-                            <span>
+                      {mainPage.users[userIndex]?.card.photos?.map((el: IPhotos) => {
+                        return el &&
+                          <span>
                             <img height='100px' src={`data:${el.format};base64,${el.content}`}
                                  alt='фото'/>
 </span>
-                        })
+                      })
                       }
 
-                        <div>{mainPage.users[userIndex]?.card.rating}</div>
+                      <div>{mainPage.users[userIndex]?.card.rating}</div>
                 </span>
                     <span>
                         <div>{mainPage.users[userIndex]?.yearsOld}</div>
@@ -441,9 +535,9 @@ if (parameter === 'start') {
 
                       <div>
                         Интересы:
-                  {mainPage.users[userIndex]?.card.tags?.map((item: string) => {
-                    return <div>{item}</div>
-                  })}
+                        {mainPage.users[userIndex]?.card.tags?.map((item: string) => {
+                          return <div>{item}</div>
+                        })}
                 </div>
 
                     </span>

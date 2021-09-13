@@ -39,6 +39,7 @@ export interface IUserData {
     firstName: string,
     lastName: string,
     middleName: string,
+    birthday: string,
     yearsOld: number,
     location: string,
     card: IUserCard,

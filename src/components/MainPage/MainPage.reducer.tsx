@@ -8,7 +8,7 @@ import {
 import * as constants from "./MainPage.consts";
 import {setLikeUserAC, setPhotoParam} from "./MainPageAC";
 import {IAction, IMainPage, IPhotos} from "../../types";
-import {SET_FILTER_COMMON_TAGS, SET_FILTER_RATING} from "./MainPage.consts";
+import {SET_ACC_BIRTHDAY, SET_FILTER_COMMON_TAGS, SET_FILTER_RATING} from "./MainPage.consts";
 
 export default function MainPageReducer(state: IMainPage = initialState, action: IAction) {
     switch (action.type) {
@@ -217,6 +217,40 @@ export default function MainPageReducer(state: IMainPage = initialState, action:
                     commonTagsCount: action.payload
                 }
             };
+        case constants.SET_ACC_FIRST_NAME:
+            return {
+                ...state,
+                account: {
+                    ...state.account,
+                    firstName: action.payload
+                }
+            };
+        case constants.SET_ACC_LAST_NAME:
+            return {
+                ...state,
+                account: {
+                    ...state.account,
+                    lastName: action.payload
+                }
+            };
+        case constants.SET_ACC_MIDDLE_NAME:
+            return {
+                ...state,
+                account: {
+                    ...state.account,
+                    middleName: action.payload
+                }
+            };
+        case constants.SET_ACC_BIRTHDAY:
+            return {
+                ...state,
+                account: {
+                    ...state.account,
+                    birthday: action.payload
+                }
+            };
+
+
         default:
             return state;
     }
