@@ -8,7 +8,8 @@ import Login from "./components/Login/LoginPropsContainer";
 import {Redirect, Switch} from "react-router";
 import MainPage from "./components/MainPage/MainPage";
 import ErrorWrapper from "./components/ErrorWrapper/ErrorWrapper";
-import ResetPassword from "./components/Login/ResetPassword/ResetPassword";
+import ChangeAccountSettingsModalWindow
+  from "./components/MainPage/components/ChangeAccountSettingsModalWindow/ChangeAccountSettingsModalWindow";
 
 
 function App() {
@@ -32,8 +33,9 @@ function App() {
                     <Switch>
                         <Route path='/' component={MainPage} exact/>
                         <Route path='/login' component={Login} exact/>
-                        <Route path='/resetpasschange' component={ResetPassword} exact/>
-                        <Route path='/main' component={MainPage} exact/>
+                        {/*<Route path='/resetpasschange' component={ResetPassword} exact/>*/}
+                      <Route path='/main/accountsettings' component={ChangeAccountSettingsModalWindow} exact/>
+                      <Route path='/main' component={MainPage} exact/>
 
                         {/*<Route path={SIGN_IN_PATH} component={SignIn} exact/>*/}
                         {/*<Route path={PROFILE_PATH} component={InDevelopment} exact/>*/}

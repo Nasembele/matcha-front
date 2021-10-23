@@ -124,3 +124,35 @@ export const changeAccBirthdayAC = (date: string) => ({
     type: constants.SET_ACC_BIRTHDAY,
     payload: date
 });
+
+export const setValidPrevEmailAC = (isValidPrevEmail: boolean) => ({
+    type: constants.SET_VALID_PREV_EMAIL,
+    payload: isValidPrevEmail
+});
+
+export const setNewEmailAC = (newEmail: string) => ({
+    type: constants.SET_NEW_EMAIL,
+    payload: newEmail
+});
+
+export const setValidNewEmailAC = (isValidNewEmail: boolean) => ({
+    type: constants.SET_VALID_NEW_EMAIL,
+    payload: isValidNewEmail
+});
+
+export const setConfirmNewEmailAC = (isConfirmNewEmail: boolean) => ({
+    type: constants.SET_CONFIRM_NEW_EMAIL,
+    payload: isConfirmNewEmail
+});
+
+export const setChangePassAC = (isChangePass: boolean) => ({
+    type: constants.SET_CHANGE_PASS,
+    payload: isChangePass
+});
+
+export const setIsValidLinkAC = (isValidLink: boolean) => ({
+    type: constants.SET_VALID_LINK_CHANGE_EMAIL_PASS,
+    payload: isValidLink
+});
+
+

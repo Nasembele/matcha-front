@@ -20,7 +20,7 @@ import {
     setIsValidLinkResetUserAC,
     setIsValidPassResetUserAC
 } from "./LoginAC";
-import {recoveryPasswordPostQuery, signInPostQuery, updateRegDataPostQuery} from "../../api";
+import {changeAccPassPostQuery, recoveryPasswordPostQuery, signInPostQuery, updateRegDataPostQuery} from "../../api";
 
 const Login = () => {
 
@@ -54,7 +54,10 @@ const Login = () => {
     };
 
     const recoveryPassword = () => {
-        dispatch(recoveryPasswordPostQuery({email: login.resetData!.email}));
+        // dispatch(recoveryPasswordPostQuery({email: login.resetData!.email}));
+
+        dispatch(changeAccPassPostQuery(login.resetData.email));
+
     };
 
     // const changeChosenIndex = () => {

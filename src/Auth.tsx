@@ -5,7 +5,9 @@ import * as React from "react";
 import {Switch, BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
 import {ILogin, IState} from "./types";
 import {authGetUserQuery} from "./api";
-import ResetPassword from "./components/Login/ResetPassword/ResetPassword";
+import ChangeAccountSettingsModalWindow from "./components/MainPage/components/ChangeAccountSettingsModalWindow/ChangeAccountSettingsModalWindow";
+import ChangeAccountPassModalWindow
+    from "./components/MainPage/components/ChangeAccountPassModalWindow/ChangeAccountPassModalWindow";
 
 // const App = Loadable({
 //     loader: () => import('App'),
@@ -44,8 +46,10 @@ function Auth() {
     return (
         <Router>
             <Switch>
+                <Route path='/main/accountsettings' component={ChangeAccountSettingsModalWindow} exact/>
+                <Route path='/passchange' component={ChangeAccountPassModalWindow} exact/>
+
                 <Route path={'/login'} component={Login}/>
-                <Route path='/resetpasschange' component={ResetPassword} exact/>
 
                 <Route path='/' render={() => (
                     isAuthorised

@@ -8,7 +8,7 @@ import {
 import * as constants from "./MainPage.consts";
 import {setLikeUserAC, setPhotoParam} from "./MainPageAC";
 import {IAction, IMainPage, IPhotos} from "../../types";
-import {SET_ACC_BIRTHDAY, SET_FILTER_COMMON_TAGS, SET_FILTER_RATING} from "./MainPage.consts";
+import {SET_ACC_BIRTHDAY, SET_FILTER_COMMON_TAGS, SET_FILTER_RATING, SET_VALID_NEW_EMAIL} from "./MainPage.consts";
 
 export default function MainPageReducer(state: IMainPage = initialState, action: IAction) {
     switch (action.type) {
@@ -249,7 +249,54 @@ export default function MainPageReducer(state: IMainPage = initialState, action:
                     birthday: action.payload
                 }
             };
-
+        case constants.SET_VALID_PREV_EMAIL:
+            return {
+                ...state,
+                changeAccountSetting: {
+                    ...state.changeAccountSetting,
+                    isValidPrevEmail: action.payload
+                }
+            };
+        case constants.SET_NEW_EMAIL:
+            return {
+                ...state,
+                changeAccountSetting: {
+                    ...state.changeAccountSetting,
+                    newEmail: action.payload
+                }
+            };
+        case constants.SET_VALID_NEW_EMAIL:
+            return {
+                ...state,
+                changeAccountSetting: {
+                    ...state.changeAccountSetting,
+                    isValidNewEmail: action.payload
+                }
+            };
+        case constants.SET_CONFIRM_NEW_EMAIL:
+            return {
+                ...state,
+                changeAccountSetting: {
+                    ...state.changeAccountSetting,
+                    isConfirmNewEmail: action.payload
+                }
+            };
+        case constants.SET_CHANGE_PASS:
+            return {
+                ...state,
+                changeAccountSetting: {
+                    ...state.changeAccountSetting,
+                    isChangePass: action.payload
+                }
+            };
+        case constants.SET_VALID_LINK_CHANGE_EMAIL_PASS:
+            return {
+                ...state,
+                changeAccountSetting: {
+                    ...state.changeAccountSetting,
+                    isValidEmailPassLink: action.payload
+                }
+            };
 
         default:
             return state;

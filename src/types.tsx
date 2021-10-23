@@ -80,6 +80,20 @@ export interface IUserFilter {
 
 export interface IMainPage {
     account: IUserData,
+    changeAccountSetting: {
+        newEmail: string,
+        isValidPrevEmail: null | boolean,
+        isValidNewEmail: null | boolean,
+        // linkData: {
+        //     id: null | number,
+        //     token: string,
+        //     linkId: null | number
+        // },
+        isConfirmNewEmail: null | boolean,
+        isValidEmailPassLink: null | boolean,
+        isChangePass: null | boolean,
+
+    },
     users: IUserData[],
     likeUsers: IUserData[],
     userFilters: IUserFilter,

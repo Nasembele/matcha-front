@@ -21,7 +21,7 @@ import {
 } from "./MainPageAC";
 import {tagsArray} from "./MainPage.helpers";
 import {
-  authGetUserQuery, changeAccEmailPostQuery,
+  authGetUserQuery, changeAccEmailPostQuery, changeAccPassPostQuery,
   changePhotoPostQuery,
   getUsersPostQuery, likeUserPostQuery,
   logoutGetQuery,
@@ -35,6 +35,7 @@ import {
   changeRegLastNameAC, changeRegMiddleNameAC,
   changeRegSexualPreferenceAC
 } from "../Login/LoginAC";
+import ChangeAccountSettingsModalWindow from "./components/ChangeAccountSettingsModalWindow/ChangeAccountSettingsModalWindow";
 
 const getBase64 = (file: File) => {
   return new Promise((resolve, reject) => {
@@ -83,6 +84,11 @@ const MainPage = (state: IState) => {
   const [userIndex, setUserIndex] = useState(0); //возможно просто задать 0?
   const [isSaveChange, setIsSaveChange] = useState(false); //выключать при логауте
   const [isOpenFilter, setIsOpenFilter] = useState(false); //выключать при логауте
+
+  const [isShowChangeBirthday, setIsShowChangeBirthday] = useState(false);
+  const [isShowChangeEmail, setIsShowChangeEmail] = useState(false);
+  const [isShowChangePass, setIsShowChangePass] = useState(false);
+
 
 
 
@@ -254,11 +260,21 @@ const MainPage = (state: IState) => {
 
   const changeAccBirthday = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
     dispatch(changeAccBirthdayAC(value));
+    dispatch(updateAccountSettings("birthDate", value));
+  }
+
+  const changeShowBirthday = () => {
+    setIsShowChangeBirthday(true);
   }
 
   const changeAccEmail = () => {
     dispatch(changeAccEmailPostQuery());
+    setIsShowChangeEmail(true);
+  }
 
+  const changeAccPass = () => {
+    dispatch(changeAccPassPostQuery());
+    setIsShowChangePass(true);
   }
 
   return (
@@ -444,20 +460,47 @@ const MainPage = (state: IState) => {
               </button>
 
               <div className={style.form_header}>Дата рождения</div>
+
+              <div>{mainPage.account.birthday}</div>
+
+              {
+                !isShowChangeBirthday &&
+                <button onClick={changeShowBirthday}>
+                  Поменять дату рождения
+                </button>
+              }
+              {isShowChangeBirthday &&
               <input className={style.form_input} type={'date'}
                      onChange={changeAccBirthday}
-                     value={mainPage.account.birthday}/>
+                     value={mainPage.account.birthday}/>}
 
-                <button onClick={saveChangedBirthday}>
-                  Сохранить изменения
-                </button>
+                {/*<button onClick={saveChangedBirthday}>*/}
+                {/*  Сохранить изменения*/}
+                {/*</button>*/}
 
 
               <div className={style.form_header}>e-mail</div>
-
               <button onClick={changeAccEmail}>
                 Поменять email
               </button>
+              {isShowChangeEmail &&
+              <div>{'Перейдите по ссылке из почты'}</div>
+              }
+              {/*TODO change pass*/}
+
+              <div className={style.form_header}>Пароль</div>
+              <button onClick={changeAccPass}>
+                Поменять пароль
+              </button>
+              {isShowChangePass &&
+              <div>{'Перейдите по ссылке из почты'}</div>
+              }
+
+              {mainPage.changeAccountSetting.isValidPrevEmail &&
+              <div>
+
+              </div>
+              }
 
               {/*<input className={style.form_input}*/}
               {/*       value={login.authData.email}/>*/}
@@ -466,7 +509,8 @@ const MainPage = (state: IState) => {
           </div>
         </div>}
 
-        {chosenIndex === 0 && <div>
+        {chosenIndex === 0 &&
+        <div>
           <div className={style.button_acc} onClick={openAccountSetting}>Аккаунт</div>
           <div className={style.button_acc} onClick={openAccountProperties}>Настройки аккаунта</div>
           <div className={style.button_acc} onClick={openUserFilter}>Фильтр</div>
