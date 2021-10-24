@@ -25,13 +25,13 @@ const ChangeAccountSettingsModalWindow = () => {
     dispatch(validateLink(currentURL.href));
 
 
-    const arrURL = currentURL.search.split('&');
-    const act = arrURL[0].slice(1);
+    const arrURL = currentURL.search?.split('&');
+    const act = arrURL[0]?.slice(1);
 
 
-    const id = arrURL[1].slice(3);
-    const token = arrURL[2].slice(6);
-    const linkId = arrURL[3].slice(7);
+    const id = arrURL[1]?.slice(3);
+    const token = arrURL[2]?.slice(6);
+    const linkId = arrURL[3]?.slice(7);
 
 
     setId(id);

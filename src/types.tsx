@@ -7,8 +7,8 @@ export interface IPhotos {
 
         content: string,
         format: string,
-        name: string,
-        action: 'add' | 'delete' | null,
+        // name: string,
+        action: 'save' | 'delete' | null,
         number: string
 
 }
@@ -28,8 +28,8 @@ export interface IUserCard {
     position?: string,
     education?: string,
     rating: number,
-    gender: 'MALE' | 'FEMALE' | null,
-    sexualPreference: 'GETERO' | 'GAY' | 'BISEXUAL' | 'LESBI' | null,
+    gender: 'male'| 'female' | null,
+    sexualPreference: 'getero' | 'gay' | 'bisexual' | 'lesbi' | null,
     tags?: Array<string>,
     photos: Array<IPhotos>
 }

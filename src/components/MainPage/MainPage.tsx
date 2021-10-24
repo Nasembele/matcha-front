@@ -23,7 +23,7 @@ import {tagsArray} from "./MainPage.helpers";
 import {
   authGetUserQuery, changeAccEmailPostQuery, changeAccPassPostQuery,
   changePhotoPostQuery,
-  getUsersPostQuery, likeUserPostQuery,
+  getUsersPostQuery, likeUserPutQuery,
   logoutGetQuery,
   saveChangeAccPostQuery, updateAccountSettings
 } from "../../api";
@@ -195,7 +195,7 @@ const MainPage = (state: IState) => {
   };
 
   const onClickLikeUser = () => {
-    dispatch(likeUserPostQuery(mainPage.users[userIndex]?.id));
+    dispatch(likeUserPutQuery(mainPage.users[userIndex]?.id));
   };
 
   const onClickNotLikeUser = () => {
@@ -219,7 +219,7 @@ const MainPage = (state: IState) => {
     getBase64(e.target.files[0]).then(
       res => {
         dispatch(setPhotoContent(res, number));
-        dispatch(changePhotoPostQuery(number));
+        dispatch(changePhotoPostQuery(number, 'save'));
         // dispatch(authGetUserQuery()); TODO открыть когда заработает запрос
       }
     );
@@ -363,21 +363,21 @@ const MainPage = (state: IState) => {
               <div className={style.form_header}>Пол</div>
               <select onChange={changeGender}>
                 <option>{'Не выбрано'}</option>
-                <option value={'male'} selected={mainPage.account.card.gender === 'MALE'}>{'M'}</option>
-                <option value={'female'} selected={mainPage.account.card.gender === 'FEMALE'}>{'Ж'}</option>
+                <option value={'male'} selected={mainPage.account.card.gender === 'male'}>{'M'}</option>
+                <option value={'female'} selected={mainPage.account.card.gender === 'female'}>{'Ж'}</option>
               </select>
 
               <div className={style.form_header}>Сексуальные предпочтения</div>
               <select onChange={changeSexualPreference}>
                 <option>{'Не выбрано'}</option>
                 <option value={'getero'}
-                        selected={mainPage.account.card.sexualPreference === 'GETERO'}>{'гетеро'}</option>
+                        selected={mainPage.account.card.sexualPreference === 'getero'}>{'гетеро'}</option>
                 <option value={'bisexual'}
-                        selected={mainPage.account.card.sexualPreference === 'BISEXUAL'}>{'би'}</option>
-                {mainPage.account?.card?.gender === 'MALE' &&
-                <option value={'GAY'} selected={mainPage.account.card.sexualPreference === 'GAY'}>{'гей'}</option>}
-                {mainPage.account?.card?.gender === 'FEMALE' && <option value={'lesbi'}
-                                                                        selected={mainPage.account.card.sexualPreference === 'LESBI'}>{'лесби'}</option>}
+                        selected={mainPage.account.card.sexualPreference === 'bisexual'}>{'би'}</option>
+                {mainPage.account?.card?.gender === 'male' &&
+                <option value={'gay'} selected={mainPage.account.card.sexualPreference === 'gay'}>{'гей'}</option>}
+                {mainPage.account?.card?.gender === 'female' &&
+                <option value={'lesbi'} selected={mainPage.account.card.sexualPreference === 'lesbi'}>{'лесби'}</option>}
               </select>
 
               <div className={style.form_header}>Биография</div>

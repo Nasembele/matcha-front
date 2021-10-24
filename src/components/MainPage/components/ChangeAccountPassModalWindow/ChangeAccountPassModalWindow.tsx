@@ -28,14 +28,14 @@ const ChangeAccountPassModalWindow = () => {
 
     dispatch(validateLink(currentURL.href));
 
-    const arrURL = currentURL.search.split('&');
+    const arrURL = currentURL.search?.split('&');
 //    const act = arrURL[0].slice(1);
 
     console.log(arrURL);
 
-    const id = arrURL[0].slice(4);
-    const token = arrURL[1].slice(6);
-    const linkId = arrURL[2].slice(7);
+    const id = arrURL[0]?.slice(4);
+    const token = arrURL[1]?.slice(6);
+    const linkId = arrURL[2]?.slice(7);
 
     console.log(id);
     console.log(token);

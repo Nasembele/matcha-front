@@ -8,6 +8,7 @@ import {authGetUserQuery} from "./api";
 import ChangeAccountSettingsModalWindow from "./components/MainPage/components/ChangeAccountSettingsModalWindow/ChangeAccountSettingsModalWindow";
 import ChangeAccountPassModalWindow
     from "./components/MainPage/components/ChangeAccountPassModalWindow/ChangeAccountPassModalWindow";
+import ConfirmLinkWindow from "./components/MainPage/components/ConfirmLinkWindow/ConfirmLinkWindow";
 
 // const App = Loadable({
 //     loader: () => import('App'),
@@ -48,6 +49,7 @@ function Auth() {
             <Switch>
                 <Route path='/main/accountsettings' component={ChangeAccountSettingsModalWindow} exact/>
                 <Route path='/passchange' component={ChangeAccountPassModalWindow} exact/>
+                <Route path='/confirmAccount' component={ConfirmLinkWindow} exact/>
 
                 <Route path={'/login'} component={Login}/>
 
