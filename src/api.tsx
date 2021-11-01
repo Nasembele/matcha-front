@@ -75,7 +75,7 @@ export const usersAPI = {
   //     return instance.get('account')
   // },
 
-  saveAccountChanges(newCard: IUserCard) {
+  saveAccountChanges(newCard: any) {
     return instance.post('main/account?act=card', newCard)
   },
 
@@ -91,8 +91,8 @@ export const usersAPI = {
   //     return instance.get('getUsers')
   // },
   //
-  likeUser(userId: number) {
-    return instance.put(`like/${userId}`)
+  likeUser(userId: number, data: any) {
+    return instance.put(`main/like`, data)
   },
 
   updateAccSettings(data: Object) {
@@ -310,7 +310,21 @@ export const validateLink = (currentURL: string) => (dispatch: Dispatch) => {
 // }
 
 export const saveChangeAccPostQuery = (newCard: IUserCard) => (dispatch: Dispatch) => {
-  usersAPI.saveAccountChanges(newCard)
+  const prepareNewCard = {
+    biography: newCard.biography || '',
+    workPlace: newCard.workPlace || '',
+    position: newCard.position || '',
+    education: newCard.education || '',
+    gender: newCard.gender || 'male',
+    sexualPreference: newCard.sexualPreference || 'getero',
+    tags: newCard.tags || [],
+    // photos: [{
+    //   ...newCard.photos[0],
+    //   action: 'save'
+    // }]
+    // photos: newCard.photos || []
+  }
+  usersAPI.saveAccountChanges(prepareNewCard)
     .then((res: any) => {
       // dispatch(setUserAccountAC(response));
     }) //валидация на успешный ответ
@@ -325,7 +339,7 @@ export const changePhotoPostQuery = (number: number, action: 'save' | 'delete') 
   if (action) {
     photoObj.action = action;
   }
-  usersAPI.changePhoto(photoObj)
+  usersAPI.changePhoto([photoObj])
     .then((res: any) => {
       // dispatch(setUserAccountAC(response));
     }) //валидация на успешный ответ
@@ -636,10 +650,14 @@ export const getUsersPostQuery = () => (dispatch: Dispatch, getState: any) => {
 //         .catch(() => {});
 // }
 //
-export const likeUserPutQuery = (userId: number) => (dispatch: Dispatch) => {
-  usersAPI.likeUser(userId)
+export const likeUserPutQuery = (userId: number, action: string) => (dispatch: Dispatch) => {
+  const data = {
+    "toUserId": userId,
+    "action": action,
+  }
+  usersAPI.likeUser(userId, data)
     .then(response => { //валидация?
-      dispatch(setLikeUserAC());
+      // dispatch(setLikeUserAC()); TODO тут подумать!!!
     })
     .catch(() => {
       dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху

@@ -81,7 +81,7 @@ export const setPhotoParam = (number: number, name: string, format: string) => (
     payload: {
         number: number,
         name: name,
-        format: format
+        format: format.split('/')[1]
     }
 });
 

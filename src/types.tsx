@@ -9,7 +9,8 @@ export interface IPhotos {
         format: string,
         // name: string,
         action: 'save' | 'delete' | null,
-        number: string
+        number: string,
+    main: boolean
 
 }
 
@@ -27,7 +28,7 @@ export interface IUserCard {
     workPlace?: string,
     position?: string,
     education?: string,
-    rating: number,
+    rating?: number,
     gender: 'male'| 'female' | null,
     sexualPreference: 'getero' | 'gay' | 'bisexual' | 'lesbi' | null,
     tags?: Array<string>,
@@ -43,7 +44,8 @@ export interface IUserData {
     yearsOld: number,
     location: string,
     card: IUserCard,
-    match: boolean
+    match?: boolean,
+    filter?: IUserFilter
 }
 
 export interface IRegData {
@@ -75,7 +77,8 @@ export interface IUserFilter {
     ageBy?: string,
     ageTo?: string,
     rating?: string,
-    commonTagsCount?: string
+    commonTagsCount?: string,
+    location?: string
 }
 
 export interface IMainPage {

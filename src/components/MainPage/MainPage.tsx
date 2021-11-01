@@ -195,7 +195,14 @@ const MainPage = (state: IState) => {
   };
 
   const onClickLikeUser = () => {
-    dispatch(likeUserPutQuery(mainPage.users[userIndex]?.id));
+    dispatch(likeUserPutQuery(mainPage.users[userIndex]?.id, 'like'));
+    //TODO показывать если матч и передавать его в чат
+    dispatch(deleteNotLikeUserAC());
+  };
+
+  const onClickDisLikeUser = () => {
+    dispatch(likeUserPutQuery(mainPage.users[userIndex]?.id, 'disLike'));
+    dispatch(deleteNotLikeUserAC());
   };
 
   const onClickNotLikeUser = () => {
@@ -299,7 +306,7 @@ const MainPage = (state: IState) => {
               <div className={style.form_header}>Возраст</div>
               <span>{mainPage.account.yearsOld}</span>
 
-              <div className={style.form_header}>Фото 1</div>
+              <div className={style.form_header}>Главное фото</div>
               {!mainPage.account.card.photos[0] &&
               <input type="file" id="file" name="file" onChange={changePhoto(0)}/>}
 
@@ -321,6 +328,7 @@ const MainPage = (state: IState) => {
                             <img height='100px'
                                  src={`data:${mainPage.account.card.photos[1]?.format};base64,${mainPage.account.card.photos[1]?.content}`}
                                  alt='фото 2'/>
+                <div onClick={deletePhoto(1)}>Удалить фото</div>
 
                             <div className={style.form_header}>Фото 3</div>
                 {!mainPage.account.card.photos[2] &&
@@ -332,6 +340,7 @@ const MainPage = (state: IState) => {
                             <img height='100px'
                                  src={`data:${mainPage.account.card.photos[2]?.format};base64,${mainPage.account.card.photos[2]?.content}`}
                                  alt='фото 3'/>
+                <div onClick={deletePhoto(2)}>Удалить фото</div>
 
                             <div className={style.form_header}>Фото 4</div>
                 {!mainPage.account.card.photos[3] &&
@@ -342,6 +351,7 @@ const MainPage = (state: IState) => {
                             <img height='100px'
                                  src={`data:${mainPage.account.card.photos[3]?.format};base64,${mainPage.account.card.photos[3]?.content}`}
                                  alt='фото 4'/>
+                <div onClick={deletePhoto(3)}>Удалить фото</div>
 
                             <div className={style.form_header}>Фото 5</div>
                 {!mainPage.account.card.photos[4] &&
@@ -353,6 +363,8 @@ const MainPage = (state: IState) => {
                             <img height='100px'
                                  src={`data:${mainPage.account.card.photos[4]?.format};base64,${mainPage.account.card.photos[4]?.content}`}
                                  alt='фото 5'/>
+                                <div onClick={deletePhoto(4)}>Удалить фото</div>
+
 </span>}
               <div className={style.form_header}>Месторасположение</div>
               <span>{mainPage.account.location}</span>
@@ -604,6 +616,8 @@ const MainPage = (state: IState) => {
               //     }).catch(props.toggleFollowingProgress(false, u.id));
             }>Like
             </button>
+            <button onClick={onClickDisLikeUser}>дизлайк</button>
+
             <button onClick={onClickNotLikeUser}>Next</button>
           </div>
 

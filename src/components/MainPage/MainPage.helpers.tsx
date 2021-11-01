@@ -21,46 +21,55 @@ export const initialUserData = {
       {
         content: '',
         format: '',
-        name: '',
-        action: null,
-        number: '1'
+        // name: '',
+        action: 'save' as 'save',
+        number: '1',
+        main: false
+
+      },
+      {
+        content: '',
+        format: '',
+        // name: '',
+        action:'save' as 'save',
+        number: '2',
+        main: false
+
 
       },
       {
         content: '',
         format: '',
         name: '',
-        action: null,
-        number: '2'
+        action: 'save' as 'save',
+        number: '3',
+        main: false
+
 
       },
       {
         content: '',
         format: '',
         name: '',
-        action: null,
-        number: '3'
+        action: 'save' as 'save',
+        number: '4',
+        main: false
+
 
       },
       {
         content: '',
         format: '',
         name: '',
-        action: null,
-        number: '4'
+        action: 'save' as 'save',
+        number: '5',
+        main: false
 
-      },
-      {
-        content: '',
-        format: '',
-        name: '',
-        action: null,
-        number: '5'
 
       }
     ]
   },
-  match: false,
+  match: false
 }
 
 export const initialUserFilter = {
@@ -120,7 +129,7 @@ export const giveNextUsers = (likeUsers: IUserData[]) => {
   return likeUsers
 }
 
-export const setPhotoParamHelp = (photos: IPhotos[] | undefined, payload: { number: string, name: string, format: string }) => {
+export const setPhotoParamHelp = (photos: IPhotos[] | undefined, payload: { number: number, name: string, format: string }) => {
   photos?.push(
     {
 
@@ -128,6 +137,7 @@ export const setPhotoParamHelp = (photos: IPhotos[] | undefined, payload: { numb
       format: payload.format,
       // name: payload.name,
       action: 'save',
+      main: payload?.number === 0,
       number: String(payload?.number + 1)
 
     }

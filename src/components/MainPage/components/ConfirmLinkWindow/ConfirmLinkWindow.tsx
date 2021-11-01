@@ -8,14 +8,14 @@ const ConfirmLinkWindow = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const currentURL = window.location;
+  const currentURL = window.location;
 
+  useEffect(() => {
     dispatch(validateLink(currentURL.href));
 
     console.log(currentURL.href);
 
-  });
+  }, [currentURL]);
 
   const isValidEmailPassLink = useSelector((state: IState) => state.mainPage?.changeAccountSetting?.isValidEmailPassLink);
 
