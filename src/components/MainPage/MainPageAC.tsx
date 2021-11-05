@@ -1,5 +1,5 @@
 import * as constants from "./MainPage.consts";
-import {IUserData} from "../../types";
+import {IUserData, IUserFilter} from "../../types";
 
 export const setUserAccountAC = (userAccountData: IUserData) => ({
     type: constants.SET_USER_ACCOUNT,
@@ -45,6 +45,11 @@ export const setUsersAC = (users: Array<IUserData>) => ({
     payload: users
 });
 
+export const setUserFiltersAC = (filter: IUserFilter) => ({
+    type: constants.SET_USER_FILTER,
+    payload: filter
+});
+
 export const setLikeUserAC = () => ({
     type: constants.SET_LIKE_USER,
 });
@@ -85,24 +90,29 @@ export const setPhotoParam = (number: number, name: string, format: string) => (
     }
 });
 
-export const setStartFilterAgeAC = (startAge: string) => ({
+export const setStartFilterAgeAC = (startAge: number) => ({
     type: constants.SET_START_FILTER_AGE,
     payload: startAge
 });
 
-export const setEndFilterAgeAC = (endAge: string) => ({
+export const setEndFilterAgeAC = (endAge: number) => ({
     type: constants.SET_END_FILTER_AGE,
     payload: endAge
 });
 
-export const setFilterRatingAC = (rating: string) => ({
+export const setFilterRatingAC = (rating: number) => ({
     type: constants.SET_FILTER_RATING,
     payload: rating
 });
 
-export const setFilterCommonTagsAC = (commonTags: string) => ({
+export const setFilterCommonTagsAC = (commonTags: number) => ({
     type: constants.SET_FILTER_COMMON_TAGS,
     payload: commonTags
+});
+
+export const setFilterLocationAC = (location: string) => ({
+    type: constants.SET_FILTER_LOCATION,
+    payload: location
 });
 
 export const changeAccFirstNameAC = (name: string) => ({
@@ -153,6 +163,10 @@ export const setChangePassAC = (isChangePass: boolean) => ({
 export const setIsValidLinkAC = (isValidLink: boolean) => ({
     type: constants.SET_VALID_LINK_CHANGE_EMAIL_PASS,
     payload: isValidLink
+});
+
+export const setMatchCurrentUserAC = () => ({
+    type: constants.SET_MATCH_CURRENT_USER,
 });
 
 

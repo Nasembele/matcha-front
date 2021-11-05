@@ -73,10 +73,11 @@ export const initialUserData = {
 }
 
 export const initialUserFilter = {
-  ageBy: '',
-  ageTo: '',
-  rating: '',
-  commonTagsCount: ''
+  ageBy: 0,
+  ageTo: 0,
+  rating: 0,
+  commonTagsCount: 0,
+  location: ''
 }
 
 export const initialState = {

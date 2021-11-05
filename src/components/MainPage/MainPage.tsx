@@ -13,7 +13,7 @@ import {
   changeTagsAC,
   changeWorkPlaceAC,
   deleteNotLikeUserAC,
-  deleteTagsAC, setEndFilterAgeAC, setFilterCommonTagsAC, setFilterRatingAC,
+  deleteTagsAC, setEndFilterAgeAC, setFilterCommonTagsAC, setFilterLocationAC, setFilterRatingAC,
   setLikeUserAC,
   setPhotoContent, setPhotoParam, setStartFilterAgeAC,
   setUserDataAC,
@@ -25,7 +25,7 @@ import {
   changePhotoPostQuery,
   getUsersPostQuery, likeUserPutQuery,
   logoutGetQuery,
-  saveChangeAccPostQuery, updateAccountSettings
+  saveChangeAccPostQuery, setUserFilterPutQuery, updateAccountSettings
 } from "../../api";
 import {IPhotos, IState} from "../../types";
 import {
@@ -35,7 +35,8 @@ import {
   changeRegLastNameAC, changeRegMiddleNameAC,
   changeRegSexualPreferenceAC
 } from "../Login/LoginAC";
-import ChangeAccountSettingsModalWindow from "./components/ChangeAccountSettingsModalWindow/ChangeAccountSettingsModalWindow";
+import ChangeAccountSettingsModalWindow
+  from "./components/ChangeAccountSettingsModalWindow/ChangeAccountSettingsModalWindow";
 
 const getBase64 = (file: File) => {
   return new Promise((resolve, reject) => {
@@ -90,8 +91,6 @@ const MainPage = (state: IState) => {
   const [isShowChangePass, setIsShowChangePass] = useState(false);
 
 
-
-
   const countUsers = mainPage.users.length;
 
   useEffect(() => {
@@ -103,9 +102,9 @@ const MainPage = (state: IState) => {
 
   }, [chosenIndex, countUsers]);
 
-  useEffect(() => {
-    dispatch(getUsersPostQuery());
-  }, [mainPage.userFilters]);
+  // useEffect(() => {
+  //   dispatch(getUsersPostQuery());
+  // }, [mainPage.userFilters]);
 
   const openAccountSetting = () => {
     // dispatch(setUserDataAC(userData));
@@ -132,22 +131,25 @@ const MainPage = (state: IState) => {
   }
   const setFilterAge = (parameter: string) => (e: any) => {
     if (parameter === 'start') {
-      dispatch(setStartFilterAgeAC(e.target.value));
+      dispatch(setStartFilterAgeAC(Number(e.target.value)));
     }
     if (parameter === 'end') {
-      dispatch(setEndFilterAgeAC(e.target.value));
+      dispatch(setEndFilterAgeAC(Number(e.target.value)));
 
     }
   }
 
 
   const setFilterRating = (e: any) => {
-    dispatch(setFilterRatingAC(e.target.value));
+    dispatch(setFilterRatingAC(Number(e.target.value)));
   }
   const setFilterCommonTags = (e: any) => {
-    dispatch(setFilterCommonTagsAC(e.target.value));
+    dispatch(setFilterCommonTagsAC(Number(e.target.value)));
   }
 
+  const setFilterLocation = (e: any) => {
+    dispatch(setFilterLocationAC(e.target.value));
+  }
 
   const closeAccountSetting = () => {
     setChosenIndex(0);
@@ -197,12 +199,17 @@ const MainPage = (state: IState) => {
   const onClickLikeUser = () => {
     dispatch(likeUserPutQuery(mainPage.users[userIndex]?.id, 'like'));
     //TODO показывать если матч и передавать его в чат
-    dispatch(deleteNotLikeUserAC());
+    // dispatch(deleteNotLikeUserAC());
   };
 
   const onClickDisLikeUser = () => {
     dispatch(likeUserPutQuery(mainPage.users[userIndex]?.id, 'disLike'));
-    dispatch(deleteNotLikeUserAC());
+    // dispatch(deleteNotLikeUserAC());
+  };
+
+  const onClickTakeLikeUser = () => {
+    dispatch(likeUserPutQuery(mainPage.users[userIndex]?.id, 'takeLike'));
+    // dispatch(deleteNotLikeUserAC());
   };
 
   const onClickNotLikeUser = () => {
@@ -251,8 +258,6 @@ const MainPage = (state: IState) => {
   //сделать кнопук удаления каждой отдельной фотки и после этого обновлять инфу
 
 
-  // const pnh = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAADgAAAAjACAYAAABL
-
   const changeFirstAccName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
     dispatch(changeAccFirstNameAC(value));
   }
@@ -282,6 +287,12 @@ const MainPage = (state: IState) => {
   const changeAccPass = () => {
     dispatch(changeAccPassPostQuery());
     setIsShowChangePass(true);
+  }
+
+  const getUsersByFilters = () => {
+    //запрос на фильтры
+    dispatch(setUserFilterPutQuery());
+    // dispatch(getUsersPostQuery());
   }
 
   return (
@@ -389,7 +400,8 @@ const MainPage = (state: IState) => {
                 {mainPage.account?.card?.gender === 'male' &&
                 <option value={'gay'} selected={mainPage.account.card.sexualPreference === 'gay'}>{'гей'}</option>}
                 {mainPage.account?.card?.gender === 'female' &&
-                <option value={'lesbi'} selected={mainPage.account.card.sexualPreference === 'lesbi'}>{'лесби'}</option>}
+                <option value={'lesbi'}
+                        selected={mainPage.account.card.sexualPreference === 'lesbi'}>{'лесби'}</option>}
               </select>
 
               <div className={style.form_header}>Биография</div>
@@ -486,9 +498,9 @@ const MainPage = (state: IState) => {
                      onChange={changeAccBirthday}
                      value={mainPage.account.birthday}/>}
 
-                {/*<button onClick={saveChangedBirthday}>*/}
-                {/*  Сохранить изменения*/}
-                {/*</button>*/}
+              {/*<button onClick={saveChangedBirthday}>*/}
+              {/*  Сохранить изменения*/}
+              {/*</button>*/}
 
 
               <div className={style.form_header}>e-mail</div>
@@ -552,7 +564,12 @@ const MainPage = (state: IState) => {
                   <input type='number' onChange={setFilterCommonTags} value={mainPage.userFilters.commonTagsCount}/>
                 </div>
               </p>
-
+              <p>Месторасположение
+                <div>
+                  <input type='text' onChange={setFilterLocation} value={mainPage.userFilters.location}/>
+                </div>
+              </p>
+<button onClick={getUsersByFilters}>Поиск</button>
             </div>
           </div>
           }
@@ -604,6 +621,8 @@ const MainPage = (state: IState) => {
           {/*})}*/}
 
           <div>
+            {!mainPage.currentUser?.match &&
+<span>
             <button onClick={onClickLikeUser
 
               // props.toggleFollowingProgress(true, u.id);
@@ -616,9 +635,19 @@ const MainPage = (state: IState) => {
               //     }).catch(props.toggleFollowingProgress(false, u.id));
             }>Like
             </button>
-            <button onClick={onClickDisLikeUser}>дизлайк</button>
+            <button onClick={onClickDisLikeUser}>Dislike</button>
+  </span>
+            }
 
-            <button onClick={onClickNotLikeUser}>Next</button>
+            {mainPage.currentUser?.match &&
+              <span>
+            <button onClick={onClickTakeLikeUser}>Take like</button>
+                <button onClick={onClickNotLikeUser}>Next</button>
+
+                </span>
+            }
+
+            {/*<button onClick={onClickNotLikeUser}>Next</button>*/}
           </div>
 
         </div>}

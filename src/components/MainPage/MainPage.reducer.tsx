@@ -7,7 +7,7 @@ import {
 } from "./MainPage.helpers";
 import * as constants from "./MainPage.consts";
 import {setLikeUserAC, setPhotoParam} from "./MainPageAC";
-import {IAction, IMainPage, IPhotos} from "../../types";
+import {IAction, IMainPage, IPhotos, IUserData} from "../../types";
 import {SET_ACC_BIRTHDAY, SET_FILTER_COMMON_TAGS, SET_FILTER_RATING, SET_VALID_NEW_EMAIL} from "./MainPage.consts";
 
 export default function MainPageReducer(state: IMainPage = initialState, action: IAction) {
@@ -95,16 +95,28 @@ export default function MainPageReducer(state: IMainPage = initialState, action:
             return {
                 ...state,
                 users: action.payload,
+                currentUser: {
+                    userData: action.payload[0],
+                    match: false
+                },
             };
         case constants.SET_LIKE_USER:
             return {
                 ...state,
+                currentUser: {
+                    userData: state.users[1],
+                    match: false
+                },
                 likeUsers: setLikeUser(state.likeUsers, state.users[0]),
-                users: giveNextUsers(state.users)
+                users: giveNextUsers(state.users),
             };
         case constants.DELETE_NOT_LIKE_USER:
             return {
                 ...state,
+                currentUser: {
+                    userData: state.users[1],
+                    match: false
+                },
                 users: giveNextUsers(state.users)
             };
         case constants.SET_USER_DATA:
@@ -217,6 +229,14 @@ export default function MainPageReducer(state: IMainPage = initialState, action:
                     commonTagsCount: action.payload
                 }
             };
+        case constants.SET_FILTER_LOCATION:
+            return {
+                ...state,
+                userFilters: {
+                    ...state.userFilters,
+                    location: action.payload
+                }
+            };
         case constants.SET_ACC_FIRST_NAME:
             return {
                 ...state,
@@ -297,7 +317,19 @@ export default function MainPageReducer(state: IMainPage = initialState, action:
                     isValidEmailPassLink: action.payload
                 }
             };
-
+        case constants.SET_MATCH_CURRENT_USER:
+            return {
+                ...state,
+                currentUser: {
+                    ...state.currentUser,
+                    match: true
+                }
+            };
+        case constants.SET_USER_FILTER:
+            return {
+                ...state,
+                userFilters: action.payload
+            };
         default:
             return state;
     }

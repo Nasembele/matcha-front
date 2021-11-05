@@ -44,7 +44,7 @@ export interface IUserData {
     yearsOld: number,
     location: string,
     card: IUserCard,
-    match?: boolean,
+    // match?: boolean,
     filter?: IUserFilter
 }
 
@@ -74,11 +74,11 @@ export interface ILogin {
 }
 
 export interface IUserFilter {
-    ageBy?: string,
-    ageTo?: string,
-    rating?: string,
-    commonTagsCount?: string,
-    location?: string
+    ageBy: number,
+    ageTo: number,
+    rating: number,
+    commonTagsCount: number,
+    location: string
 }
 
 export interface IMainPage {
@@ -100,6 +100,12 @@ export interface IMainPage {
     users: IUserData[],
     likeUsers: IUserData[],
     userFilters: IUserFilter,
+    currentUser?: IUserDataWithMatch
+}
+
+export interface IUserDataWithMatch {
+    userData: IUserData,
+    match: boolean
 }
 
 export interface IError {
