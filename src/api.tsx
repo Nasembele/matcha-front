@@ -20,6 +20,7 @@ import {
 import {setServerErrorAC} from "./components/ErrorWrapper/ErrorWrapperAC";
 import {prepareDateToSendServer} from "./helpers";
 import {ChangeEvent} from "react";
+import {setUserMatchesAC} from "./components/Chat/ChatAC";
 
 const instance = axios.create(
   {
@@ -122,6 +123,10 @@ export const usersAPI = {
     return instance.put(`passchange`, data)
   },
 
+  getUserMatchGetQuery(lastId?: number) {
+    return lastId ? instance.get(`main?act=getMatches&after=${lastId}`)
+      : instance.get(`main?act=getMatches`)
+  },
 
   // fetch('http://localhost:8080/registration', {
   // method: 'POST',
@@ -162,7 +167,7 @@ export const usersAPI = {
 // .then(res => console.log(res))
 // .catch(e => console.log(e));
 
-export const authGetUserQuery = () => (dispatch: Dispatch) => {
+export const authGetUserQuery = () => (dispatch: any) => {
   usersAPI.authGetUser()
     // fetch('http://localhost:8080/getauthuser', {
     //     method: 'GET',
@@ -180,6 +185,7 @@ export const authGetUserQuery = () => (dispatch: Dispatch) => {
         // dispatch(setIsAuthUserDataAC(res.data));
         dispatch(setUserDataAC(res.data));
         dispatch(setUserFiltersAC(res.data.filter));
+        dispatch(getUserMatch());
       }
       // dispatch(setIsAuthAC(true));
     })
@@ -190,7 +196,7 @@ export const authGetUserQuery = () => (dispatch: Dispatch) => {
     });
 }
 
-export const signInPostQuery = (isAuthData: IAuthData) => (dispatch: Dispatch) => {
+export const signInPostQuery = (isAuthData: IAuthData) => (dispatch: any) => {
   usersAPI.signIn(isAuthData)
     .then((res: any) => {
       // debugger;
@@ -200,6 +206,7 @@ export const signInPostQuery = (isAuthData: IAuthData) => (dispatch: Dispatch) =
         dispatch(setUserDataAC(res.data));
         dispatch(setUserFiltersAC(res.data.filter));
         dispatch(setIsAuthUserAC(true));
+        dispatch(getUserMatch());
       }
       // dispatch(setIsAuthUserDataAC(res));
       // dispatch(setIsAuthUserAC(true));
@@ -388,7 +395,7 @@ export const setUserFilterPutQuery = () => (dispatch: any, getState: any) => {
 //         .catch(() => {});
 // }
 //
-export const likeUserPutQuery = (userId: number, action: string) => (dispatch: Dispatch) => {
+export const likeUserPutQuery = (userId: number, action: string) => (dispatch: any) => {
   const data = {
     "toUserId": userId,
     "action": action,
@@ -399,6 +406,7 @@ export const likeUserPutQuery = (userId: number, action: string) => (dispatch: D
 
       if (response.data === 'MATCH') {
         dispatch(setMatchCurrentUserAC());
+        dispatch(getUserMatch());
       } else {
         dispatch(deleteNotLikeUserAC());
 
@@ -544,3 +552,13 @@ export const saveNewPassword = (id: string, linkId: string, token: string, pass:
     });
 }
 
+export const getUserMatch = (lastId?: number) => (dispatch: Dispatch, getState: any) => {
+
+  usersAPI.getUserMatchGetQuery(lastId)
+    .then((response: any) => { //валидация?
+      dispatch(setUserMatchesAC(response.data));
+    })
+    .catch(() => {
+      dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
+    });
+}

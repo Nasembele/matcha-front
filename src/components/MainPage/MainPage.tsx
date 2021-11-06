@@ -22,7 +22,7 @@ import {
 import {tagsArray} from "./MainPage.helpers";
 import {
   authGetUserQuery, changeAccEmailPostQuery, changeAccPassPostQuery,
-  changePhotoPostQuery,
+  changePhotoPostQuery, getUserMatch,
   getUsersPostQuery, likeUserPutQuery,
   logoutGetQuery,
   saveChangeAccPostQuery, setUserFilterPutQuery, updateAccountSettings
@@ -37,6 +37,7 @@ import {
 } from "../Login/LoginAC";
 import ChangeAccountSettingsModalWindow
   from "./components/ChangeAccountSettingsModalWindow/ChangeAccountSettingsModalWindow";
+import {MatchSideBar} from "../Chat/MatchSideBar/MatchSideBar";
 
 const getBase64 = (file: File) => {
   return new Promise((resolve, reject) => {
@@ -101,6 +102,10 @@ const MainPage = (state: IState) => {
 
 
   }, [chosenIndex, countUsers]);
+
+  // useEffect(() => { //TODO делать запрос пока матчи не кончатся
+  //   dispatch(getUserMatch());
+  // });
 
   // useEffect(() => {
   //   dispatch(getUsersPostQuery());
@@ -297,8 +302,7 @@ const MainPage = (state: IState) => {
 
   return (
     <div className={style.content_wrapper}>
-      <div className={style.chat}>
-      </div>
+      <MatchSideBar/>
       <div className={style.main_field}>
         {chosenIndex === 1 &&
         <div>
@@ -607,10 +611,14 @@ const MainPage = (state: IState) => {
                         <div>{mainPage.users[userIndex]?.card.education}</div>
 
                       <div>
-                        Интересы:
+                        {mainPage.users[userIndex] &&
+                          <div>
+                          Интересы:
                         {mainPage.users[userIndex]?.card.tags?.map((item: string) => {
                           return <div>{item}</div>
                         })}
+                          </div>
+                        }
                 </div>
 
                     </span>
@@ -619,6 +627,9 @@ const MainPage = (state: IState) => {
           {/*{state.users.us.map((item) => {*/}
           {/*    return <div key={item.fullName}>{item.fullName}</div>*/}
           {/*})}*/}
+
+          {
+            mainPage.users[userIndex] &&
 
           <div>
             {!mainPage.currentUser?.match &&
@@ -649,6 +660,7 @@ const MainPage = (state: IState) => {
 
             {/*<button onClick={onClickNotLikeUser}>Next</button>*/}
           </div>
+          }
 
         </div>}
         <p className={style.logout} onClick={onClickLogout}>Выйти</p>

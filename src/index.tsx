@@ -11,11 +11,13 @@ import LoginReducer from "./components/Login/Login.reducer";
 import MainPageReducer from "./components/MainPage/MainPage.reducer";
 import Auth from "./Auth";
 import ErrorWrapperReducer from "./components/ErrorWrapper/ErrorWrapper.reducer";
+import ChatReducer from "./components/Chat/Chat.reducer";
 
 let reducers = combineReducers({
     login: LoginReducer,
     error: ErrorWrapperReducer,
-    mainPage: MainPageReducer
+    mainPage: MainPageReducer,
+    chat: ChatReducer
 });
 
 const composeEnhancers = composeWithDevTools({});

@@ -112,8 +112,18 @@ export interface IError {
     isServerError: boolean,
 }
 
+export interface IMatches {
+    matchId: number,
+    userId: number
+}
+
+export interface IChat {
+    matches: IMatches[]
+}
+
 export interface IState {
     login: ILogin,
     mainPage: IMainPage,
+    chat: IChat,
     error: IError,
 }
