@@ -8,7 +8,7 @@ export interface IPhotos {
         content: string,
         format: string,
         // name: string,
-        action: 'save' | 'delete' | null,
+        action?: 'save' | 'delete' | null,
         number: string,
     main: boolean
 
@@ -114,11 +114,37 @@ export interface IError {
 
 export interface IMatches {
     matchId: number,
-    userId: number
+    userId: number,
+    chatId?: number,
+    fio?: string,
+    icon?: IPhotos
+}
+
+export interface IMessage {
+    chatId: number,
+    content: string,
+    creationTime: string,
+    fromId: number,
+    id: number,
+    status: string,
+    toId: number,
+    type: string
+}
+
+export interface IFirstPackMessagesWithChatId {
+    messages: {
+        chatId: number,
+        messageAnswer: IMessage[]
+    }
 }
 
 export interface IChat {
-    matches: IMatches[]
+    chatToken: string,
+    chatFingerprint: string,
+    isOpenChatRoom: boolean,
+    openChatId: number,
+    matches: IMatches[],
+    firstPackMessages: IFirstPackMessagesWithChatId[]
 }
 
 export interface IState {

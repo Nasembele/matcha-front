@@ -8,7 +8,7 @@ import {
   setUsersAC, setValidNewEmailAC,
   setValidPrevEmailAC
 } from "./components/MainPage/MainPageAC";
-import {IAuthData, IPhotos, IRegData, IState, IUserCard, IUserData, IUserFilter} from "./types";
+import {IAuthData, IChat, IPhotos, IRegData, IState, IUserCard, IUserData, IUserFilter} from "./types";
 import {Dispatch} from "redux";
 import {
   changeLoginAC, changePasswordAC,
@@ -20,7 +20,21 @@ import {
 import {setServerErrorAC} from "./components/ErrorWrapper/ErrorWrapperAC";
 import {prepareDateToSendServer} from "./helpers";
 import {ChangeEvent} from "react";
-import {setUserMatchesAC} from "./components/Chat/ChatAC";
+import {setChatTokenAC, setIsOpenChatRoom, setUserMatchesAC} from "./components/Chat/ChatAC";
+import {useSelector} from "react-redux";
+import {socket} from "./components/MainPage/MainPage";
+
+// const userId = sessionStorage.getItem('userId');
+// const chatToken = sessionStorage.getItem('chatToken');
+// const chatFingerprint = sessionStorage.getItem('chatFingerprint');
+//
+// console.log(userId);
+// console.log(chatToken);
+// console.log(chatToken);
+
+// let socket = new WebSocket(`ws://localhost:8080/chat/${userId}/${chatToken}/${chatFingerprint}`); //TODO вписать id меня и чата и вынести вотдельный файл
+
+// let socket = new WebSocket(`ws://localhost:8080/chat/2/12`); //TODO вписать id меня и чата и вынести вотдельный файл
 
 const instance = axios.create(
   {
@@ -128,6 +142,14 @@ export const usersAPI = {
       : instance.get(`main?act=getMatches`)
   },
 
+  createChatPutQuery(data: Object) {
+    return instance.put(`main/chatcreate`, data);
+  },
+
+  getChatTokenGetQuery() {
+    return instance.get(`main/token`);
+    },
+
   // fetch('http://localhost:8080/registration', {
   // method: 'POST',
   //     body: JSON.stringify({})
@@ -167,7 +189,7 @@ export const usersAPI = {
 // .then(res => console.log(res))
 // .catch(e => console.log(e));
 
-export const authGetUserQuery = () => (dispatch: any) => {
+export const authGetUserQuery = () => (dispatch: any, getState: any) => {
   usersAPI.authGetUser()
     // fetch('http://localhost:8080/getauthuser', {
     //     method: 'GET',
@@ -181,11 +203,15 @@ export const authGetUserQuery = () => (dispatch: any) => {
         dispatch(setIsAuthUserAC(false));
         // добавить ошибку error jwt
       } else {
+
+
+
         dispatch(setIsAuthUserAC(true));
         // dispatch(setIsAuthUserDataAC(res.data));
         dispatch(setUserDataAC(res.data));
         dispatch(setUserFiltersAC(res.data.filter));
         dispatch(getUserMatch());
+        dispatch(getChatToken());
       }
       // dispatch(setIsAuthAC(true));
     })
@@ -196,17 +222,29 @@ export const authGetUserQuery = () => (dispatch: any) => {
     });
 }
 
-export const signInPostQuery = (isAuthData: IAuthData) => (dispatch: any) => {
+export const signInPostQuery = (isAuthData: IAuthData) => (dispatch: any, getState: any) => {
   usersAPI.signIn(isAuthData)
     .then((res: any) => {
       // debugger;
       if (res.data !== 'INVALID LOGIN OR PASSWORD') { //поправить на новый лад?
         // добавить ошибку error jwt
         // dispatch(setIsAuthUserDataAC(res.data));
+
+        const userId = getState().mainPage.account.userId;
+        const chatToken = getState().chat.chatToken;
+        const chatFingerprint = getState().chat.chatFingerprint;
+
+        // const myStorage = window.localStorage;
+        // sessionStorage.setItem('userId', userId);
+        // sessionStorage.setItem('chatToken', chatToken);
+        // sessionStorage.setItem('chatFingerprint', chatFingerprint);
+
+
         dispatch(setUserDataAC(res.data));
         dispatch(setUserFiltersAC(res.data.filter));
         dispatch(setIsAuthUserAC(true));
         dispatch(getUserMatch());
+        dispatch(getChatToken());
       }
       // dispatch(setIsAuthUserDataAC(res));
       // dispatch(setIsAuthUserAC(true));
@@ -274,6 +312,7 @@ export const logoutGetQuery = () => (dispatch: Dispatch) => {
       dispatch(changeLoginAC(''));
       dispatch(changePasswordAC(''));
       dispatch(setIsAuthUserAC(false)); //TODO почистить в редаксе логин и пароль
+      sessionStorage.clear();
     })
     .catch(() => {
       dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
@@ -409,7 +448,6 @@ export const likeUserPutQuery = (userId: number, action: string) => (dispatch: a
         dispatch(getUserMatch());
       } else {
         dispatch(deleteNotLikeUserAC());
-
       }
 
     })
@@ -562,3 +600,126 @@ export const getUserMatch = (lastId?: number) => (dispatch: Dispatch, getState: 
       dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
     });
 }
+
+export const createChat = (toUser: number) => (dispatch: any, getState: any) => {
+
+  usersAPI.createChatPutQuery({'toUsr': toUser})
+    .then((response: any) => { //валидация?
+      dispatch(setIsOpenChatRoom(true, response.data));
+      dispatch(getUserMatch());
+    })
+    .catch(() => {
+      dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
+    });
+}
+
+export const getChatToken = () => (dispatch: any, getState: any) => {
+
+  usersAPI.getChatTokenGetQuery()
+    .then((response: any) => { //валидация?
+
+      const userId = getState().mainPage.account.id;
+
+      sessionStorage.setItem('userId', userId);
+       sessionStorage.setItem('chatToken', response.data.token);
+       sessionStorage.setItem('chatFingerprint', response.data.userFingerprint);
+
+      const userIdCheck = sessionStorage.getItem('userId');
+      const chatToken = sessionStorage.getItem('chatToken');
+      const chatFingerprint = sessionStorage.getItem('chatFingerprint');
+
+      console.log(userIdCheck);
+      console.log(response.data.token);
+      console.log(chatFingerprint);
+
+
+      dispatch(setChatTokenAC(response.data));
+
+      const chat = getState().chat;
+      // const userId = getState().mainPage.account.id;
+
+      // dispatch(openChatCanal(chat, userId));
+
+    })
+    .catch(() => {
+      dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
+    });
+}
+
+// export const openChatCanal = (chat: IChat, userId: number) => {
+//
+//   //тут сделать обработку уведомлений
+//
+//
+//   socket.onopen = function (e) {
+//     alert("[open] Соединение установлено");
+//
+//     alert("Отправляем данные на сервер");
+//
+//     const dataMessage = {
+//       chatId: 1,
+//       message: {
+//         chatId: "1",
+//         fromId: "2",
+//         toId: "98",
+//         type: "TEXT",
+//         content: "Hey lol!"
+//       }
+//     };
+//
+//     socket.send(JSON.stringify(dataMessage));
+//
+//     const message = {
+//       chatId: 1,
+//       getMessageRq: {
+//         messageIds: [1, 2, 3],
+//         type: "BY_IDS"
+//       }
+//     };
+//
+//     socket.send(JSON.stringify(message));
+//
+//     socket.onmessage = function (event) {
+//       alert(`[message] Данные получены с сервера: ${event.data}`);
+//     };
+//     // JSON.parse(json)
+//
+//     const deleteMessage = {
+//       chatId: 1,
+//       deleteMessage: {
+//         ids: [1, 2, 3],
+//         type: "BY_IDS"
+//       }
+//     };
+//
+//     socket.send(JSON.stringify(deleteMessage));
+//
+//   };
+// }
+//
+// export const sendMessage = () => {
+//   alert("Отправляем данные на сервер");
+//
+//   const dataMessage = {
+//     chatId: 1,
+//     message: {
+//       chatId: "1",
+//       fromId: "2",
+//       toId: "98",
+//       type: "TEXT",
+//       content: "Hey lol!"
+//     }
+//   };
+//   //
+//   socket.send(JSON.stringify(dataMessage));
+//   //
+//   // const message = {
+//   //   chatId: 1,
+//   //   getMessageRq: {
+//   //     messageIds: [1, 2, 3],
+//   //     type: "BY_IDS"
+//   //   }
+//   // };
+//   //
+//   // socket.send(JSON.stringify(message));
+// }

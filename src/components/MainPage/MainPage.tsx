@@ -27,7 +27,7 @@ import {
   logoutGetQuery,
   saveChangeAccPostQuery, setUserFilterPutQuery, updateAccountSettings
 } from "../../api";
-import {IPhotos, IState} from "../../types";
+import {IChat, IPhotos, IState} from "../../types";
 import {
   changeRegBirthdayAC,
   changeRegFirstNameAC,
@@ -38,6 +38,88 @@ import {
 import ChangeAccountSettingsModalWindow
   from "./components/ChangeAccountSettingsModalWindow/ChangeAccountSettingsModalWindow";
 import {MatchSideBar} from "../Chat/MatchSideBar/MatchSideBar";
+import {ChatRoom} from "../Chat/ChatRoom/ChatRoom";
+import {setIsOpenChatRoom} from "../Chat/ChatAC";
+
+// const openChatCanal = (chat: IChat, userId: number) => {
+//
+//   //тут сделать обработку уведомлений
+//
+//
+//   socket.onopen = function (e) {
+//     alert("[open] Соединение установлено");
+//
+//     alert("Отправляем данные на сервер");
+//
+//     const dataMessage = {
+//       chatId: 1,
+//       message: {
+//         chatId: "1",
+//         fromId: "2",
+//         toId: "98",
+//         type: "TEXT",
+//         content: "Hey lol!"
+//       }
+//     };
+//
+//     socket.send(JSON.stringify(dataMessage));
+//
+//     const message = {
+//       chatId: 1,
+//       getMessageRq: {
+//         messageIds: [1, 2, 3],
+//         type: "BY_IDS"
+//       }
+//     };
+//
+//     socket.send(JSON.stringify(message));
+//
+//     socket.onmessage = function (event) {
+//       alert(`[message] Данные получены с сервера: ${event.data}`);
+//     };
+//     // JSON.parse(json)
+//
+//     const deleteMessage = {
+//       chatId: 1,
+//       deleteMessage: {
+//         ids: [1, 2, 3],
+//         type: "BY_IDS"
+//       }
+//     };
+//
+//     socket.send(JSON.stringify(deleteMessage));
+//
+//   };
+// }
+//
+// export const sendMessage = () => {
+//   alert("Отправляем данные на сервер");
+//
+//   const dataMessage = {
+//     chatId: 1,
+//     message: {
+//       chatId: "1",
+//       fromId: "2",
+//       toId: "98",
+//       type: "TEXT",
+//       content: "Hey lol!"
+//     }
+//   };
+//   //
+//   socket.send(JSON.stringify(dataMessage));
+//   //
+//   // const message = {
+//   //   chatId: 1,
+//   //   getMessageRq: {
+//   //     messageIds: [1, 2, 3],
+//   //     type: "BY_IDS"
+//   //   }
+//   // };
+//   //
+//   // socket.send(JSON.stringify(message));
+// }
+
+
 
 const getBase64 = (file: File) => {
   return new Promise((resolve, reject) => {
@@ -53,6 +135,14 @@ const getBase64 = (file: File) => {
     reader.onerror = error => reject(error);
   });
 }
+
+// const chat = useSelector((state: IState) => state.chat);
+// const userId = useSelector((state: IState) => state.mainPage.use);
+const userIdChat = sessionStorage.getItem('userId');
+const chatToken = sessionStorage.getItem('chatToken');
+const chatFingerprint = sessionStorage.getItem('chatFingerprint');
+
+export const socket = new WebSocket(`ws://localhost:8080/chat/${userIdChat}/${chatToken}/${chatFingerprint}`); //TODO вписать id меня и чата и вынести вотдельный файл
 
 const MainPage = (state: IState) => {
 
@@ -77,7 +167,9 @@ const MainPage = (state: IState) => {
 
   const mainPage = useSelector((state: IState) => state.mainPage);
   const login = useSelector((state: IState) => state.login);
+  const chat = useSelector((state: IState) => state.chat);
 
+  const userId = mainPage.account.id;
   // const userData = useSelector((state: IState) => state.login.userData);
 
   const [chosenIndex, setChosenIndex] = useState(0);
@@ -102,6 +194,13 @@ const MainPage = (state: IState) => {
 
 
   }, [chosenIndex, countUsers]);
+
+  useEffect(() => {
+    if (chat.isOpenChatRoom === true) {
+      setChosenIndex(3);
+
+    }
+  }, [chat.isOpenChatRoom]);
 
   // useEffect(() => { //TODO делать запрос пока матчи не кончатся
   //   dispatch(getUserMatch());
@@ -158,6 +257,7 @@ const MainPage = (state: IState) => {
 
   const closeAccountSetting = () => {
     setChosenIndex(0);
+    dispatch(setIsOpenChatRoom(false));
   }
 
   // const changeOrient = (orient: any) => {
@@ -663,6 +763,18 @@ const MainPage = (state: IState) => {
           }
 
         </div>}
+
+        {
+          chosenIndex === 3 &&
+            <div>
+            <ChatRoom/>
+
+          <button onClick={closeAccountSetting}>
+            Назад
+          </button>
+            </div>
+        }
+
         <p className={style.logout} onClick={onClickLogout}>Выйти</p>
 
       </div>
