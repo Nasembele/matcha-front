@@ -1,0 +1,9 @@
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /*grid-auto-rows: 100vh;*/
+}
+
+.my_message {
+    text-align: right;
+}

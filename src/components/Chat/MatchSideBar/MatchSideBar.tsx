@@ -29,7 +29,7 @@ export const MatchSideBar = () => {
 
   const showChatRoom = (el: IMatches) => () => {
     if (el.chatId) {
-      dispatch(setIsOpenChatRoom(true, el.chatId));
+      dispatch(setIsOpenChatRoom(true, el.chatId, el.userId));
       return;
     }
     dispatch(createChat(el.userId));
@@ -70,8 +70,7 @@ export const MatchSideBar = () => {
               <img height='40px'
                    src={`data:${el.icon?.format};base64,${el.icon?.content}`}
                    alt='фото'/>}
-              {el.matchId}
-              {el.fio}
+              {el.firstName}
             </div>
         })
       }
@@ -84,9 +83,10 @@ export const MatchSideBar = () => {
               <img height='40px'
                    src={`data:${el.icon?.format};base64,${el.icon?.content}`}
                    alt='фото'/>}
-              {el.matchId}
-              {el.fio}
-              {chat.firstPackMessages.find(messageEl => messageEl.messages.chatId === el.chatId)?.messages.messageAnswer[0]?.content}
+              {el.firstName}
+              <div>
+                {chat.firstPackMessages.find(messageEl => messageEl.messages.chatId === el.chatId)?.messages.messageAnswer[0]?.content}
+              </div>
             </div>
           </div>
       })

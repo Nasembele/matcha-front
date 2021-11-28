@@ -20,7 +20,7 @@ import {
 import {setServerErrorAC} from "./components/ErrorWrapper/ErrorWrapperAC";
 import {prepareDateToSendServer} from "./helpers";
 import {ChangeEvent} from "react";
-import {setChatTokenAC, setIsOpenChatRoom, setUserMatchesAC} from "./components/Chat/ChatAC";
+import {setChatTokenAC, setIsOpenChatRoom, setUserInChatAC, setUserMatchesAC} from "./components/Chat/ChatAC";
 import {useSelector} from "react-redux";
 import {socket} from "./components/MainPage/MainPage";
 
@@ -149,6 +149,10 @@ export const usersAPI = {
   getChatTokenGetQuery() {
     return instance.get(`main/token`);
     },
+
+  getUserByIdGetQuery(userId: number) {
+    return instance.get(`main/getuser?id=${userId}`);
+  }
 
   // fetch('http://localhost:8080/registration', {
   // method: 'POST',
@@ -605,8 +609,19 @@ export const createChat = (toUser: number) => (dispatch: any, getState: any) => 
 
   usersAPI.createChatPutQuery({'toUsr': toUser})
     .then((response: any) => { //валидация?
-      dispatch(setIsOpenChatRoom(true, response.data));
+      dispatch(setIsOpenChatRoom(true, response.data, toUser));
       dispatch(getUserMatch());
+    })
+    .catch(() => {
+      dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
+    });
+}
+
+export const getUserById = (userId: number) => (dispatch: any, getState: any) => {
+
+  usersAPI.getUserByIdGetQuery(userId)
+    .then((response: any) => { //валидация?
+      dispatch(setUserInChatAC(response.data));
     })
     .catch(() => {
       dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху

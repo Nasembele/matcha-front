@@ -116,7 +116,7 @@ export interface IMatches {
     matchId: number,
     userId: number,
     chatId?: number,
-    fio?: string,
+    firstName?: string,
     icon?: IPhotos
 }
 
@@ -135,7 +135,8 @@ export interface IFirstPackMessagesWithChatId {
     messages: {
         chatId: number,
         messageAnswer: IMessage[]
-    }
+    },
+    lastMessagesId?: number
 }
 
 export interface IChat {
@@ -143,8 +144,10 @@ export interface IChat {
     chatFingerprint: string,
     isOpenChatRoom: boolean,
     openChatId: number,
+    toUserId: number,
     matches: IMatches[],
-    firstPackMessages: IFirstPackMessagesWithChatId[]
+    firstPackMessages: IFirstPackMessagesWithChatId[],
+    userInChat?: IUserData
 }
 
 export interface IState {

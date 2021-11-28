@@ -7,15 +7,23 @@ export const prepareDateToSendServer = (date: string) => {
 
 export const addNewFirstPack = (arr: IFirstPackMessagesWithChatId[], newEl: {
         messages: {
-    chatId: number,
-    messageAnswer: IMessage[]
-    }
+            chatId: number,
+            messageAnswer: IMessage[]
+        }
 }
 ) => {
+    const messagesWithLastI = {
+        messages: {
+            chatId: newEl.messages.chatId,
+            messageAnswer: newEl.messages.messageAnswer.reverse()
+        },
+        lastMessagesId: newEl.messages.messageAnswer[0]?.id
+    }
+
     const ind = arr.findIndex((el) => el.messages.chatId === newEl.messages.chatId);
     if (ind !== -1) {
         arr.splice(ind, 1);
     }
-        arr.push(newEl);
+        arr.push(messagesWithLastI);
     return arr;
 }
