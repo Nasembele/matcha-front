@@ -303,6 +303,7 @@ const MainPage = (state: IState) => {
 
   const onClickLikeUser = () => {
     dispatch(likeUserPutQuery(mainPage.users[userIndex]?.id, 'like'));
+
     //TODO показывать если матч и передавать его в чат
     // dispatch(deleteNotLikeUserAC());
   };
@@ -402,7 +403,10 @@ const MainPage = (state: IState) => {
 
   return (
     <div className={style.content_wrapper}>
+<div>
       <MatchSideBar/>
+
+</div>
       <div className={style.main_field}>
         {chosenIndex === 1 &&
         <div>
@@ -749,6 +753,7 @@ const MainPage = (state: IState) => {
             <button onClick={onClickDisLikeUser}>Dislike</button>
   </span>
             }
+            {mainPage.currentUser?.match && <div>ПРОИЗОШЕЛ МАТЧ!</div>}
 
             {mainPage.currentUser?.match &&
               <span>

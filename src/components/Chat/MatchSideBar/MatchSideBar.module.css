@@ -1,3 +1,11 @@
 .match_side_bar {
     background-color: #e84a67;
+    height: 100%;
+}
+
+
+.notification {
+    position: absolute;
+    bottom: 0;
+    height: 50px;
 }

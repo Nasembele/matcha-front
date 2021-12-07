@@ -121,6 +121,13 @@ export const ChatRoom = () => {
 
   // };
 
+  const getActualMessage = {
+    chatId: chat.openChatId,
+    getMessageRq: {
+      type: "GET_FIRST_PACK"
+    }
+  };
+
   useEffect(() => {
     dispatch(getUserById(chat.toUserId));
   }, [chat.toUserId]);
@@ -150,9 +157,18 @@ export const ChatRoom = () => {
 
     socket.send(JSON.stringify(getFirstMessage));
 
-    socket.onmessage = function (event) {
-      dispatch(setFirstPackMessagesAC(JSON.parse(event.data)));
-    };
+    // socket.onmessage = function (event) {
+    //   dispatch(setFirstPackMessagesAC(JSON.parse(event.data)));
+    // };
+    //
+    // socket.onmessage = function (event) {
+    //   const parseEvent = JSON.parse(event.data);
+    //   if (parseEvent.chatId && parseEvent.messageAnswer) {
+    //     dispatch(setFirstPackMessagesAC(parseEvent));
+    //   } else {
+    //     socket.send(JSON.stringify(getFirstMessage));
+    //   }
+    // };
 
     setMessage('');
   }
@@ -162,22 +178,41 @@ export const ChatRoom = () => {
       chatId: chat.openChatId,
       getMessageRq: {
         type: "BEFORE_FIRST",
-        specificId: chat.firstPackMessages.find((el) => el.messages.chatId === chat.openChatId)?.lastMessagesId
+        specificId: chat.firstPackMessages.find((el) => el.messages.chatId === chat.openChatId)?.oldestMessagesId
       }
     };
 
     socket.send(JSON.stringify(getFirstMessage));
 
     socket.onmessage = function (event) {
-      dispatch(setFirstPackMessagesAC(JSON.parse(event.data)));
+
+      const parseEvent = JSON.parse(event.data);
+      if (parseEvent.chatId && parseEvent.messageAnswer) {
+        dispatch(setFirstPackMessagesAC(parseEvent));
+      } else if (parseEvent.chatId && parseEvent.messageNotification) {
+        socket.send(JSON.stringify(getActualMessage));
+      }
     };
   }
+
+  const getLastMessages = () => {
+
+    socket.send(JSON.stringify(getActualMessage));
+
+  }
+
+  const currentPack = chat.firstPackMessages.find((el) => el.messages.chatId === chat.openChatId)?.messages.messageAnswer;
+  const disableButtonGetNewMessage = currentPack?.length ? currentPack?.length < 10 : true;
 
   return (
     <div className={style.container}>
       <div>
-        <button onClick={getPreviousMessages}>
+        <button onClick={getPreviousMessages}
+                disabled={disableButtonGetNewMessage}>
           Показать предыдущие сообщения
+        </button>
+        <button onClick={getLastMessages}>
+          К новым сообщениям
         </button>
         {
           firstMessagePackByChatId?.map((el: IMessage) => {

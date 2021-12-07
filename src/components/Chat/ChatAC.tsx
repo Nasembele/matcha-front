@@ -11,7 +11,7 @@ export const setIsOpenChatRoom = (isOpenChatRoom: boolean, chatId?: number, toUs
   payload: {isOpenChatRoom, chatId, toUserId}
 });
 
-export const setChatTokenAC = (data: {Token: string, userFingerprint: string}) => ({
+export const setChatTokenAC = (data: { Token: string, userFingerprint: string }) => ({
   type: constants.SET_CHAT_TOKEN,
   payload: data
 });
@@ -25,4 +25,15 @@ export const setUserInChatAC = (userInChat: IUserData) => ({
   type: constants.SET_USER_IN_CHAT,
   payload: userInChat
 });
+
+export const setNotificationAboutNewMessageAC = (hasNewMessage: boolean) => ({
+  type: constants.SET_NOTIFICATION_ABOUT_NEW_MESSAGES,
+  payload: hasNewMessage
+});
+
+export const setNotificationParametersAboutNewMessageAC = (chatId: number, userId: number) => ({
+  type: constants.SET_NOTIFICATION_PARAMETERS_ABOUT_NEW_MESSAGES,
+  payload: {chatId, userId}
+});
+
 

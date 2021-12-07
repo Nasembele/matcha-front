@@ -47,6 +47,23 @@ export default function ChatReducer(state: IChat = initialChatState, action: IAc
         ...state,
         userInChat: action.payload
       };
+    case constants.SET_NOTIFICATION_ABOUT_NEW_MESSAGES:
+      return {
+        ...state,
+        messageNotification: {
+          ...state.messageNotification,
+          hasNewMessage: action.payload
+        }
+      };
+    case constants.SET_NOTIFICATION_PARAMETERS_ABOUT_NEW_MESSAGES:
+      return {
+        ...state,
+        messageNotification: {
+          ...state.messageNotification,
+          chatId: action.payload.chatId,
+          userId: action.payload.userId
+        }
+      };
     default:
       return state;
   }

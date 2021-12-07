@@ -4,7 +4,12 @@ import style from './MatchSideBar.module.css';
 import MultiToggle from "../../../parts/MultiToggle/MultiToggle";
 import React, {useEffect, useState} from "react";
 import {createChat, getUserMatch, getUsersPostQuery} from "../../../api";
-import {setFirstPackMessagesAC, setIsOpenChatRoom} from "../ChatAC";
+import {
+  setFirstPackMessagesAC,
+  setIsOpenChatRoom,
+  setNotificationAboutNewMessageAC,
+  setNotificationParametersAboutNewMessageAC
+} from "../ChatAC";
 import {socket} from "../../MainPage/MainPage";
 
 const matchTitles = ['Пары', 'Сообщения'];
@@ -23,16 +28,24 @@ export const MatchSideBar = () => {
 
   const getNewMatches = () => {
     const numberLastId = chat.matches.length - 1;
-    const lastId = chat.matches[numberLastId].matchId;
+    const lastId = chat.matches[numberLastId]?.matchId;
     dispatch(getUserMatch(lastId));
   };
 
-  const showChatRoom = (el: IMatches) => () => {
+  const showChatRoom = (el: any) => () => {
     if (el.chatId) {
       dispatch(setIsOpenChatRoom(true, el.chatId, el.userId));
       return;
     }
     dispatch(createChat(el.userId));
+  }
+
+  const showChatRoomAndCloseNotification = (el: any) => () => {
+    if (el.chatId) {
+      dispatch(setIsOpenChatRoom(true, el.chatId, el.userId));
+      dispatch(setNotificationAboutNewMessageAC(false));
+      return;
+    }
   }
 
   useEffect(() => {
@@ -48,9 +61,32 @@ export const MatchSideBar = () => {
         socket.send(JSON.stringify(getFirstMessage));
 
         socket.onmessage = function (event) {
-          dispatch(setFirstPackMessagesAC(JSON.parse(event.data)));
+          const parseEvent = JSON.parse(event.data);
+          if (parseEvent.chatId && parseEvent.messageAnswer) {
+            dispatch(setFirstPackMessagesAC(parseEvent));
+          } else if (parseEvent.chatId && parseEvent.messageNotification) {
+            dispatch(setNotificationAboutNewMessageAC(true));
+            dispatch(setNotificationParametersAboutNewMessageAC(parseEvent.chatId, parseEvent.messageNotification.senderId));
+
+            socket.send(JSON.stringify(getFirstMessage));
+
+            // const getMessageById = {
+            //   chatId: el.chatId,
+            //   getMessageRq: {
+            //     messageIds: [parseEvent.messageNotification.messageId],
+            //     type: "BY_IDS"
+            //   }
+            // };
+            // socket.send(JSON.stringify(getMessageById));
+
+            //todo делать запрос за новым сообщением и складывать его в редакс и показываь внизу старницы уведомление о нем
+            // socket.send(JSON.stringify(getFirstMessage));
+
+            // dispatch(setNotificationAboutNewMessage());
+          }
         };
       }
+
     })
   }, [chat.matches]);
 
@@ -76,6 +112,8 @@ export const MatchSideBar = () => {
       }
       {matchTypeIdx === 1 &&
       chat.matches.map((el: IMatches) => {
+        const currentPackMessages = chat.firstPackMessages.find(messageEl => messageEl.messages.chatId === el.chatId)?.messages.messageAnswer;
+        const lastMessage = currentPackMessages ? currentPackMessages[currentPackMessages.length - 1]?.content : '';
         return el.chatId &&
           <div>
             <div onClick={showChatRoom(el)}>
@@ -85,15 +123,21 @@ export const MatchSideBar = () => {
                    alt='фото'/>}
               {el.firstName}
               <div>
-                {chat.firstPackMessages.find(messageEl => messageEl.messages.chatId === el.chatId)?.messages.messageAnswer[0]?.content}
+                {lastMessage}
               </div>
             </div>
           </div>
+
       })
       }
       <button onClick={getNewMatches}>
         Загрузить ещё
       </button>
+      {chat.messageNotification?.hasNewMessage &&
+      <div className={style.notification}
+            onClick={showChatRoomAndCloseNotification(chat.messageNotification)}>
+        НОВОЕ СООБЩЕНИЕ!
+      </div>}
     </div>
   )
 }

@@ -12,18 +12,19 @@ export const addNewFirstPack = (arr: IFirstPackMessagesWithChatId[], newEl: {
         }
 }
 ) => {
-    const messagesWithLastI = {
+    const messagesWithId = {
         messages: {
             chatId: newEl.messages.chatId,
             messageAnswer: newEl.messages.messageAnswer.reverse()
         },
-        lastMessagesId: newEl.messages.messageAnswer[0]?.id
+        oldestMessagesId: newEl.messages.messageAnswer[0]?.id,
+        freshMessagesId: newEl.messages.messageAnswer[newEl.messages.messageAnswer.length - 1]?.id
     }
 
     const ind = arr.findIndex((el) => el.messages.chatId === newEl.messages.chatId);
     if (ind !== -1) {
         arr.splice(ind, 1);
     }
-        arr.push(messagesWithLastI);
+        arr.push(messagesWithId);
     return arr;
 }

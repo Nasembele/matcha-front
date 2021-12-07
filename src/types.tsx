@@ -136,7 +136,8 @@ export interface IFirstPackMessagesWithChatId {
         chatId: number,
         messageAnswer: IMessage[]
     },
-    lastMessagesId?: number
+    oldestMessagesId?: number,
+    freshMessagesId?: number
 }
 
 export interface IChat {
@@ -147,7 +148,12 @@ export interface IChat {
     toUserId: number,
     matches: IMatches[],
     firstPackMessages: IFirstPackMessagesWithChatId[],
-    userInChat?: IUserData
+    userInChat?: IUserData,
+    messageNotification?: {
+        hasNewMessage: boolean,
+        chatId: number,
+        userId: number
+    }
 }
 
 export interface IState {
