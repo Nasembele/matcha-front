@@ -145,7 +145,7 @@ const Login = () => {
                 {chosenIndex === 0 && <div>
                   <p className={style.title}>Join and start dating today!</p>
                   <div className={style.content}>
-                    <div className={style.form_header}>email</div>
+                    <div className={style.form_header}>email или username</div>
                     <input type={'text'} onChange={changeLogin} className={style.form_input}/>
                     <div className={style.form_header}>Пароль</div>
                     <input type={'password'} onChange={changePassword} className={style.form_input}/>

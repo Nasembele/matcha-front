@@ -10,7 +10,7 @@ export default function LoginReducer(state: ILogin = initialState, action: IActi
                 ...state,
                 authData: {
                     ...state.authData,
-                    email: action.payload
+                    login: action.payload
                 }
             };
         case constants.SET_USER_PASSWORD:

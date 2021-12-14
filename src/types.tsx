@@ -61,7 +61,7 @@ export interface IRegData {
 }
 
 export interface IAuthData {
-    email: string,
+    login: string,
     password: string
 }
 

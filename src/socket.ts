@@ -6,14 +6,17 @@ const chatToken = sessionStorage.getItem('chatToken');
 const chatFingerprint = sessionStorage.getItem('chatFingerprint');
 
 
-export const socket = new WebSocket(`ws://localhost:8080/chat/${userIdChat}/${chatToken}/${chatFingerprint}`);
+export const socket = new WebSocket(`ws://localhost:8080/${userIdChat}/${chatToken}/${chatFingerprint}`);
 
 export const getActualMessages = (openChatId: number, firstMessagePackByChatId?: IMessage[]) => {
 
   const getActualMessages = {
-    chatId: openChatId,
-    getMessageRq: {
-      type: "GET_FIRST_PACK"
+    type: 'CHAT',
+    transportMessage: {
+      chatId: openChatId,
+      getMessageRq: {
+        type: "GET_FIRST_PACK"
+      }
     }
   };
 
@@ -28,9 +31,12 @@ export const getActualMessages = (openChatId: number, firstMessagePackByChatId?:
     receivedMessages.map(el => resultId.push(el.id));
 
     const deliveryMesssage = {
-      chatId: openChatId,
-      deliveryNotification: {
-        ids: resultId
+      type: 'CHAT',
+      transportMessage: {
+        chatId: openChatId,
+        deliveryNotification: {
+          ids: resultId
+        }
       }
     };
 
@@ -40,13 +46,16 @@ export const getActualMessages = (openChatId: number, firstMessagePackByChatId?:
 
 export const sendMessage = (openChatId: number, fromUserId: number, toUserId: number, message: string, firstMessagePackByChatId?: IMessage[]) => {
   const newMessage = {
-    chatId: openChatId,
-    message: {
+    type: 'CHAT',
+    transportMessage: {
       chatId: openChatId,
-      fromId: fromUserId,
-      toId: toUserId,
-      type: "TEXT",
-      content: message
+      message: {
+        chatId: openChatId,
+        fromId: fromUserId,
+        toId: toUserId,
+        type: "TEXT",
+        content: message
+      }
     }
   };
 
@@ -58,10 +67,13 @@ export const sendMessage = (openChatId: number, fromUserId: number, toUserId: nu
 export const getPreviousMessages = (openChatId: number, firstPackMessages: IFirstPackMessagesWithChatId[],
                                     setFirstPackMessagesCallBack: Function, firstMessagePackByChatId?: IMessage[]) => {
   const getFirstMessage = {
-    chatId: openChatId,
-    getMessageRq: {
-      type: "BEFORE_FIRST",
-      specificId: firstPackMessages.find((el) => el.messages.chatId === openChatId)?.oldestMessagesId
+    type: 'CHAT',
+    transportMessage: {
+      chatId: openChatId,
+      getMessageRq: {
+        type: "BEFORE_FIRST",
+        specificId: firstPackMessages.find((el) => el.messages.chatId === openChatId)?.oldestMessagesId
+      }
     }
   };
 
@@ -69,9 +81,9 @@ export const getPreviousMessages = (openChatId: number, firstPackMessages: IFirs
 
   socket.onmessage = function (event) {
     const parseEvent = JSON.parse(event.data);
-    if (parseEvent.chatId && parseEvent.messageAnswer) {
-      setFirstPackMessagesCallBack(parseEvent);
-    } else if (parseEvent.chatId && parseEvent.messageNotification) {
+    if (parseEvent.transportMessage?.chatId && parseEvent.transportMessage?.messageAnswer) {
+      setFirstPackMessagesCallBack(parseEvent.transportMessage);
+    } else if (parseEvent.transportMessage?.chatId && parseEvent.transportMessage?.messageNotification) {
       getActualMessages(openChatId, firstMessagePackByChatId);
     }
   };
@@ -79,10 +91,13 @@ export const getPreviousMessages = (openChatId: number, firstPackMessages: IFirs
 
 export const deleteMessage = (openChatId: number, messageId: number, firstMessagePackByChatId?: IMessage[]) => {
   const deleteMessage = {
-    chatId: openChatId,
-    deleteMessage: {
-      type: "BY_IDS",
-      ids: [messageId]
+    type: 'CHAT',
+    transportMessage: {
+      chatId: openChatId,
+      deleteMessage: {
+        type: "BY_IDS",
+        ids: [messageId]
+      }
     }
   };
 
@@ -93,9 +108,12 @@ export const deleteMessage = (openChatId: number, messageId: number, firstMessag
 
 export const deleteAllMessages = (openChatId: number, firstMessagePackByChatId?: IMessage[]) => {
   const deleteMessage = {
-    chatId: openChatId,
-    deleteMessage: {
-      type: "ALL",
+    type: 'CHAT',
+    transportMessage: {
+      chatId: openChatId,
+      deleteMessage: {
+        type: "ALL",
+      }
     }
   };
 
@@ -108,9 +126,12 @@ export const deleteAllMessages = (openChatId: number, firstMessagePackByChatId?:
 export const getFirstMessages = (chatId: number, setFirstPackMessagesCallBack: Function,
                                  setNotificationAboutNewMessageCallBack: Function) => {
   const getFirstMessage = {
-    chatId: chatId,
-    getMessageRq: {
-      type: "GET_FIRST_PACK"
+    type: 'CHAT',
+    transportMessage: {
+      chatId: chatId,
+      getMessageRq: {
+        type: "GET_FIRST_PACK"
+      }
     }
   };
 
@@ -118,10 +139,10 @@ export const getFirstMessages = (chatId: number, setFirstPackMessagesCallBack: F
 
   socket.onmessage = function (event) {
     const parseEvent = JSON.parse(event.data);
-    if (parseEvent.chatId && parseEvent.messageAnswer) {
-      setFirstPackMessagesCallBack(parseEvent);
-    } else if (parseEvent.chatId && parseEvent.messageNotification) {
-      setNotificationAboutNewMessageCallBack(true, parseEvent.chatId, parseEvent.messageNotification.senderId);
+    if (parseEvent.transportMessage?.chatId && parseEvent.transportMessage?.messageAnswer) {
+      setFirstPackMessagesCallBack(parseEvent.transportMessage);
+    } else if (parseEvent.transportMessage?.chatId && parseEvent.transportMessage?.messageNotification) {
+      setNotificationAboutNewMessageCallBack(true, parseEvent.transportMessage.chatId, parseEvent.transportMessage.messageNotification.senderId);
       socket.send(JSON.stringify(getFirstMessage));
     }
   };

@@ -7,7 +7,7 @@ import {createChat, getUserMatch} from "../../../api";
 import {
   setFirstPackMessagesAC,
   setIsOpenChatRoom,
-  setNotificationAboutNewMessageAC
+  setNotificationAboutNewMessageAC, setUserMatchesAC
 } from "../ChatAC";
 import {getFirstMessages} from "../../../socket";
 
@@ -28,7 +28,7 @@ export const MatchSideBar = () => {
   const getNewMatches = () => {
     const numberLastId = chat.matches.length - 1;
     const lastId = chat.matches[numberLastId]?.matchId;
-    dispatch(getUserMatch(lastId));
+    dispatch(getUserMatch('MATCH', setUserMatchesAC, lastId));
   };
 
   const showChatRoom = (el: any) => () => {
@@ -55,10 +55,21 @@ export const MatchSideBar = () => {
     chat.matches.map((el: IMatches) => {
       if (el.chatId) {
         return getFirstMessages(el.chatId, setFirstPackMessagesCallBack, setNotificationAboutNewMessageCallBack);
-      } return ''
+      }
+      return ''
     })
   }, [chat.matches]);
 
+
+  // const openLikesHistory = () => {
+  //   dispatch(getUserMatch('LIKE', setUserMatchesAC));
+  // }
+  // // {/*todo история лайков*/}
+
+  // const openVisitsHistory = () => {
+  //   dispatch(getUserMatch('VISIT', setUserMatchesAC));
+  // }
+  // // {/*todo история визитов*/}
 
   return (
     <div className={style.match_side_bar}>
@@ -68,16 +79,22 @@ export const MatchSideBar = () => {
       />
       {
         matchTypeIdx === 0 &&
-        chat.matches.map((el: IMatches) => {
-          return !el.chatId &&
-            <div onClick={showChatRoom(el)}>
-              {el.icon?.content &&
-              <img height='40px'
-                   src={`data:${el.icon?.format};base64,${el.icon?.content}`}
-                   alt='фото'/>}
-              {el.firstName}
-            </div>
-        })
+        <div>
+          {chat.matches.map((el: IMatches) => {
+            return !el.chatId &&
+              <div onClick={showChatRoom(el)}>
+                {el.icon?.content &&
+                <img height='40px'
+                     src={`data:${el.icon?.format};base64,${el.icon?.content}`}
+                     alt='фото'/>}
+                {el.firstName}
+              </div>
+          })}
+          {/*/!*todo история лайков*  куда то отдельно их засунуть!/*/}
+          {/*<div onClick={openLikesHistory}>История лайков</div>*/}
+          {/*<div onClick={openVisitsHistory}>История визитов</div>*/}
+
+        </div>
       }
       {matchTypeIdx === 1 &&
       chat.matches.map((el: IMatches) => {

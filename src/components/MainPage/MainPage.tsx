@@ -25,7 +25,7 @@ import {
   changePhotoPostQuery, getUserMatch,
   getUsersPostQuery, likeUserPutQuery,
   logoutGetQuery,
-  saveChangeAccPostQuery, setUserFilterPutQuery, updateAccountSettings
+  saveChangeAccPostQuery, setUserFilterPutQuery, setVisitUserPutQuery, updateAccountSettings
 } from "../../api";
 import {IChat, IPhotos, IState} from "../../types";
 import {
@@ -302,19 +302,26 @@ const MainPage = (state: IState) => {
   };
 
   const onClickLikeUser = () => {
-    dispatch(likeUserPutQuery(mainPage.users[userIndex]?.id, 'like'));
+    dispatch(likeUserPutQuery(mainPage.users[userIndex]?.id, 'LIKE'));
+
+    //TODO показывать если матч и передавать его в чат
+    // dispatch(deleteNotLikeUserAC());
+  };
+
+  const onClickVisitUser = () => {
+    dispatch(setVisitUserPutQuery(mainPage.users[userIndex]?.id));
 
     //TODO показывать если матч и передавать его в чат
     // dispatch(deleteNotLikeUserAC());
   };
 
   const onClickDisLikeUser = () => {
-    dispatch(likeUserPutQuery(mainPage.users[userIndex]?.id, 'disLike'));
+    dispatch(likeUserPutQuery(mainPage.users[userIndex]?.id, 'DISLIKE'));
     // dispatch(deleteNotLikeUserAC());
   };
 
   const onClickTakeLikeUser = () => {
-    dispatch(likeUserPutQuery(mainPage.users[userIndex]?.id, 'takeLike'));
+    dispatch(likeUserPutQuery(mainPage.users[userIndex]?.id, 'TAKE_LIKE'));
     // dispatch(deleteNotLikeUserAC());
   };
 
@@ -736,6 +743,9 @@ const MainPage = (state: IState) => {
             mainPage.users[userIndex] &&
 
           <div>
+            <button onClick={onClickVisitUser}>
+              Посмотреть юзера
+            </button>
             {!mainPage.currentUser?.match &&
 <span>
             <button onClick={onClickLikeUser

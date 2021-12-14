@@ -108,7 +108,7 @@ export const usersAPI = {
       return instance.put('main', filters)
   },
 
-  likeUser(userId: number, data: any) {
+  likeUser(data: any) {
     return instance.put(`main/like`, data)
   },
 
@@ -136,9 +136,9 @@ export const usersAPI = {
     return instance.put(`passchange`, data)
   },
 
-  getUserMatchGetQuery(lastId?: number) {
-    return lastId ? instance.get(`main?act=getMatches&after=${lastId}`)
-      : instance.get(`main?act=getMatches`)
+  getUserMatchGetQuery(action: string, lastId?: number) {
+    return lastId ? instance.get(`main?act=getActions&action=${action}&after=${lastId}`)
+      : instance.get(`main?act=getActions&action=${action}`)
   },
 
   createChatPutQuery(data: Object) {
@@ -213,7 +213,7 @@ export const authGetUserQuery = () => (dispatch: any, getState: any) => {
         // dispatch(setIsAuthUserDataAC(res.data));
         dispatch(setUserDataAC(res.data));
         dispatch(setUserFiltersAC(res.data.filter));
-        dispatch(getUserMatch());
+        dispatch(getUserMatch('MATCH', setUserMatchesAC));
         dispatch(getChatToken());
       }
       // dispatch(setIsAuthAC(true));
@@ -246,7 +246,7 @@ export const signInPostQuery = (isAuthData: IAuthData) => (dispatch: any, getSta
         dispatch(setUserDataAC(res.data));
         dispatch(setUserFiltersAC(res.data.filter));
         dispatch(setIsAuthUserAC(true));
-        dispatch(getUserMatch());
+        dispatch(getUserMatch('MATCH', setUserMatchesAC));
         dispatch(getChatToken());
       }
       // dispatch(setIsAuthUserDataAC(res));
@@ -437,18 +437,21 @@ export const setUserFilterPutQuery = () => (dispatch: any, getState: any) => {
 //         .catch(() => {});
 // }
 //
-export const likeUserPutQuery = (userId: number, action: string) => (dispatch: any) => {
+export const likeUserPutQuery = (userId: number, action: string) => (dispatch: any, getState: any) => {
+  const myId = getState().mainPage.account.id;
+
   const data = {
-    "toUserId": userId,
+    "toUsr": userId,
     "action": action,
+    'fromUsr': myId
   }
-  usersAPI.likeUser(userId, data)
+  usersAPI.likeUser(data)
     .then((response: any) => { //валидация?
       // dispatch(setLikeUserAC()); TODO тут подумать!!!
 
       if (response.data === 'MATCH') {
         dispatch(setMatchCurrentUserAC());
-        dispatch(getUserMatch());
+        dispatch(getUserMatch('MATCH', setUserMatchesAC));
       } else {
         dispatch(deleteNotLikeUserAC());
       }
@@ -593,11 +596,11 @@ export const saveNewPassword = (id: string, linkId: string, token: string, pass:
     });
 }
 
-export const getUserMatch = (lastId?: number) => (dispatch: Dispatch, getState: any) => {
+export const getUserMatch = (action: string, actionAfterSuccess: Function, lastId?: number) => (dispatch: Dispatch, getState: any) => {
 
-  usersAPI.getUserMatchGetQuery(lastId)
+  usersAPI.getUserMatchGetQuery(action, lastId)
     .then((response: any) => { //валидация?
-      dispatch(setUserMatchesAC(response.data));
+      dispatch(actionAfterSuccess(response.data));
     })
     .catch(() => {
       dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
@@ -609,8 +612,23 @@ export const createChat = (toUser: number) => (dispatch: any, getState: any) => 
   usersAPI.createChatPutQuery({'toUsr': toUser})
     .then((response: any) => { //валидация?
       dispatch(setIsOpenChatRoom(true, response.data, toUser));
-      dispatch(getUserMatch());
+      dispatch(getUserMatch('MATCH', setUserMatchesAC));
     })
+    .catch(() => {
+      dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
+    });
+}
+
+export const setVisitUserPutQuery = (userId: number) => (dispatch: any, getState: any) => {
+  const myId = getState().mainPage.account.id;
+
+  const data = {
+    "toUsr": userId,
+    "action": 'VISIT',
+    'fromUsr': myId
+  }
+  usersAPI.likeUser(data)
+    .then()
     .catch(() => {
       dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
     });
@@ -621,6 +639,7 @@ export const getUserById = (userId: number) => (dispatch: any, getState: any) =>
   usersAPI.getUserByIdGetQuery(userId)
     .then((response: any) => { //валидация?
       dispatch(setUserInChatAC(response.data));
+      dispatch(setVisitUserPutQuery(userId));
     })
     .catch(() => {
       dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
@@ -646,7 +665,6 @@ export const getChatToken = () => (dispatch: any, getState: any) => {
       console.log(response.data.token);
       console.log(chatFingerprint);
 
-
       dispatch(setChatTokenAC(response.data));
 
       const chat = getState().chat;
@@ -659,81 +677,3 @@ export const getChatToken = () => (dispatch: any, getState: any) => {
       dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
     });
 }
-
-// export const openChatCanal = (chat: IChat, userId: number) => {
-//
-//   //тут сделать обработку уведомлений
-//
-//
-//   socket.onopen = function (e) {
-//     alert("[open] Соединение установлено");
-//
-//     alert("Отправляем данные на сервер");
-//
-//     const dataMessage = {
-//       chatId: 1,
-//       message: {
-//         chatId: "1",
-//         fromId: "2",
-//         toId: "98",
-//         type: "TEXT",
-//         content: "Hey lol!"
-//       }
-//     };
-//
-//     socket.send(JSON.stringify(dataMessage));
-//
-//     const message = {
-//       chatId: 1,
-//       getMessageRq: {
-//         messageIds: [1, 2, 3],
-//         type: "BY_IDS"
-//       }
-//     };
-//
-//     socket.send(JSON.stringify(message));
-//
-//     socket.onmessage = function (event) {
-//       alert(`[message] Данные получены с сервера: ${event.data}`);
-//     };
-//     // JSON.parse(json)
-//
-//     const deleteMessage = {
-//       chatId: 1,
-//       deleteMessage: {
-//         ids: [1, 2, 3],
-//         type: "BY_IDS"
-//       }
-//     };
-//
-//     socket.send(JSON.stringify(deleteMessage));
-//
-//   };
-// }
-//
-// export const sendMessage = () => {
-//   alert("Отправляем данные на сервер");
-//
-//   const dataMessage = {
-//     chatId: 1,
-//     message: {
-//       chatId: "1",
-//       fromId: "2",
-//       toId: "98",
-//       type: "TEXT",
-//       content: "Hey lol!"
-//     }
-//   };
-//   //
-//   socket.send(JSON.stringify(dataMessage));
-//   //
-//   // const message = {
-//   //   chatId: 1,
-//   //   getMessageRq: {
-//   //     messageIds: [1, 2, 3],
-//   //     type: "BY_IDS"
-//   //   }
-//   // };
-//   //
-//   // socket.send(JSON.stringify(message));
-// }

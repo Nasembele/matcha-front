@@ -42,7 +42,7 @@ export const initialResetData = {
 export const initialState = {
     isAuth: false,
     authData: {
-        email: '',
+        login: '',
         password: ''
     },
     regData: initialRegData,
