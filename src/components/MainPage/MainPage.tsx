@@ -138,11 +138,11 @@ const getBase64 = (file: File) => {
 
 // const chat = useSelector((state: IState) => state.chat);
 // const userId = useSelector((state: IState) => state.mainPage.use);
-const userIdChat = sessionStorage.getItem('userId');
-const chatToken = sessionStorage.getItem('chatToken');
-const chatFingerprint = sessionStorage.getItem('chatFingerprint');
-
-export const socket = new WebSocket(`ws://localhost:8080/chat/${userIdChat}/${chatToken}/${chatFingerprint}`); //TODO вписать id меня и чата и вынести вотдельный файл
+// const userIdChat = sessionStorage.getItem('userId');
+// const chatToken = sessionStorage.getItem('chatToken');
+// const chatFingerprint = sessionStorage.getItem('chatFingerprint');
+//
+// export const socket = new WebSocket(`ws://localhost:8080/chat/${userIdChat}/${chatToken}/${chatFingerprint}`); //TODO вписать id меня и чата и вынести вотдельный файл
 
 const MainPage = (state: IState) => {
 

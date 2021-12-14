@@ -22,7 +22,6 @@ import {prepareDateToSendServer} from "./helpers";
 import {ChangeEvent} from "react";
 import {setChatTokenAC, setIsOpenChatRoom, setUserInChatAC, setUserMatchesAC} from "./components/Chat/ChatAC";
 import {useSelector} from "react-redux";
-import {socket} from "./components/MainPage/MainPage";
 
 // const userId = sessionStorage.getItem('userId');
 // const chatToken = sessionStorage.getItem('chatToken');

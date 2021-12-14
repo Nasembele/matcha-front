@@ -10,7 +10,7 @@ import {
   setNotificationAboutNewMessageAC,
   setNotificationParametersAboutNewMessageAC
 } from "../ChatAC";
-import {socket} from "../../MainPage/MainPage";
+import {socket} from "../../../socket";
 
 const matchTitles = ['Пары', 'Сообщения'];
 
@@ -69,22 +69,9 @@ export const MatchSideBar = () => {
             dispatch(setNotificationParametersAboutNewMessageAC(parseEvent.chatId, parseEvent.messageNotification.senderId));
 
             socket.send(JSON.stringify(getFirstMessage));
-
-            // const getMessageById = {
-            //   chatId: el.chatId,
-            //   getMessageRq: {
-            //     messageIds: [parseEvent.messageNotification.messageId],
-            //     type: "BY_IDS"
-            //   }
-            // };
-            // socket.send(JSON.stringify(getMessageById));
-
-            //todo делать запрос за новым сообщением и складывать его в редакс и показываь внизу старницы уведомление о нем
-            // socket.send(JSON.stringify(getFirstMessage));
-
-            // dispatch(setNotificationAboutNewMessage());
           }
         };
+
       }
 
     })

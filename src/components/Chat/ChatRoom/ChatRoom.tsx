@@ -1,10 +1,14 @@
 import {useDispatch, useSelector} from "react-redux";
 import {IFirstPackMessagesWithChatId, IMatches, IMessage, IPhotos, IState} from "../../../types";
-import {socket} from "../../MainPage/MainPage";
-import React, {useEffect, useMemo, useState} from "react";
-import {setFirstPackMessagesAC} from "../ChatAC";
+import React, {MouseEventHandler, useEffect, useMemo, useState} from "react";
+import {
+  setFirstPackMessagesAC,
+  setNotificationAboutNewMessageAC,
+  setNotificationParametersAboutNewMessageAC
+} from "../ChatAC";
 import {getUserById} from "../../../api";
 import style from './ChatRoom.module.css';
+import {getActualMessages, sendMessage, socket} from "../../../socket";
 
 export const ChatRoom = () => {
 
@@ -17,158 +21,14 @@ export const ChatRoom = () => {
 
   const firstMessagePackByChatId = chat.firstPackMessages.find(el => el.messages.chatId === chat.openChatId)?.messages.messageAnswer;
 
-  // let socket = new WebSocket(`ws://localhost:8080/chat/2/${chat.chatToken}/${chat.chatFingerprint}`); //TODO вписать id меня и чата и вынести вотдельный файл
-
-  // socket.onopen = function (e) {
-  //   alert("[open] Соединение установлено");
-  //   alert("Отправляем данные на сервер");
-  //   // socket.send("Меня зовут Джон");
-  //
-  //   const dataMessage = {
-  //     message: {
-  //       chatId: "1",
-  //       fromId: "2",
-  //       toId: "100",
-  //       type: "TEXT",
-  //       content: "Hey lol!"
-  //     }
-  //   };
-  //
-  //   socket.send(JSON.stringify(dataMessage));
-  //
-  //   const message = {
-  //     getMessageRq: {
-  //       messageIds: [127, 129, 130, 131],
-  //       type: "BY_IDS"
-  //     }
-  //   };
-  //
-  //   socket.send(JSON.stringify(message));
-  //
-  //   // JSON.parse(json)
-  // };
-
-
-  // socket.onmessage = function (event) {
-  //   alert(`[message] Данные получены с сервера: ${event.data}`);
-  // };
-
-  // socket.onclose = function(event) {
-  //   if (event.wasClean) {
-  //     alert(`[close] Соединение закрыто чисто, код=${event.code} причина=${event.reason}`);
-  //   } else {
-  //     // например, сервер убил процесс или сеть недоступна
-  //     // обычно в этом случае event.code 1006
-  //     alert('[close] Соединение прервано');
-  //   }
-  // };
-
-  // socket.onerror = function (error) {
-  //   alert(`[error] ${error}`);
-  // };
-
-  // socket.onopen = function (e) {
-  //   alert("[open] Соединение установлено");
-
-  // alert("Отправляем данные на сервер");
-
-  // const dataMessage = {
-  //   chatId: 1,
-  //   message: {
-  //     chatId: "1",
-  //     fromId: "2",
-  //     toId: "98",
-  //     type: "TEXT",
-  //     content: "Hey kek!"
-  //   }
-  // };
-
-  // socket.send(JSON.stringify(dataMessage));
-
-  // const message = {
-  //   chatId: 1,
-  //   getMessageRq: {
-  //     messageIds: [1, 2, 3],
-  //     type: "BY_IDS"
-  //   }
-  // };
-  //
-  // socket.send(JSON.stringify(message));
-
-  // const getFirstMessage = {
-  //   chatId: 1,
-  //   getMessageRq: {
-  //     type: "GET_FIRST_PACK"
-  //   }
-  // };
-  //
-  // socket.send(JSON.stringify(getFirstMessage));
-  //
-  //   socket.onmessage = function (event) {
-  //     alert(`[message] Данные получены с сервера: ${event.data}`);
-  //   };
-  // JSON.parse(json)
-
-  // const deleteMessage = {
-  //   chatId: 1,
-  //   deleteMessage: {
-  //     ids: [1, 2, 3],
-  //     type: "BY_IDS"
-  //   }
-  // };
-  //
-  // socket.send(JSON.stringify(deleteMessage));
-
-  // };
-
-  const getActualMessage = {
-    chatId: chat.openChatId,
-    getMessageRq: {
-      type: "GET_FIRST_PACK"
-    }
-  };
-
   useEffect(() => {
     dispatch(getUserById(chat.toUserId));
   }, [chat.toUserId]);
 
-  const sendMessage = () => {
+  const onClickSendMessage = () => {
     if (!message) return;
 
-    const newMessage = {
-      chatId: chat.openChatId,
-      message: {
-        chatId: chat.openChatId,
-        fromId: fromUserId,
-        toId: chat.toUserId,
-        type: "TEXT",
-        content: message
-      }
-    };
-
-    socket.send(JSON.stringify(newMessage));
-
-    const getFirstMessage = {
-      chatId: chat.openChatId,
-      getMessageRq: {
-        type: "GET_FIRST_PACK"
-      }
-    };
-
-    socket.send(JSON.stringify(getFirstMessage));
-
-    // socket.onmessage = function (event) {
-    //   dispatch(setFirstPackMessagesAC(JSON.parse(event.data)));
-    // };
-    //
-    // socket.onmessage = function (event) {
-    //   const parseEvent = JSON.parse(event.data);
-    //   if (parseEvent.chatId && parseEvent.messageAnswer) {
-    //     dispatch(setFirstPackMessagesAC(parseEvent));
-    //   } else {
-    //     socket.send(JSON.stringify(getFirstMessage));
-    //   }
-    // };
+    sendMessage(chat.openChatId, fromUserId, chat.toUserId, message, firstMessagePackByChatId);
 
     setMessage('');
   }
@@ -190,19 +50,44 @@ export const ChatRoom = () => {
       if (parseEvent.chatId && parseEvent.messageAnswer) {
         dispatch(setFirstPackMessagesAC(parseEvent));
       } else if (parseEvent.chatId && parseEvent.messageNotification) {
-        socket.send(JSON.stringify(getActualMessage));
+        getActualMessages(chat.openChatId, firstMessagePackByChatId);
       }
     };
   }
 
-  const getLastMessages = () => {
-
-    socket.send(JSON.stringify(getActualMessage));
-
-  }
-
   const currentPack = chat.firstPackMessages.find((el) => el.messages.chatId === chat.openChatId)?.messages.messageAnswer;
   const disableButtonGetNewMessage = currentPack?.length ? currentPack?.length < 10 : true;
+
+  const deleteMessage = (e: any) => {
+    const deleteMessage = {
+      chatId: chat.openChatId,
+      deleteMessage: {
+        type: "BY_IDS",
+        ids: [e.target.dataset.messageId]
+      }
+    };
+
+    socket.send(JSON.stringify(deleteMessage));
+
+    getActualMessages(chat.openChatId, firstMessagePackByChatId);
+  }
+
+  const deleteAllMessage = (e: any) => {
+    const deleteMessage = {
+      chatId: chat.openChatId,
+      deleteMessage: {
+        type: "ALL",
+      }
+    };
+
+    socket.send(JSON.stringify(deleteMessage));
+
+    getActualMessages(chat.openChatId, firstMessagePackByChatId);
+  }
+
+  const getLastMessageCallBack = () => {
+    getActualMessages(chat.openChatId, firstMessagePackByChatId);
+  }
 
   return (
     <div className={style.container}>
@@ -211,7 +96,7 @@ export const ChatRoom = () => {
                 disabled={disableButtonGetNewMessage}>
           Показать предыдущие сообщения
         </button>
-        <button onClick={getLastMessages}>
+        <button onClick={getLastMessageCallBack}>
           К новым сообщениям
         </button>
         {
@@ -219,31 +104,38 @@ export const ChatRoom = () => {
             return <div>
               <div>
                 {el.fromId !== fromUserId &&
-                  <div>
-                    {
-                      chat.userInChat?.card.photos[0] &&
-                      <span>
+                <div>
+                  {
+                    chat.userInChat?.card.photos[0] &&
+                    <span>
                         <img height='40px'
                              src={`data:${chat.userInChat?.card.photos[0]?.format};base64,${chat.userInChat?.card.photos[0]?.content}`}
                              alt='фото'/>
                       </span>
-                    }
-                    {chat.userInChat?.firstName}
-                  </div>
+                  }
+                  {chat.userInChat?.firstName}
+                </div>
                 }
               </div>
               <div className={el.fromId === fromUserId ? style.my_message : undefined}>
                 {el.content}
               </div>
+              <div onClick={deleteMessage}
+                   data-message-id={el.id}>
+                Delete
+              </div>
             </div>
           })
         }
         <textarea onChange={(e) => setMessage(e.currentTarget.value)} value={message}/>
-       <div>
-         <button onClick={sendMessage}>
-          Отправить
-         </button>
-       </div>
+        <div>
+          <button onClick={onClickSendMessage}>
+            Отправить
+          </button>
+        </div>
+        <div onClick={deleteAllMessage}>
+          Удалить всю переписку
+        </div>
       </div>
       <div>
           <span>
@@ -255,7 +147,8 @@ export const ChatRoom = () => {
                 return el &&
                   <span>
                     <img height='100px' src={`data:${el.format};base64,${el.content}`} alt='фото'/>
-                  </span>})
+                  </span>
+              })
               }
               <div>{chat.userInChat?.card.rating}</div>
             </span>
