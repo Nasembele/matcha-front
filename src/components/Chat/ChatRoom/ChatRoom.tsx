@@ -1,14 +1,18 @@
 import {useDispatch, useSelector} from "react-redux";
-import {IFirstPackMessagesWithChatId, IMatches, IMessage, IPhotos, IState} from "../../../types";
-import React, {MouseEventHandler, useEffect, useMemo, useState} from "react";
+import {IMessage, IPhotos, IState} from "../../../types";
+import React, {useEffect, useState} from "react";
 import {
   setFirstPackMessagesAC,
-  setNotificationAboutNewMessageAC,
-  setNotificationParametersAboutNewMessageAC
 } from "../ChatAC";
 import {getUserById} from "../../../api";
 import style from './ChatRoom.module.css';
-import {getActualMessages, sendMessage, socket} from "../../../socket";
+import {
+  deleteAllMessages,
+  deleteMessage,
+  getActualMessages,
+  getPreviousMessages,
+  sendMessage
+} from "../../../socket";
 
 export const ChatRoom = () => {
 
@@ -27,72 +31,34 @@ export const ChatRoom = () => {
 
   const onClickSendMessage = () => {
     if (!message) return;
-
     sendMessage(chat.openChatId, fromUserId, chat.toUserId, message, firstMessagePackByChatId);
-
     setMessage('');
   }
 
-  const getPreviousMessages = () => {
-    const getFirstMessage = {
-      chatId: chat.openChatId,
-      getMessageRq: {
-        type: "BEFORE_FIRST",
-        specificId: chat.firstPackMessages.find((el) => el.messages.chatId === chat.openChatId)?.oldestMessagesId
-      }
-    };
-
-    socket.send(JSON.stringify(getFirstMessage));
-
-    socket.onmessage = function (event) {
-
-      const parseEvent = JSON.parse(event.data);
-      if (parseEvent.chatId && parseEvent.messageAnswer) {
-        dispatch(setFirstPackMessagesAC(parseEvent));
-      } else if (parseEvent.chatId && parseEvent.messageNotification) {
-        getActualMessages(chat.openChatId, firstMessagePackByChatId);
-      }
-    };
+  const onClickGetPreviousMessages = () => {
+    const setFirstPackMessagesCallBack = (parseEvent: any) => dispatch(setFirstPackMessagesAC(parseEvent));
+    getPreviousMessages(chat.openChatId, chat.firstPackMessages, setFirstPackMessagesCallBack, firstMessagePackByChatId);
   }
 
-  const currentPack = chat.firstPackMessages.find((el) => el.messages.chatId === chat.openChatId)?.messages.messageAnswer;
-  const disableButtonGetNewMessage = currentPack?.length ? currentPack?.length < 10 : true;
-
-  const deleteMessage = (e: any) => {
-    const deleteMessage = {
-      chatId: chat.openChatId,
-      deleteMessage: {
-        type: "BY_IDS",
-        ids: [e.target.dataset.messageId]
-      }
-    };
-
-    socket.send(JSON.stringify(deleteMessage));
-
-    getActualMessages(chat.openChatId, firstMessagePackByChatId);
+  const onClickDeleteMessage = (e: any) => {
+    deleteMessage(chat.openChatId, e.target.dataset.messageId, firstMessagePackByChatId);
   }
 
-  const deleteAllMessage = (e: any) => {
-    const deleteMessage = {
-      chatId: chat.openChatId,
-      deleteMessage: {
-        type: "ALL",
-      }
-    };
-
-    socket.send(JSON.stringify(deleteMessage));
-
-    getActualMessages(chat.openChatId, firstMessagePackByChatId);
+  const onClickDeleteAllMessages = () => {
+    deleteAllMessages(chat.openChatId, firstMessagePackByChatId);
   }
 
   const getLastMessageCallBack = () => {
     getActualMessages(chat.openChatId, firstMessagePackByChatId);
   }
 
+  const currentPack = chat.firstPackMessages.find((el) => el.messages.chatId === chat.openChatId)?.messages.messageAnswer;
+  const disableButtonGetNewMessage = currentPack?.length ? currentPack?.length < 10 : true;
+
   return (
     <div className={style.container}>
       <div>
-        <button onClick={getPreviousMessages}
+        <button onClick={onClickGetPreviousMessages}
                 disabled={disableButtonGetNewMessage}>
           Показать предыдущие сообщения
         </button>
@@ -120,7 +86,7 @@ export const ChatRoom = () => {
               <div className={el.fromId === fromUserId ? style.my_message : undefined}>
                 {el.content}
               </div>
-              <div onClick={deleteMessage}
+              <div onClick={onClickDeleteMessage}
                    data-message-id={el.id}>
                 Delete
               </div>
@@ -133,7 +99,7 @@ export const ChatRoom = () => {
             Отправить
           </button>
         </div>
-        <div onClick={deleteAllMessage}>
+        <div onClick={onClickDeleteAllMessages}>
           Удалить всю переписку
         </div>
       </div>

@@ -3,14 +3,13 @@ import {IMatches, IState} from "../../../types";
 import style from './MatchSideBar.module.css';
 import MultiToggle from "../../../parts/MultiToggle/MultiToggle";
 import React, {useEffect, useState} from "react";
-import {createChat, getUserMatch, getUsersPostQuery} from "../../../api";
+import {createChat, getUserMatch} from "../../../api";
 import {
   setFirstPackMessagesAC,
   setIsOpenChatRoom,
-  setNotificationAboutNewMessageAC,
-  setNotificationParametersAboutNewMessageAC
+  setNotificationAboutNewMessageAC
 } from "../ChatAC";
-import {socket} from "../../../socket";
+import {getFirstMessages} from "../../../socket";
 
 const matchTitles = ['Пары', 'Сообщения'];
 
@@ -49,31 +48,14 @@ export const MatchSideBar = () => {
   }
 
   useEffect(() => {
+    const setFirstPackMessagesCallBack = (parseEvent: any) => dispatch(setFirstPackMessagesAC(parseEvent));
+    const setNotificationAboutNewMessageCallBack = (hasNewMessage: boolean, parseEvent: any) =>
+      dispatch(setNotificationAboutNewMessageAC(true, parseEvent.chatId, parseEvent.messageNotification.senderId));
+
     chat.matches.map((el: IMatches) => {
       if (el.chatId) {
-        const getFirstMessage = {
-          chatId: el.chatId,
-          getMessageRq: {
-            type: "GET_FIRST_PACK"
-          }
-        };
-
-        socket.send(JSON.stringify(getFirstMessage));
-
-        socket.onmessage = function (event) {
-          const parseEvent = JSON.parse(event.data);
-          if (parseEvent.chatId && parseEvent.messageAnswer) {
-            dispatch(setFirstPackMessagesAC(parseEvent));
-          } else if (parseEvent.chatId && parseEvent.messageNotification) {
-            dispatch(setNotificationAboutNewMessageAC(true));
-            dispatch(setNotificationParametersAboutNewMessageAC(parseEvent.chatId, parseEvent.messageNotification.senderId));
-
-            socket.send(JSON.stringify(getFirstMessage));
-          }
-        };
-
-      }
-
+        return getFirstMessages(el.chatId, setFirstPackMessagesCallBack, setNotificationAboutNewMessageCallBack);
+      } return ''
     })
   }, [chat.matches]);
 
@@ -122,7 +104,7 @@ export const MatchSideBar = () => {
       </button>
       {chat.messageNotification?.hasNewMessage &&
       <div className={style.notification}
-            onClick={showChatRoomAndCloseNotification(chat.messageNotification)}>
+           onClick={showChatRoomAndCloseNotification(chat.messageNotification)}>
         НОВОЕ СООБЩЕНИЕ!
       </div>}
     </div>

@@ -26,14 +26,9 @@ export const setUserInChatAC = (userInChat: IUserData) => ({
   payload: userInChat
 });
 
-export const setNotificationAboutNewMessageAC = (hasNewMessage: boolean) => ({
+export const setNotificationAboutNewMessageAC = (hasNewMessage: boolean, chatId?: number, userId?: number) => ({
   type: constants.SET_NOTIFICATION_ABOUT_NEW_MESSAGES,
-  payload: hasNewMessage
-});
-
-export const setNotificationParametersAboutNewMessageAC = (chatId: number, userId: number) => ({
-  type: constants.SET_NOTIFICATION_PARAMETERS_ABOUT_NEW_MESSAGES,
-  payload: {chatId, userId}
+  payload: {hasNewMessage, chatId, userId}
 });
 
 
