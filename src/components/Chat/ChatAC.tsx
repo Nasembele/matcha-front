@@ -26,9 +26,17 @@ export const setUserInChatAC = (userInChat: IUserData) => ({
   payload: userInChat
 });
 
-export const setNotificationAboutNewMessageAC = (hasNewMessage: boolean, chatId?: number, userId?: number) => ({
+export const setNotificationAboutNewMessageAC = (isShow: boolean, chatId?: number, userId?: number, messageId?: number) => ({
   type: constants.SET_NOTIFICATION_ABOUT_NEW_MESSAGES,
-  payload: {hasNewMessage, chatId, userId}
+  payload: {isShow, chatId, userId, messageId}
 });
 
+export const closeNotificationAboutNewMessageAC = (isShow: boolean, messageId: number) => ({
+  type: constants.CLOSE_NOTIFICATION_ABOUT_NEW_MESSAGES,
+  payload: {isShow, messageId}
+});
 
+export const setNotificationAboutNewVisitAC = (isShow: boolean, fromUsr?: number, toUsr?: number, action?: string) => ({
+  type: constants.SET_NOTIFICATION_ABOUT_NEW_VISIT,
+  payload: {isShow, fromUsr, toUsr, action}
+});

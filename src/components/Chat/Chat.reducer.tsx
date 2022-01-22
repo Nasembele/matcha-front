@@ -1,6 +1,6 @@
 import {IAction, IChat} from "../../types";
 import * as constants from "./Chat.consts";
-import {addNewFirstPack} from "../../helpers";
+import {addElemInArray, addNewFirstPack, closeNotificationAboutMessage} from "../../helpers";
 
 export const initialChatState = {
   chatToken: '',
@@ -10,7 +10,9 @@ export const initialChatState = {
   toUserId: 0,
   matches: [],
   firstPackMessages: [],
-  lastIdInFirstPAckMessages: 0
+  lastIdInFirstPAckMessages: 0,
+  messageNotification: [],
+  actionNotifications: []
 }
 
 export default function ChatReducer(state: IChat = initialChatState, action: IAction) {
@@ -50,13 +52,30 @@ export default function ChatReducer(state: IChat = initialChatState, action: IAc
     case constants.SET_NOTIFICATION_ABOUT_NEW_MESSAGES:
       return {
         ...state,
-        messageNotification: {
-          ...state.messageNotification,
-          hasNewMessage: action.payload.hasNewMessage,
+        messageNotification: addElemInArray({
+          isShow: action.payload.isShow,
           chatId: action.payload.chatId,
-          userId: action.payload.userId
-        }
+          userId: action.payload.userId,
+          messageId:  action.payload.messageId,
+        }, state.messageNotification)
       };
+    case constants.CLOSE_NOTIFICATION_ABOUT_NEW_MESSAGES:
+      return {
+        ...state,
+        messageNotification: closeNotificationAboutMessage(action.payload.messageId, state.messageNotification)
+      };
+
+    case constants.SET_NOTIFICATION_ABOUT_NEW_VISIT:
+      return {
+        ...state,
+        actionNotifications: addElemInArray({
+          action: action.payload.action,
+          isShow: action.payload.isShow,
+          fromUsr: action.payload.fromUsr,
+          toUsr: action.payload.toUsr
+        }, state.actionNotifications)
+      };
+
     default:
       return state;
   }

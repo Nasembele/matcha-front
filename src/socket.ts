@@ -123,8 +123,9 @@ export const deleteAllMessages = (openChatId: number, firstMessagePackByChatId?:
 }
 
 
-export const getFirstMessages = (chatId: number, setFirstPackMessagesCallBack: Function,
-                                 setNotificationAboutNewMessageCallBack: Function) => {
+export const getFirstMessages = (chatId: number | undefined, setFirstPackMessagesCallBack: Function,
+                                 setNotificationAboutNewMessageCallBack: Function,
+                                 setNotificationAboutNewVisitCallBack?: Function) => {
   const getFirstMessage = {
     type: 'CHAT',
     transportMessage: {
@@ -139,11 +140,32 @@ export const getFirstMessages = (chatId: number, setFirstPackMessagesCallBack: F
 
   socket.onmessage = function (event) {
     const parseEvent = JSON.parse(event.data);
+
     if (parseEvent.transportMessage?.chatId && parseEvent.transportMessage?.messageAnswer) {
       setFirstPackMessagesCallBack(parseEvent.transportMessage);
-    } else if (parseEvent.transportMessage?.chatId && parseEvent.transportMessage?.messageNotification) {
-      setNotificationAboutNewMessageCallBack(true, parseEvent.transportMessage.chatId, parseEvent.transportMessage.messageNotification.senderId);
+    }
+
+    else if (parseEvent.transportMessage?.chatId && parseEvent.transportMessage?.messageNotification) {
+      setNotificationAboutNewMessageCallBack(true, parseEvent.transportMessage.chatId,
+        parseEvent.transportMessage.messageNotification.senderId, parseEvent.transportMessage.messageNotification.messageId)
       socket.send(JSON.stringify(getFirstMessage));
     }
+    else if (setNotificationAboutNewVisitCallBack && parseEvent.likeAction && parseEvent.type === 'ACTION_NOTIFICATION') {
+      setNotificationAboutNewVisitCallBack(true, parseEvent.likeAction.fromUsr, parseEvent.likeAction.toUsr, parseEvent.likeAction.action)
+      // socket.send(JSON.stringify(getFirstMessage));
+    }
   };
+}
+
+
+export const setAction = (action: string, fromUsr: number, toUsr: number) => {
+  const setVisitMessage = {
+    type: 'ACTION_NOTIFICATION',
+    likeAction: {
+      fromUsr,
+      toUsr,
+      action
+    }
+  };
+  socket.send(JSON.stringify(setVisitMessage));
 }

@@ -28,3 +28,14 @@ export const addNewFirstPack = (arr: IFirstPackMessagesWithChatId[], newEl: {
         arr.push(messagesWithId);
     return arr;
 }
+
+export const addElemInArray = (elem: any, array: any) => {
+    array.push(elem);
+    return array;
+}
+
+export const closeNotificationAboutMessage = (messageId: number, array: any) => {
+    const ind = array.findIndex((el: any) => el.messageId === messageId);
+    array[ind].isShow = false;
+    return array;
+}

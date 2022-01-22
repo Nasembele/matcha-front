@@ -27,7 +27,7 @@ import {
   logoutGetQuery,
   saveChangeAccPostQuery, setUserFilterPutQuery, setVisitUserPutQuery, updateAccountSettings
 } from "../../api";
-import {IChat, IPhotos, IState} from "../../types";
+import {IChat, IMatches, IPhotos, IState} from "../../types";
 import {
   changeRegBirthdayAC,
   changeRegFirstNameAC,
@@ -39,7 +39,14 @@ import ChangeAccountSettingsModalWindow
   from "./components/ChangeAccountSettingsModalWindow/ChangeAccountSettingsModalWindow";
 import {MatchSideBar} from "../Chat/MatchSideBar/MatchSideBar";
 import {ChatRoom} from "../Chat/ChatRoom/ChatRoom";
-import {setIsOpenChatRoom} from "../Chat/ChatAC";
+import {
+  setFirstPackMessagesAC,
+  setIsOpenChatRoom,
+  setNotificationAboutNewMessageAC,
+  setNotificationAboutNewVisitAC
+} from "../Chat/ChatAC";
+import {getFirstMessages, setAction} from "../../socket";
+import {Button} from "@mui/material";
 
 // const openChatCanal = (chat: IChat, userId: number) => {
 //
@@ -202,6 +209,23 @@ const MainPage = (state: IState) => {
     }
   }, [chat.isOpenChatRoom]);
 
+  useEffect(() => {
+    const setFirstPackMessagesCallBack = (parseEvent: any) => dispatch(setFirstPackMessagesAC(parseEvent));
+    const setNotificationAboutNewMessageCallBack = (hasNewMessage: boolean, chatId: number, senderId: number, messageId: number) =>
+      dispatch(setNotificationAboutNewMessageAC(hasNewMessage, chatId, senderId, messageId));
+    const setNotificationAboutNewVisitCallBack = (hasNewVisit: boolean, fromUsr: number, toUsr: number, action: string) =>
+      dispatch(setNotificationAboutNewVisitAC(hasNewVisit, fromUsr, toUsr, action));
+
+    // chat.matches.map((el: IMatches) => {
+      // if (el.chatId) {
+      // return
+    getFirstMessages(undefined, setFirstPackMessagesCallBack, setNotificationAboutNewMessageCallBack, setNotificationAboutNewVisitCallBack);
+      // }
+      // return ''
+    // })
+  }, []);
+
+
   // useEffect(() => { //TODO делать запрос пока матчи не кончатся
   //   dispatch(getUserMatch());
   // });
@@ -309,7 +333,12 @@ const MainPage = (state: IState) => {
   };
 
   const onClickVisitUser = () => {
-    dispatch(setVisitUserPutQuery(mainPage.users[userIndex]?.id));
+    const toUser = mainPage.users[userIndex]?.id;
+    const fromUser = mainPage.account.id;
+
+    dispatch(setVisitUserPutQuery(toUser));
+    setAction('VISIT', fromUser, toUser);
+
 
     //TODO показывать если матч и передавать его в чат
     // dispatch(deleteNotLikeUserAC());

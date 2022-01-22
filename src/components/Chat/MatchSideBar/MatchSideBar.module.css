@@ -6,6 +6,5 @@
 
 .notification {
     position: absolute;
-    bottom: 0;
-    height: 50px;
+    height: 30px;
 }

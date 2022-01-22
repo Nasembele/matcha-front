@@ -5,11 +5,15 @@ import MultiToggle from "../../../parts/MultiToggle/MultiToggle";
 import React, {useEffect, useState} from "react";
 import {createChat, getUserMatch} from "../../../api";
 import {
+  closeNotificationAboutNewMessageAC,
   setFirstPackMessagesAC,
   setIsOpenChatRoom,
-  setNotificationAboutNewMessageAC, setUserMatchesAC
+  setNotificationAboutNewMessageAC,
+  setUserMatchesAC
 } from "../ChatAC";
 import {getFirstMessages} from "../../../socket";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import "antd/dist/antd.css";
 
 const matchTitles = ['Пары', 'Сообщения'];
 
@@ -42,15 +46,17 @@ export const MatchSideBar = () => {
   const showChatRoomAndCloseNotification = (el: any) => () => {
     if (el.chatId) {
       dispatch(setIsOpenChatRoom(true, el.chatId, el.userId));
-      dispatch(setNotificationAboutNewMessageAC(false));
+      dispatch(closeNotificationAboutNewMessageAC(false, el.messageId));
       return;
     }
   }
 
   useEffect(() => {
     const setFirstPackMessagesCallBack = (parseEvent: any) => dispatch(setFirstPackMessagesAC(parseEvent));
-    const setNotificationAboutNewMessageCallBack = (hasNewMessage: boolean, parseEvent: any) =>
-      dispatch(setNotificationAboutNewMessageAC(true, parseEvent.chatId, parseEvent.messageNotification.senderId));
+    const setNotificationAboutNewMessageCallBack = (hasNewMessage: boolean, chatId: number, senderId: number, messageId: number) =>
+      dispatch(setNotificationAboutNewMessageAC(hasNewMessage, chatId, senderId, messageId));
+    // const setNotificationAboutNewVisitCallBack = (hasNewVisit: boolean, fromUsr: number, toUsr: number, action: string) =>
+    //   dispatch(setNotificationAboutNewVisitAC(hasNewVisit, fromUsr, toUsr, action));
 
     chat.matches.map((el: IMatches) => {
       if (el.chatId) {
@@ -119,11 +125,28 @@ export const MatchSideBar = () => {
       <button onClick={getNewMatches}>
         Загрузить ещё
       </button>
-      {chat.messageNotification?.hasNewMessage &&
-      <div className={style.notification}
-           onClick={showChatRoomAndCloseNotification(chat.messageNotification)}>
-        НОВОЕ СООБЩЕНИЕ!
-      </div>}
+      {chat.messageNotification.map((el, idx) => {
+        if (el.isShow) {
+          return <div className={style.notification}
+                      style={{bottom: `${idx * 30}px`}}
+                      onClick={showChatRoomAndCloseNotification(el)}>
+            НОВОЕ СООБЩЕНИЕ!
+          </div>
+        }
+      })}
+      {chat.actionNotifications.map((el, idx) => {
+        if (el.isShow) {
+          return <div className={style.notification}
+                      style={{bottom: `${idx * 20 + 10}px`}}
+                      // onClick={showChatRoomAndCloseNotification(el)} todo показывать кто посетил по клику
+          >
+            {el.action === 'VISIT' && 'НОВЫЙ ВИЗИТ!'}
+            {el.action === 'LIKE' && 'НОВЫЙ LIKE!'}
+            {el.action === 'MATCH' && 'НОВЫЙ MATCH!'}
+            {el.action === 'TAKE_LIKE' && 'НОВЫЙ TAKE_LIKE!'}
+          </div>
+        }
+      })}
     </div>
   )
 }

@@ -149,11 +149,17 @@ export interface IChat {
     matches: IMatches[],
     firstPackMessages: IFirstPackMessagesWithChatId[],
     userInChat?: IUserData,
-    messageNotification?: {
-        hasNewMessage: boolean,
+    messageNotification: Array<{
+        isShow: boolean,
         chatId: number,
         userId: number
-    }
+    }>,
+    actionNotifications: Array<{
+        action: string,
+        isShow: boolean,
+        fromUsr: number,
+        toUsr: number
+    }>
 }
 
 export interface IState {
