@@ -68,18 +68,30 @@
 }
 
 .whole_form {
-    float: right !important;
-    width: 370px;
-    background-color: white;
-    margin-top: 0.5vh;
-    margin-right: 17vw;
+    /*float: right !important;*/
+    /*width: 370px;*/
+    /*background-color: white;*/
+    /*margin-top: 0.5vh;*/
+    /*margin-right: 17vw;*/
+
+    /*float: right !important;*/
+    width: 100%;
+    min-width: 300px;
+    max-width: 450px;
+    /*margin-top: 50%;*/
+    /*background-color: white;*/
+    /*margin-top: 0.5vh;*/
+    /*margin-right: 17vw;*/
+    margin: auto;
 }
 
 .title {
     color: #e84a67;
-    font-size: 35px;
+    font-size: 30px;
+    line-height: 33px;
     text-align: center;
     font-weight: bold;
+    padding: 0 10px;
 }
 
 .form_header {
@@ -91,6 +103,10 @@
 
 .form_input {
     width: 100%;
+}
+
+.input_margin {
+    margin-bottom: 15px !important;
 }
 
 .content {

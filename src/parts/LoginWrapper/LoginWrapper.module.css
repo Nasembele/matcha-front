@@ -1,0 +1,31 @@
+/*small*/
+
+@media (max-width: 768px) {
+    .main {
+        display: grid;
+        grid-template-rows: 1fr 1fr 1fr;
+        /*grid-template-columns: 1fr;*/
+        /*display: flex;*/
+        /*flex-direction: column;*/
+
+    }
+}
+
+/*big*/
+@media (min-width: 768px) {
+    .main {
+        display: grid;
+        /*grid-template-rows: 1fr 1fr 1fr;*/
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+.wrapper {
+    background: radial-gradient(ellipse, rgb(242, 208, 231) 7%, rgb(179, 181, 238) 99%);
+    height: 100vh;
+}
+
+.children {
+    display: flex;
+    /*min-width: 380px;*/
+}

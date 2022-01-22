@@ -1,9 +1,12 @@
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
-import style from "../../MainPage.module.css";
 import {IState} from "../../../../types";
 import {setNewEmailAC} from "../../MainPageAC";
 import {confirmNewEmail, saveNewEmail, validateLink} from "../../../../api";
+import style from "../../../Login/Login.module.css";
+import LoginWrapper from "../../../../parts/LoginWrapper/LoginWrapper";
+import {Button, Input} from "antd";
+import cc from "classnames";
 
 const ChangeAccountSettingsModalWindow = () => {
 
@@ -69,11 +72,11 @@ const ChangeAccountSettingsModalWindow = () => {
   console.log(mainPage.changeAccountSetting.isConfirmNewEmail);
 
   return (
-    <div>
+    <LoginWrapper>
 
       {/*{isAuth && <Redirect to={'/main'}/>}*/}
-      <header className={style.header}>Матча</header>
-      <body className={style.body}>
+      {/*<header className={style.header}>Матча</header>*/}
+      {/*<body className={style.body}>*/}
       <div className={style.whole_form}>
         <p className={style.title}>Смена почты</p>
         {mainPage.changeAccountSetting.isValidPrevEmail === false &&
@@ -85,11 +88,11 @@ const ChangeAccountSettingsModalWindow = () => {
         // && mainPage.changeAccountSetting.isValidEmailPassLink
         && mainPage.changeAccountSetting.isValidEmailPassLink === true &&
         <div className={style.content}>
-          <div className={style.form_header}>Введите новый email</div>
-          <input type={'email'} className={style.form_input} onBlur={changeValidatePassword}/>
-          <button type={'button'} className={style.reg_button} onClick={onClickResetPassword}>
+          {/*<div className={style.form_header}>Введите новый email</div>*/}
+          <Input placeholder={'новый email'} type={'email'} onBlur={changeValidatePassword}/>
+          <Button type={'primary'} className={cc(style.reg_button, style.whole_wide)} onClick={onClickResetPassword}>
             Сохранить
-          </button>
+          </Button>
 
 
           { mainPage.changeAccountSetting.isValidNewEmail === false &&
@@ -121,7 +124,7 @@ const ChangeAccountSettingsModalWindow = () => {
         {isShowChangeEmailInput && mainPage.changeAccountSetting.isValidPrevEmail === false &&
         <div className={style.content}>
           <div className={style.form_header}>
-            Ссылка невалидная
+            Невалидная ссылка
           </div>
         </div>
         }
@@ -142,9 +145,10 @@ const ChangeAccountSettingsModalWindow = () => {
 
         }
       </div>
-      </body>
-    </div>
-  )
+      {/*</body>*/}
+      </LoginWrapper>
+
+      )
 }
 
 export default ChangeAccountSettingsModalWindow;

@@ -3,25 +3,36 @@
     background-color: #f52758;
 }
 
-.body {
-    background-image: url('./images/slide.jpg');
-    height: calc(100vh - 90px);
-    background-size: cover;
-}
+/*.body {*/
+/*    !*background-image: url('./images/slide.jpg');*!*/
+/*    !*height: calc(100vh - 90px);*!*/
+/*    !*background-size: cover;*!*/
+/*}*/
 
 .whole_form {
-    float: right !important;
-    width: 370px;
-    background-color: white;
-    margin-top: 0.5vh;
-    margin-right: 17vw;
+    /*float: right !important;*/
+    width: 100%;
+    min-width: 300px;
+    max-width: 450px;
+    /*margin-top: 50%;*/
+    /*background-color: white;*/
+    /*margin-top: 0.5vh;*/
+    /*margin-right: 17vw;*/
+    margin: auto;
+}
+
+::-webkit-scrollbar {
+    width: 0; /* ширина для вертикального скролла */
+    height: 0; /* высота для горизонтального скролла */
 }
 
 .title {
     color: #e84a67;
-    font-size: 35px;
+    font-size: 30px;
+    line-height: 33px;
     text-align: center;
     font-weight: bold;
+    padding: 0 10px;
 }
 
 .form_header {
@@ -29,41 +40,75 @@
     margin-bottom: 7px;
     margin-top: 7px;
     font-weight: bold;
+    text-align: center;
 }
 
-.form_input {
-    width: 100%;
+/*.form_input {*/
+/*    width: 100%;*/
+/*}*/
+
+.bottom_margin {
+    margin-top: 25px;
+    /*margin-bottom: 15px;*/
 }
 
 .content {
-    padding: 0 30px 30px;
+    padding: 0 30px;
 }
 
+/*small*/
+
+@media (max-height: 740px) {
+    .body {
+        max-height: 50vh;
+        overflow-y: scroll;
+    }
+}
+
+/*big*/
+@media (min-height: 740px) {
+    .body {
+        max-height: 70vh;
+        overflow-y: scroll;
+    }
+}
+
+
 .submit_button {
-    color: #ffffff;
-    display: inline-block;
-    background: #f52758;
-    border-radius: 5px;
-    font-size: 19px;
-    line-height: 22px;
-    padding: 10px 18px 14px 20px;
-    font-weight: bold;
-    border: 1px solid #f52758;
-    margin-top: 25px;
+    /*color: #ffffff;*/
+    /*display: inline-block;*/
+    background: #f52758 !important;
+    /*border-radius: 5px;*/
+    /*font-size: 19px;*/
+    /*line-height: 22px;*/
+    /*padding: 10px 18px 14px 20px;*/
+    /*font-weight: bold;*/
+    border: 1px solid #f52758 !important;
+    /*border: 1px solid #ffffff;*/
+    /*margin-top: 20px;*/
+    /*width: 30%;*/
 }
 
 .negative_button {
-    color: #f52758;
-    display: inline-block;
-    background: #ffffff;
-    border-radius: 5px;
-    font-size: 19px;
-    line-height: 22px;
-    padding: 10px 18px 14px 20px;
-    font-weight: bold;
-    border: 1px solid #f52758;
-    margin-top: 25px;
-    margin-left: 10px;
+    color: #f52758 !important;
+    /*display: inline-block;*/
+    background: #ffffff !important;
+    /*border-radius: 5px;*/
+    /*font-size: 19px;*/
+    /*line-height: 22px;*/
+    /*padding: 10px 18px 14px 20px;*/
+    /*font-weight: bold;*/
+    border: 1px solid #f52758 !important;
+    /*margin-top: 20px;*/
+    /*margin-left: 10px;*/
+    /*width: 65%;*/
+}
+
+.button_container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-gap: 7px;
+    margin-top: 20px;
 }
 
 .error {
@@ -72,17 +117,17 @@
 }
 
 .reg_button {
-    color: #ffffff;
-    display: inline-block;
-    background: rgb(53, 138, 217);
-    border-radius: 5px;
-    font-size: 19px;
-    line-height: 22px;
-    padding: 10px 18px 14px 20px;
-    font-weight: bold;
-    border: 1px solid #ffffff;
-    margin-top: 25px;
-    width: 100%;
+    /*color: #ffffff;*/
+    /*display: inline-block;*/
+    background: rgb(53, 138, 217) !important;
+    /*border-radius: 5px;*/
+    /*font-size: 19px;*/
+    /*line-height: 22px;*/
+    /*padding: 10px 18px 14px 20px;*/
+    /*font-weight: bold;*/
+    border: 1px solid rgb(53, 138, 217);
+    margin-top: 20px;
+    /*width: 100%;*/
 }
 
 .reset_password {
@@ -103,4 +148,12 @@
     border: 1px solid #f52758;
     /*margin-top: 25px;*/
     margin-left: 33%;
+}
+
+.whole_wide {
+    width: 100%;
+}
+
+.input_margin {
+    margin-bottom: 15px !important;
 }

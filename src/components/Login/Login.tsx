@@ -1,7 +1,8 @@
 import React, {ChangeEvent, ChangeEventHandler, useState} from "react";
 import style from './Login.module.css';
 import {useDispatch, useSelector} from "react-redux";
-
+import {Button, DatePicker, Input, Select} from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 import {Redirect} from "react-router";
 import {ILogin, IState} from "../../types";
 import {
@@ -21,6 +22,9 @@ import {
     setIsValidPassResetUserAC
 } from "./LoginAC";
 import {changeAccPassPostQuery, recoveryPasswordPostQuery, signInPostQuery, updateRegDataPostQuery} from "../../api";
+import LoginWrapper from "../../parts/LoginWrapper/LoginWrapper";
+import {Option} from "antd/es/mentions";
+import cc from "classnames";
 
 const Login = () => {
 
@@ -89,8 +93,12 @@ const Login = () => {
         dispatch(changeRegMiddleNameAC(value));
     }
 
-    const changeRegBirthday = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-        dispatch(changeRegBirthdayAC(value));
+    // const changeRegBirthday = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+    //     dispatch(changeRegBirthdayAC(value));
+    // }
+
+    const changeRegBirthday = (date: any, dateString: string) => {
+        dispatch(changeRegBirthdayAC(dateString));
     }
 
     const changeRegEmail = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
@@ -119,12 +127,12 @@ const Login = () => {
     //     return <Redirect to={'/main'}/>
     // }
 
-    const changeRegGender = (e: React.FormEvent<HTMLSelectElement>) => {
-        dispatch(changeRegGenderAC(e.currentTarget.value));
+    const changeRegGender = (value: string) => {
+        dispatch(changeRegGenderAC(value));
     };
 
-    const changeRegSexualPreference = (e: React.FormEvent<HTMLSelectElement>) => {
-        dispatch(changeRegSexualPreferenceAC(e.currentTarget.value));
+    const changeRegSexualPreference = (value: string) => {
+        dispatch(changeRegSexualPreferenceAC(value));
     };
 
     const onChangeSetPassword = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
@@ -137,45 +145,51 @@ const Login = () => {
 
 
     return (
-        <div>
+      <LoginWrapper>
+        <div className={style.whole_form}>
             {login.isAuth && <Redirect to={'/main'}/>}
-            <header className={style.header}>Матча</header>
-            <body className={style.body}>
-            <div className={style.whole_form}>
+            {/*<header className={style.header}>Матча</header>*/}
                 {chosenIndex === 0 && <div>
                   <p className={style.title}>Join and start dating today!</p>
                   <div className={style.content}>
-                    <div className={style.form_header}>email или username</div>
-                    <input type={'text'} onChange={changeLogin} className={style.form_input}/>
-                    <div className={style.form_header}>Пароль</div>
-                    <input type={'password'} onChange={changePassword} className={style.form_input}/>
-                    <div>
-                      <button type={'button'} className={style.submit_button} onClick={signInButton}>
+                    {/*<div className={style.form_header}>email или username</div>*/}
+                    <Input type={'text'} onChange={changeLogin}
+                           placeholder={'email или username'}
+                           size="large"  prefix={<UserOutlined/>}/>
+                    {/*<div className={style.form_header}>Пароль</div>*/}
+                    <Input.Password type={'password'} onChange={changePassword} className={style.bottom_margin}
+                                    placeholder={'пароль'} size="large"/>
+
+                    <div className={style.button_container}>
+                      <Button type={'primary'} size={'large'}  className={style.submit_button} onClick={signInButton}>
                         Войти
-                      </button>
-                      <button type={'button'} className={style.negative_button} onClick={changeChosenIndex(1)}>
+                      </Button>
+                      <Button size={'large'} className={style.negative_button} onClick={changeChosenIndex(1)}>
                         Забыли пароль?
-                      </button>
+                      </Button>
                         {/*{error.isServerError === true &&*/}
                         {/*<p className={style.error}>Ошибка сервера</p>}*/}
                         {/*{error.isServerError === true &&*/}
                         {/*<p className={style.error}>Не удается войти. Проверьте правильность написания email и*/}
                         {/*    пароля</p>}*/}
                     </div>
-                    <button type={'button'} className={style.reg_button} onClick={changeChosenIndex(2)}>
+
+
+                    <Button block type={'primary'} size={'large'} className={style.reg_button} onClick={changeChosenIndex(2)}>
                       Регистрация
-                    </button>
+                    </Button>
                   </div>
+
                 </div>}
                 {chosenIndex === 1 && <span>
                     <p className={style.title}>Восстановление пароля</p>
                     <div className={style.content}>
-                        <div className={style.form_header}>Введите email</div>
-                        <input type={'text'} onBlur={changeEmail} className={style.form_input}/>
+                        {/*<div className={style.form_header}>Введите email</div>*/}
+                        <Input placeholder={'email'} type={'text'} onBlur={changeEmail} className={style.form_input}/>
                         <div>
-                            <button type={'button'} className={style.reg_button} onClick={recoveryPassword}>
+                            <Button type={'primary'} size={'large'} block className={style.reg_button} onClick={recoveryPassword}>
                                 Отправить
-                            </button>
+                            </Button>
                             {login.resetData.isValidEmail === false &&
                             <div>
                               <p className={style.reset_password}>Неправильный email</p>
@@ -197,65 +211,73 @@ const Login = () => {
                 {chosenIndex === 2 && <span>
                     <p className={style.title}>Регистрация</p>
                     <div className={style.content}>
-                        <div className={style.form_header}>Имя</div>
-                        <input type={'text'} onBlur={changeFirstRegName} className={style.form_input}/>
+                        <div className={style.body}>
+                        {/*<div className={style.form_header}>Имя</div>*/}
+                        <Input type={'text'} onBlur={changeFirstRegName} className={style.input_margin}
+                        placeholder={'имя'}/>
 
-                        <div className={style.form_header}>Отчество</div>
-                        <input type={'text'} onBlur={changeRegMiddleName} className={style.form_input}/>
+                        {/*<div className={style.form_header}>Отчество</div>*/}
+                        <Input type={'text'} onBlur={changeRegMiddleName} className={style.input_margin}
+                               placeholder={'отчество'}/>
 
-                        <div className={style.form_header}>Фамилия</div>
-                        <input type={'text'} onBlur={changeRegLastName} className={style.form_input}/>
 
-                        <div className={style.form_header}>Дата рождения</div>
-                        <input type={'date'} onBlur={changeRegBirthday} className={style.form_input}/>
+                        {/*<div className={style.form_header}>Фамилия</div>*/}
+                        <Input type={'text'} onBlur={changeRegLastName} className={style.input_margin}
+                               placeholder={'фамилия'}/>
 
-                        <div className={style.form_header}>Пол</div>
-                        <select onChange={changeRegGender}>
-                            <option>{'Не выбрано'}</option>
-                            <option value={'male'}>{'M'}</option>
-                            <option value={'female'}>{'Ж'}</option>
-                        </select>
+                        {/*<div className={style.form_header}>Дата рождения</div>*/}
+                        {/*<Input type={'date'} onBlur={changeRegBirthday} className={style.form_input}/>*/}
+                        <DatePicker onChange={changeRegBirthday} placeholder={'дата рождения'} className={cc(style.whole_wide, style.input_margin)}/>
 
-                        <div className={style.form_header}>Сексуальные предпочтения</div>
-                        <select onChange={changeRegSexualPreference}>
-                            <option>{'Не выбрано'}</option>
-                            <option value={'getero'}>{'гетеро'}</option>
-                            <option value={'bisexual'}>{'би'}</option>
-                            {login.regData?.gender === 'male' && <option value={'gay'}>{'гей'}</option>}
-                            {login.regData?.gender === 'female' && <option value={'lesbi'}>{'лесби'}</option>}
-                        </select>
+                        {/*<div className={style.form_header}>Пол</div>*/}
+                        <Select onChange={changeRegGender} placeholder={'пол'} className={cc(style.whole_wide, style.input_margin)}>
+                            {/*<Option>{'Не выбрано'}</Option>*/}
+                            <Option value={'male'}>{'M'}</Option>
+                            <Option value={'female'}>{'Ж'}</Option>
+                        </Select>
 
-                        <div className={style.form_header}>email</div>
-                        <input type={'text'} onBlur={changeRegEmail} className={style.form_input}/>
+                        {/*<div className={style.form_header}>Сексуальные предпочтения</div>*/}
+                        <Select onChange={changeRegSexualPreference}
+                                placeholder={'сексуальные предпочтения'}
+                                className={cc(style.whole_wide, style.input_margin)}>
+                            {/*<Option>{'Не выбрано'}</Option>*/}
+                            <Option value={'getero'}>{'гетеро'}</Option>
+                            <Option value={'bisexual'}>{'би'}</Option>
+                            {login.regData?.gender === 'male' && <Option value={'gay'}>{'гей'}</Option>}
+                            {login.regData?.gender === 'female' && <Option value={'lesbi'}>{'лесби'}</Option>}
+                        </Select>
+                        {/*<div className={style.form_header}>email</div>*/}
+                        <Input type={'text'} onBlur={changeRegEmail} className={style.input_margin}
+                               placeholder={'email'}/>
 
-                        <div className={style.form_header}>Пароль</div>
-                        <input type={'password'} onChange={changeValidatePassword} onBlur={onChangeSetPassword}
-                               className={style.form_input}/>
+                        {/*<div className={style.form_header}>Пароль</div>*/}
+                        <Input.Password type={'password'} onChange={changeValidatePassword} onBlur={onChangeSetPassword}
+                               className={style.input_margin} placeholder={'пароль'}/>
 
-                        <div className={style.form_header}>Повторите пароль</div>
-                        <input type={'password'} onChange={changeValidatePassword} onBlur={changeRegPassword}
-                               className={style.form_input}/>
+                        {/*<div className={style.form_header}>Повторите пароль</div>*/}
+                        <Input.Password type={'password'} onChange={changeValidatePassword} onBlur={changeRegPassword}
+                               className={style.input_margin} placeholder={'повторите пароль'}/>
                         {isNotMatchPassword &&
-                        <p className={style.reset_password}>Пароли не совпадают</p>}
+                        <div className={style.reset_password}>Пароли не совпадают</div>}
+                        </div>
                       <div>
-                            <button type={'button'} className={style.reg_button} onClick={updateRegData}>
+                            <Button type={'primary'} className={cc(style.reg_button, style.whole_wide)} onClick={updateRegData}>
                                 Зарегистрироваться
-                            </button>
+                            </Button>
                           {login.regData?.isRegUser &&
                           <div>
-                            <p className={style.reset_password}>
+                            <div className={style.reset_password}>
                               На указанный адрес отправлено письмо для подтверждения регистрации
-                            </p>
-                            <button type={'button'} className={style.submit_button} onClick={changeChosenIndex(0)}>
-                              Войти
-                            </button>
+                            </div>
+                            {/*<Button type={'primary'}  className={cc(style.submit_button, style.whole_wide)} onClick={changeChosenIndex(0)}>*/}
+                            {/*  Войти*/}
+                            {/*</Button>*/}
                           </div>}
                         </div>
                     </div>
                 </span>}
-            </div>
-            </body>
         </div>
+      </LoginWrapper>
     )
 }
 

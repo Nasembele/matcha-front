@@ -1,10 +1,13 @@
 import {useDispatch, useSelector} from "react-redux";
 import React, {ChangeEvent, useEffect, useState} from "react";
-import style from "../../MainPage.module.css";
+import style from "../../../Login/Login.module.css";
 import {IState} from "../../../../types";
 import {setNewEmailAC} from "../../MainPageAC";
 import {confirmNewEmail, getUsersPostQuery, saveNewEmail, saveNewPassword, validateLink} from "../../../../api";
 import {changeResetPasswordAC} from "../../../Login/LoginAC";
+import LoginWrapper from "../../../../parts/LoginWrapper/LoginWrapper";
+import {Button, Input} from "antd";
+import cc from "classnames";
 
 const ChangeAccountPassModalWindow = () => {
 
@@ -96,29 +99,32 @@ const ChangeAccountPassModalWindow = () => {
   };
 
   return (
-    <div>
+    <LoginWrapper>
 
       {/*{isAuth && <Redirect to={'/main'}/>}*/}
-      <header className={style.header}>Матча</header>
-      <body className={style.body}>
+      {/*<header className={style.header}>Матча</header>*/}
+      {/*<body className={style.body}>*/}
       <div className={style.whole_form}>
         <p className={style.title}>Смена пароля</p>
         {
           mainPage.changeAccountSetting.isValidEmailPassLink === true &&
           // TODO проверка на валидацию ссылки
         <div className={style.content}>
-          <div className={style.form_header}>Введите новый пароль</div>
-          <input type={'password'} className={style.form_input} onChange={changeValidatePassword} onBlur={changePassword}/>
+          {/*<div className={style.form_header}>Введите новый пароль</div>*/}
+          <Input.Password type={'password'} className={style.input_margin} onChange={changeValidatePassword} onBlur={changePassword}
+          placeholder={'новый пароль'}/>
 
 
-          <div className={style.form_header}>Повторите пароль</div>
-          <input type={'password'} onChange={changeValidatePassword} onBlur={changeResetPassword} className={style.form_input}/>
+          {/*<div className={style.form_header}>Повторите пароль</div>*/}
+          <Input.Password type={'password'} onChange={changeValidatePassword} onBlur={changeResetPassword}
+                          placeholder={'повторите пароль'} className={style.input_margin}/>
 
-          <button type={'button'} className={style.reg_button} onClick={onClickChangePassword}>
+          <Button type={'primary'} className={cc(style.reg_button, style.whole_wide)} onClick={onClickChangePassword}>
             Сохранить
-          </button>
+          </Button>
           {isNotMatchPassword &&
           <p className={style.reset_password}>Пароли не совпадают</p>}
+          {/*TODO проверка на разные пароли не работает*/}
         </div>
           }
 
@@ -141,8 +147,8 @@ const ChangeAccountPassModalWindow = () => {
         }
 
       </div>
-      </body>
-    </div>
+      {/*</body>*/}
+    </LoginWrapper>
   )
 }
 
