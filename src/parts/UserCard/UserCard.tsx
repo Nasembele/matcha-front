@@ -56,13 +56,14 @@ const UserCard = ({
     dispatch(deleteNotLikeUserAC());
   };
 
-  const onClickTakeLikeUser = () => {
-    dispatch(likeUserPutQuery(user.id, 'TAKE_LIKE'));
-  };
-
   const onClickNotLikeUser = () => {
     dispatch(deleteNotLikeUserAC());
-  }
+  };
+
+  const onClickTakeLikeUser = () => {
+    dispatch(likeUserPutQuery(user.id, 'TAKE_LIKE'));
+    onClickNotLikeUser();
+  };
 
   return (
     <div className={style.wrapper}>
@@ -158,8 +159,8 @@ const UserCard = ({
       <div className={style.like_container}>
         {mainPage.currentUser?.match ?
           <div className={style.like_content}>
-            <MinusCircleTwoTone twoToneColor="red" style={{fontSize: '3rem'}} onClick={onClickTakeLikeUser}/>
-            <RightCircleTwoTone twoToneColor="green" style={{fontSize: '3rem'}} onClick={onClickNotLikeUser}/>
+            <MinusCircleTwoTone twoToneColor="#FF0000" style={{fontSize: '3rem'}} onClick={onClickTakeLikeUser}/>
+            <RightCircleTwoTone twoToneColor="#52c41a" style={{fontSize: '3rem'}} onClick={onClickNotLikeUser}/>
           </div> :
           <div className={style.like_content}>
             <HeartTwoTone twoToneColor="#eb2f96" style={{fontSize: '3rem'}} onClick={onClickLikeUser}/>
@@ -167,7 +168,7 @@ const UserCard = ({
           </div>
         }
         {mainPage.currentUser?.match &&
-        <div className={style.match_text}>
+        <div className={cc(style.match_text, isShowInfo && style.text_color)}>
           матч!
         </div>}
       </div>
