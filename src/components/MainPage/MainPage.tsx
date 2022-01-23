@@ -47,6 +47,7 @@ import {
 } from "../Chat/ChatAC";
 import {getFirstMessages, setAction} from "../../socket";
 import {Button} from "@mui/material";
+import UserCard from "../../parts/UserCard/UserCard";
 
 // const openChatCanal = (chat: IChat, userId: number) => {
 //
@@ -125,7 +126,6 @@ import {Button} from "@mui/material";
 //   //
 //   // socket.send(JSON.stringify(message));
 // }
-
 
 
 const getBase64 = (file: File) => {
@@ -217,11 +217,11 @@ const MainPage = (state: IState) => {
       dispatch(setNotificationAboutNewVisitAC(hasNewVisit, fromUsr, toUsr, action));
 
     // chat.matches.map((el: IMatches) => {
-      // if (el.chatId) {
-      // return
+    // if (el.chatId) {
+    // return
     getFirstMessages(undefined, setFirstPackMessagesCallBack, setNotificationAboutNewMessageCallBack, setNotificationAboutNewVisitCallBack);
-      // }
-      // return ''
+    // }
+    // return ''
     // })
   }, []);
 
@@ -358,9 +358,9 @@ const MainPage = (state: IState) => {
     dispatch(deleteNotLikeUserAC());
   }
 
-  const onClickLogout = () => {
-    dispatch(logoutGetQuery());
-  }
+  // const onClickLogout = () => {
+  //   dispatch(logoutGetQuery());
+  // }
 
   const changeGender = (e: React.FormEvent<HTMLSelectElement>) => {
     dispatch(changeGenderAC(e.currentTarget.value));
@@ -439,10 +439,10 @@ const MainPage = (state: IState) => {
 
   return (
     <div className={style.content_wrapper}>
-<div>
-      <MatchSideBar/>
+      <div>
+        <MatchSideBar/>
 
-</div>
+      </div>
       <div className={style.main_field}>
         {chosenIndex === 1 &&
         <div>
@@ -462,10 +462,10 @@ const MainPage = (state: IState) => {
               <span>{mainPage.account.yearsOld}</span>
 
               <div className={style.form_header}>Главное фото</div>
-              {!mainPage.account.card.photos[0] &&
+              {!mainPage.account.card.photos[0]?.content &&
               <input type="file" id="file" name="file" onChange={changePhoto(0)}/>}
 
-              {mainPage.account.card.photos[0] &&
+              {mainPage.account.card.photos[0]?.content &&
               <span>
                 <img height='100px'
                      src={`data:${mainPage.account.card.photos[0]?.format};base64,${mainPage.account.card.photos[0]?.content}`}
@@ -473,12 +473,12 @@ const MainPage = (state: IState) => {
                 <div onClick={deletePhoto(0)}>Удалить фото</div>
 
                 <div className={style.form_header}>Фото 2</div>
-                {!mainPage.account.card.photos[1] &&
+                {!mainPage.account.card.photos[1]?.content &&
                 <input type="file" id="file" name="file" onChange={changePhoto(1)}/>}
               </span>
               }
 
-              {mainPage.account.card.photos[1] &&
+              {mainPage.account.card.photos[1]?.content &&
               <span>
                             <img height='100px'
                                  src={`data:${mainPage.account.card.photos[1]?.format};base64,${mainPage.account.card.photos[1]?.content}`}
@@ -486,11 +486,11 @@ const MainPage = (state: IState) => {
                 <div onClick={deletePhoto(1)}>Удалить фото</div>
 
                             <div className={style.form_header}>Фото 3</div>
-                {!mainPage.account.card.photos[2] &&
+                {!mainPage.account.card.photos[2]?.content &&
                 <input type="file" id="file" name="file" onChange={changePhoto(2)}/>}
                                   </span>}
 
-              {mainPage.account.card.photos[2] &&
+              {mainPage.account.card.photos[2]?.content &&
               <span>
                             <img height='100px'
                                  src={`data:${mainPage.account.card.photos[2]?.format};base64,${mainPage.account.card.photos[2]?.content}`}
@@ -498,10 +498,10 @@ const MainPage = (state: IState) => {
                 <div onClick={deletePhoto(2)}>Удалить фото</div>
 
                             <div className={style.form_header}>Фото 4</div>
-                {!mainPage.account.card.photos[3] &&
+                {!mainPage.account.card.photos[3]?.content &&
                 <input type="file" id="file" name="file" onChange={changePhoto(3)}/>}
 </span>}
-              {mainPage.account.card.photos[3] &&
+              {mainPage.account.card.photos[3]?.content &&
               <span>
                             <img height='100px'
                                  src={`data:${mainPage.account.card.photos[3]?.format};base64,${mainPage.account.card.photos[3]?.content}`}
@@ -509,11 +509,11 @@ const MainPage = (state: IState) => {
                 <div onClick={deletePhoto(3)}>Удалить фото</div>
 
                             <div className={style.form_header}>Фото 5</div>
-                {!mainPage.account.card.photos[4] &&
+                {!mainPage.account.card.photos[4]?.content &&
                 <input type="file" id="file" name="file" onChange={changePhoto(4)}/>}
                                     </span>}
 
-              {mainPage.account.card.photos[4] &&
+              {mainPage.account.card.photos[4]?.content &&
               <span>
                             <img height='100px'
                                  src={`data:${mainPage.account.card.photos[4]?.format};base64,${mainPage.account.card.photos[4]?.content}`}
@@ -678,148 +678,153 @@ const MainPage = (state: IState) => {
         </div>}
 
         {chosenIndex === 0 &&
-        <div>
-          <div className={style.button_acc} onClick={openAccountSetting}>Аккаунт</div>
-          <div className={style.button_acc} onClick={openAccountProperties}>Настройки аккаунта</div>
-          <div className={style.button_acc} onClick={openUserFilter}>Фильтр</div>
-          {/*{<div className={style.button_acc} onClick={closeUserFilter}>Закрыть фильтр</div>}*/}
+          // <div className={style.button_acc} onClick={openAccountSetting}>Аккаунт</div>
+          // <div className={style.button_acc} onClick={openAccountProperties}>Настройки аккаунта</div>
+          // <div className={style.button_acc} onClick={openUserFilter}>Фильтр</div>
+          // {<div className={style.button_acc} onClick={closeUserFilter}>Закрыть фильтр</div>}
 
-          {isOpenFilter &&
-          <div>
-            <div className={style.button_acc} onClick={closeUserFilter}>Закрыть фильтр</div>
-            <div className={style.userFilter}>
-              <p>Фильтр
-              </p>
-              <p>Возраст
-                <div>От
-                  <input type='number' onChange={setFilterAge("start")} value={mainPage.userFilters.ageBy}/>
-                </div>
-                <div>До
-                  <input type='number' onChange={setFilterAge("end")} value={mainPage.userFilters.ageTo}/>
-                </div>
-              </p>
-              <p>Рейтинг
-                <div>
-                  <input type='number' onChange={setFilterRating} value={mainPage.userFilters.rating}/>
-                </div>
-              </p>
-              <p>Количество общих интересов
-                <div>
-                  <input type='number' onChange={setFilterCommonTags} value={mainPage.userFilters.commonTagsCount}/>
-                </div>
-              </p>
-              <p>Месторасположение
-                <div>
-                  <input type='text' onChange={setFilterLocation} value={mainPage.userFilters.location}/>
-                </div>
-              </p>
-<button onClick={getUsersByFilters}>Поиск</button>
-            </div>
-          </div>
-          }
+          // {isOpenFilter &&
+          // <div>
+          //   <div className={style.button_acc} onClick={closeUserFilter}>Закрыть фильтр</div>
+          //   <div className={style.userFilter}>
+          //     <p>Фильтр
+          //     </p>
+          //     <p>Возраст
+          //       <div>От
+          //         <input type='number' onChange={setFilterAge("start")} value={mainPage.userFilters.ageBy}/>
+          //       </div>
+          //       <div>До
+          //         <input type='number' onChange={setFilterAge("end")} value={mainPage.userFilters.ageTo}/>
+          //       </div>
+          //     </p>
+          //     <p>Рейтинг
+          //       <div>
+          //         <input type='number' onChange={setFilterRating} value={mainPage.userFilters.rating}/>
+          //       </div>
+          //     </p>
+          //     <p>Количество общих интересов
+          //       <div>
+          //         <input type='number' onChange={setFilterCommonTags} value={mainPage.userFilters.commonTagsCount}/>
+          //       </div>
+          //     </p>
+          //     <p>Месторасположение
+          //       <div>
+          //         <input type='text' onChange={setFilterLocation} value={mainPage.userFilters.location}/>
+          //       </div>
+          //     </p>
+          //     <button onClick={getUsersByFilters}>Поиск</button>
+          //   </div>
+          // </div>
+          // }
+          mainPage.users[userIndex]
+          && <div className={style.card_wrapper}>
+            <UserCard user={mainPage.users[userIndex]}/>
+          </div>}
 
+          {/*          /!*todo от юзер*!/*/}
           {/*// fakeUsers.map(u => <div key={u.id}>*/}
-          <span>
-                <div>
-                    {/*<img*/}
-                  {/*     src={mainPage.users[userIndex]?.photoUrl != null ? mainPage.users[userIndex]?.photoUrl : './images/account.png'} height={'100px'}/>*/}
-                </div>
-                       </span>
-          <span>
-                    <span>
-                        <div>{mainPage.users[userIndex]?.firstName}</div>
-                        <div>{mainPage.users[userIndex]?.middleName}</div>
-                        <div>{mainPage.users[userIndex]?.lastName}</div>
+          {/*          <span>*/}
+          {/*                <div>*/}
+          {/*                    /!*<img*!/*/}
+          {/*                  /!*     src={mainPage.users[userIndex]?.photoUrl != null ? mainPage.users[userIndex]?.photoUrl : './images/account.png'} height={'100px'}/>*!/*/}
+          {/*                </div>*/}
+          {/*                       </span>*/}
+          {/*          <span>*/}
+          {/*                    <span>*/}
+          {/*                        <div>{mainPage.users[userIndex]?.firstName}</div>*/}
+          {/*                        <div>{mainPage.users[userIndex]?.middleName}</div>*/}
+          {/*                        <div>{mainPage.users[userIndex]?.lastName}</div>*/}
 
-                      {mainPage.users[userIndex]?.card.photos?.map((el: IPhotos) => {
-                        return el &&
-                          <span>
-                            <img height='100px' src={`data:${el.format};base64,${el.content}`}
-                                 alt='фото'/>
-</span>
-                      })
-                      }
+          {/*                      {mainPage.users[userIndex]?.card.photos?.map((el: IPhotos) => {*/}
+          {/*                        return el &&*/}
+          {/*                          <span>*/}
+          {/*                            <img height='100px' src={`data:${el.format};base64,${el.content}`}*/}
+          {/*                                 alt='фото'/>*/}
+          {/*</span>*/}
+          {/*                      })*/}
+          {/*                      }*/}
 
-                      <div>{mainPage.users[userIndex]?.card.rating}</div>
-                </span>
-                    <span>
-                        <div>{mainPage.users[userIndex]?.yearsOld}</div>
-                        <div>{mainPage.users[userIndex]?.location}</div>
-                        <div>{mainPage.users[userIndex]?.card.biography}</div>
-                        <div>{mainPage.users[userIndex]?.card.workPlace}</div>
-                        <div>{mainPage.users[userIndex]?.card.position}</div>
-                        <div>{mainPage.users[userIndex]?.card.education}</div>
+          {/*                      <div>{mainPage.users[userIndex]?.card.rating}</div>*/}
+          {/*                </span>*/}
+          {/*                    <span>*/}
+          {/*                        <div>{mainPage.users[userIndex]?.yearsOld}</div>*/}
+          {/*                        <div>{mainPage.users[userIndex]?.location}</div>*/}
+          {/*                        <div>{mainPage.users[userIndex]?.card.biography}</div>*/}
+          {/*                        <div>{mainPage.users[userIndex]?.card.workPlace}</div>*/}
+          {/*                        <div>{mainPage.users[userIndex]?.card.position}</div>*/}
+          {/*                        <div>{mainPage.users[userIndex]?.card.education}</div>*/}
 
-                      <div>
-                        {mainPage.users[userIndex] &&
-                          <div>
-                          Интересы:
-                        {mainPage.users[userIndex]?.card.tags?.map((item: string) => {
-                          return <div>{item}</div>
-                        })}
-                          </div>
-                        }
-                </div>
+          {/*                      <div>*/}
+          {/*                        {mainPage.users[userIndex] &&*/}
+          {/*                          <div>*/}
+          {/*                          Интересы:*/}
+          {/*                        {mainPage.users[userIndex]?.card.tags?.map((item: string) => {*/}
+          {/*                          return <div>{item}</div>*/}
+          {/*                        })}*/}
+          {/*                          </div>*/}
+          {/*                        }*/}
+          {/*                </div>*/}
 
-                    </span>
-                </span>
+          {/*                    </span>*/}
+          {/*                </span>*/}
 
-          {/*{state.users.us.map((item) => {*/}
-          {/*    return <div key={item.fullName}>{item.fullName}</div>*/}
-          {/*})}*/}
+          {/*          /!*{state.users.us.map((item) => {*!/*/}
+          {/*          /!*    return <div key={item.fullName}>{item.fullName}</div>*!/*/}
+          {/*          /!*})}*!/*/}
 
-          {
-            mainPage.users[userIndex] &&
+          {/*          {*/}
+          {/*            mainPage.users[userIndex] &&*/}
 
-          <div>
-            <button onClick={onClickVisitUser}>
-              Посмотреть юзера
-            </button>
-            {!mainPage.currentUser?.match &&
-<span>
-            <button onClick={onClickLikeUser
+          {/*          <div>*/}
+          {/*            <button onClick={onClickVisitUser}>*/}
+          {/*              Посмотреть юзера*/}
+          {/*            </button>*/}
+          {/*            {!mainPage.currentUser?.match &&*/}
+          {/*<span>*/}
+          {/*            <button onClick={onClickLikeUser*/}
 
-              // props.toggleFollowingProgress(true, u.id);
-              // usersAPI.unfollow(u.id)
-              //     .then(data => {
-              //         if (data.resultCode == 0) {
-              //             props.follow(u.id)
-              //         }
-              //         props.toggleFollowingProgress(false, u.id);
-              //     }).catch(props.toggleFollowingProgress(false, u.id));
-            }>Like
-            </button>
-            <button onClick={onClickDisLikeUser}>Dislike</button>
-  </span>
-            }
-            {mainPage.currentUser?.match && <div>ПРОИЗОШЕЛ МАТЧ!</div>}
+          {/*              // props.toggleFollowingProgress(true, u.id);*/}
+          {/*              // usersAPI.unfollow(u.id)*/}
+          {/*              //     .then(data => {*/}
+          {/*              //         if (data.resultCode == 0) {*/}
+          {/*              //             props.follow(u.id)*/}
+          {/*              //         }*/}
+          {/*              //         props.toggleFollowingProgress(false, u.id);*/}
+          {/*              //     }).catch(props.toggleFollowingProgress(false, u.id));*/}
+          {/*            }>Like*/}
+          {/*            </button>*/}
+          {/*            <button onClick={onClickDisLikeUser}>Dislike</button>*/}
+          {/*  </span>*/}
+          {/*            }*/}
+          {/*            {mainPage.currentUser?.match && <div>ПРОИЗОШЕЛ МАТЧ!</div>}*/}
 
-            {mainPage.currentUser?.match &&
-              <span>
-            <button onClick={onClickTakeLikeUser}>Take like</button>
-                <button onClick={onClickNotLikeUser}>Next</button>
+          {/*            {mainPage.currentUser?.match &&*/}
+          {/*              <span>*/}
+          {/*            <button onClick={onClickTakeLikeUser}>Take like</button>*/}
+          {/*                <button onClick={onClickNotLikeUser}>Next</button>*/}
 
-                </span>
-            }
+          {/*                </span>*/}
+          {/*            }*/}
 
-            {/*<button onClick={onClickNotLikeUser}>Next</button>*/}
-          </div>
-          }
+          {/*            /!*<button onClick={onClickNotLikeUser}>Next</button>*!/*/}
+          {/*          </div>*/}
+          {/*          }*/}
 
-        </div>}
+        {/*        /!*todo до юзер*!/*/}
+
 
         {
           chosenIndex === 3 &&
-            <div>
+          <div>
             <ChatRoom/>
 
-          <button onClick={closeAccountSetting}>
-            Назад
-          </button>
-            </div>
+            <button onClick={closeAccountSetting}>
+              Назад
+            </button>
+          </div>
         }
 
-        <p className={style.logout} onClick={onClickLogout}>Выйти</p>
+        {/*<p className={style.logout} onClick={onClickLogout}>Выйти</p>*/}
 
       </div>
       {/*<div className={style.main_field}>*/}

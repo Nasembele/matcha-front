@@ -3,7 +3,7 @@ import {IMatches, IState} from "../../../types";
 import style from './MatchSideBar.module.css';
 import MultiToggle from "../../../parts/MultiToggle/MultiToggle";
 import React, {useEffect, useState} from "react";
-import {createChat, getUserMatch} from "../../../api";
+import {createChat, getUserMatch, logoutGetQuery} from "../../../api";
 import {
   closeNotificationAboutNewMessageAC,
   setFirstPackMessagesAC,
@@ -56,6 +56,10 @@ export const MatchSideBar = () => {
     }
   }
 
+  const onClickLogout = () => {
+    dispatch(logoutGetQuery());
+  }
+
   useEffect(() => {
     const setFirstPackMessagesCallBack = (parseEvent: any) => dispatch(setFirstPackMessagesAC(parseEvent));
     const setNotificationAboutNewMessageCallBack = (hasNewMessage: boolean, chatId: number, senderId: number, messageId: number) =>
@@ -87,7 +91,7 @@ export const MatchSideBar = () => {
       <div className={style.menu}>
         <UserOutlined style={{fontSize: '25px'}}/>
         <HeartOutlined style={{fontSize: '25px'}}/>
-        <LogoutOutlined style={{fontSize: '25px'}}/>
+        <LogoutOutlined style={{fontSize: '25px'}} onClick={onClickLogout}/>
         {/*<Logout color={'black'}/>*/}
       </div>
       {/*<MultiToggle tabTitles={matchTitles}*/}
@@ -138,7 +142,7 @@ export const MatchSideBar = () => {
                          src={`data:${el.icon?.format};base64,${el.icon?.content}`}
                          alt='фото'/> :
                       <Avatar shape="square" size={40} icon={<UserOutlined/>}
-                      style={{backgroundColor: '#87d068', height: '50px'}}/>}
+                      style={{backgroundColor: '#fde3cf', height: '50px'}}/>}
                     <div className={style.text_container}>
                       <div className={style.name}>
                       {el.firstName}

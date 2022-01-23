@@ -1,0 +1,146 @@
+.wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.left_arrow {
+    position: absolute;
+    top: 300px;
+    right: 344px;
+}
+
+.right_arrow {
+    position: absolute;
+    top: 300px;
+    left: 365px;
+}
+
+.card_title {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 0;
+    left: 20px;
+}
+
+.name_and_age {
+    display: flex;
+}
+
+.info_card_title {
+    display: flex;
+    justify-content: space-between;
+}
+
+.info_card {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    padding: 15px 20px;
+}
+
+.name {
+    font-size: 2.5rem;
+    color: white;
+    font-weight: bold;
+}
+
+.second_name {
+    font-size: 2.5rem;
+    color: black;
+    font-weight: bold;
+}
+
+.rating {
+    margin-right: 12px;
+}
+
+.age {
+    font-size: 2.5rem;
+    color: white;
+    margin-left: 15px;
+}
+
+.second_age {
+    font-size: 2.5rem;
+    color: black;
+    margin-left: 15px;
+}
+
+.rating_container {
+    display: flex;
+}
+
+.icon_info_container {
+    /*margin: auto;*/
+    width: 40px;
+    /*margin-top: 15px*/
+    position: absolute;
+    top: 15px;
+    left: 350px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.text {
+    font-size: 1.3rem;
+    max-height: 35px;
+    overflow-y: scroll;
+}
+
+.small_text {
+    font-size: 1rem;
+    font-style: italic;
+    max-height: 25px;
+    overflow-y: scroll;
+}
+
+.tags_container {
+    margin-top: 10px;
+}
+
+.biography_text {
+    margin-top: 15px;
+    font-size: 1rem;
+    max-height: 195px;
+    overflow-y: scroll;
+}
+
+.like_container {
+    position: absolute;
+    top: 510px;
+    width: 100%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.match_text {
+    text-align: center;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 1.6rem;
+    color: white;
+}
+
+.like_content {
+    display: flex;
+    justify-content: space-around;
+}
+
+.margin {
+    margin-right: 20px;
+}
+
+.flex {
+    display: flex;
+}
+
+.space_between {
+    justify-content: space-between;
+}

@@ -9,7 +9,7 @@
     /*background-color: floralwhite;*/
     /*background-color: rgba(222, 222, 248, 0.2);*/
     background-color: rgba(255, 240, 252, 0.27);
-
+    display: flex;
 }
 
 .button_acc {
@@ -179,4 +179,10 @@
     border: 1px solid #f52758;
     /*margin-top: 25px;*/
     margin-left: 33%;
+}
+
+.card_wrapper {
+    width: 400px;
+    height: 600px;
+    margin: auto;
 }
