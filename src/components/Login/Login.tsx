@@ -200,9 +200,9 @@ const Login = () => {
                               <p className={style.reset_password}>
                                 На указанный адрес отправлено письмо для восстановления пароля
                               </p>
-                              <button type={'button'} className={style.submit_button} onClick={changeChosenIndex(0)}>
-                                Войти
-                              </button>
+                              {/*<button type={'button'} className={style.submit_button} onClick={changeChosenIndex(0)}>*/}
+                              {/*  Войти*/}
+                              {/*</button>*/}
                             </div>
                             }
                         </div>

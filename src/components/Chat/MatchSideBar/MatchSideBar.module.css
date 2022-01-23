@@ -1,10 +1,70 @@
 .match_side_bar {
-    background-color: #e84a67;
+    /*background-color: #fffdfd;*/
     height: 100%;
+    /*background-color: rgba(255, 240, 252, 0.27);*/
+    /*background-color: rgba(222, 222, 248, 0.2);*/
+    min-width: 300px;
+    max-width: 35vw;
 }
 
+
+.menu {
+    height: 75px;
+    background: linear-gradient(135deg, rgb(179, 181, 238) 7%, rgb(242, 208, 231) 99%);
+    padding: 25px 15px;
+    display: flex;
+    justify-content: space-between;
+}
 
 .notification {
     position: absolute;
     height: 30px;
+}
+
+.submit_button {
+    /*background: #f52758 !important;*/
+    /*border: 1px solid #f52758 !important;*/
+float: right;
+    border: 1px solid #f52758 !important;
+    margin-right: 10px;
+
+}
+
+.sidebar_content {
+    padding: 15px;
+}
+
+.pair_user {
+    width: 90px;
+    font-weight: bold;
+    text-align: center;
+    margin-right: 10px;
+}
+
+.pair_name {
+    width: 75px;
+}
+
+.pair_users {
+    display: flex;
+    overflow-x: scroll;
+    margin-bottom: 20px;
+}
+
+.message_pair {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.message_pairs {
+    max-height: 47vh;
+    overflow-y: scroll;
+}
+
+.name {
+    font-weight: bold;
+}
+
+.text_container {
+    margin-left: 10px;
 }
