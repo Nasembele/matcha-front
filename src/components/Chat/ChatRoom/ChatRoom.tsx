@@ -1,10 +1,10 @@
 import {useDispatch, useSelector} from "react-redux";
-import {IMessage, IPhotos, IState} from "../../../types";
+import {IMessage, IPhotos, IState, IUserData} from "../../../types";
 import React, {useEffect, useState} from "react";
 import {
-  setFirstPackMessagesAC,
+  setFirstPackMessagesAC, setUserMatchesAC,
 } from "../ChatAC";
-import {getUserById} from "../../../api";
+import {getUserById, getUserMatch} from "../../../api";
 import style from './ChatRoom.module.css';
 import {
   deleteAllMessages,
@@ -13,8 +13,24 @@ import {
   getPreviousMessages,
   sendMessage
 } from "../../../socket";
+import UserCard from "../../../parts/UserCard/UserCard";
+import {Button, Input} from "antd";
+import {
+  BackwardOutlined,
+  CloseCircleOutlined,
+  DeleteOutlined,
+  FastForwardOutlined,
+  StepBackwardOutlined
+} from "@ant-design/icons";
+import Message from "../../../parts/Message/Message";
 
-export const ChatRoom = () => {
+type IProps = {
+  closeWindow: VoidFunction
+}
+
+export const ChatRoom = ({
+                           closeWindow
+                         }: IProps) => {
 
   const dispatch = useDispatch();
 
@@ -41,7 +57,7 @@ export const ChatRoom = () => {
   }
 
   const onClickDeleteMessage = (e: any) => {
-    deleteMessage(chat.openChatId, e.target.dataset.messageId, firstMessagePackByChatId);
+    deleteMessage(chat.openChatId, e.currentTarget.dataset.messageId, firstMessagePackByChatId);
   }
 
   const onClickDeleteAllMessages = () => {
@@ -55,87 +71,59 @@ export const ChatRoom = () => {
   const currentPack = chat.firstPackMessages.find((el) => el.messages.chatId === chat.openChatId)?.messages.messageAnswer;
   const disableButtonGetNewMessage = currentPack?.length ? currentPack?.length < 10 : true;
 
+  // const actionAfterTaeLike = () => {
+  //   closeWindow();
+  //   dispatch(getUserMatch('MATCH', setUserMatchesAC));
+  // }
+
   return (
     <div className={style.container}>
-      <div>
-        <button onClick={onClickGetPreviousMessages}
-                disabled={disableButtonGetNewMessage}>
-          Показать предыдущие сообщения
-        </button>
-        <button onClick={getLastMessageCallBack}>
-          К новым сообщениям
-        </button>
-        {
-          firstMessagePackByChatId?.map((el: IMessage) => {
-            return <div>
-              <div>
-                {el.fromId !== fromUserId &&
-                <div>
-                  {
-                    chat.userInChat?.card.photos[0] &&
-                    <span>
-                        <img height='40px'
-                             src={`data:${chat.userInChat?.card.photos[0]?.format};base64,${chat.userInChat?.card.photos[0]?.content}`}
-                             alt='фото'/>
-                      </span>
-                  }
-                  {chat.userInChat?.firstName}
-                </div>
-                }
-              </div>
-              <div className={el.fromId === fromUserId ? style.my_message : undefined}>
-                {el.content}
-              </div>
-              <div onClick={onClickDeleteMessage}
-                   data-message-id={el.id}>
-                Delete
-              </div>
-            </div>
-          })
-        }
-        <textarea onChange={(e) => setMessage(e.currentTarget.value)} value={message}/>
-        <div>
-          <button onClick={onClickSendMessage}>
+      <div className={style.chat_wrapper}>
+
+        <div className={style.chat_header}>
+          {
+            disableButtonGetNewMessage ?
+              <BackwardOutlined style={{color: 'grey', fontSize: '29px'}} />:
+              <BackwardOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '29px'}} onClick={onClickGetPreviousMessages}/>
+          }
+
+          <FastForwardOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '30px'}} onClick={getLastMessageCallBack}/>
+
+          <DeleteOutlined style={{color: 'rgb(232,96,144)', fontSize: '30px'}} onClick={onClickDeleteAllMessages}/>
+          <CloseCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}} onClick={closeWindow}/>
+        </div>
+
+
+        <div className={style.message_container}>
+
+
+          {
+            firstMessagePackByChatId?.map((el: IMessage) =>
+                <Message message={el}
+                         fromUserId={fromUserId}
+                         userFirstName={chat.userInChat?.firstName}
+                         onClickDeleteMessage={onClickDeleteMessage}
+                         userPhoto={chat.userInChat?.card.photos[0]}/>
+            )
+          }
+
+
+        </div>
+
+        <Input.Group compact className={style.message_input_container}>
+          <Input style={{width: 'calc(100% - 115px)'}} onChange={(e) => setMessage(e.currentTarget.value)}
+                 value={message}/>
+          <Button type="primary" className={style.submit_button} onClick={onClickSendMessage}>
             Отправить
-          </button>
-        </div>
-        <div onClick={onClickDeleteAllMessages}>
-          Удалить всю переписку
-        </div>
+          </Button>
+        </Input.Group>
+
       </div>
-      <div>
-          <span>
-            <span>
-              <div>{chat.userInChat?.firstName}</div>
-              <div>{chat.userInChat?.middleName}</div>
-              <div>{chat.userInChat?.lastName}</div>
-              {chat.userInChat?.card.photos?.map((el: IPhotos) => {
-                return el &&
-                  <span>
-                    <img height='100px' src={`data:${el.format};base64,${el.content}`} alt='фото'/>
-                  </span>
-              })
-              }
-              <div>{chat.userInChat?.card.rating}</div>
-            </span>
-            <span>
-              <div>{chat.userInChat?.yearsOld}</div>
-              <div>{chat.userInChat?.location}</div>
-              <div>{chat.userInChat?.card.biography}</div>
-              <div>{chat.userInChat?.card.workPlace}</div>
-              <div>{chat.userInChat?.card.position}</div>
-              <div>{chat.userInChat?.card.education}</div>
-              <div>
-                {chat.userInChat &&
-                <div>
-                  Интересы:
-                  {chat.userInChat?.card.tags?.map((item: string) => {
-                    return <div>{item}</div>
-                  })}
-                </div>}
-                </div>
-            </span>
-          </span>
+      <div className={style.card_container}>
+        {chat.userInChat &&
+        <div className={style.card_wrapper}>
+          <UserCard user={chat.userInChat} isCurrentUser={true} actionAfterTakeLike={closeWindow}/>
+        </div>}
       </div>
     </div>
   )

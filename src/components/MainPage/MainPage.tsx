@@ -718,7 +718,7 @@ const MainPage = (state: IState) => {
           // }
           mainPage.users[userIndex]
           && <div className={style.card_wrapper}>
-            <UserCard user={mainPage.users[userIndex]}/>
+            <UserCard user={mainPage.users[userIndex]} isCurrentUser={false}/>
           </div>}
 
           {/*          /!*todo от юзер*!/*/}
@@ -815,12 +815,8 @@ const MainPage = (state: IState) => {
 
         {
           chosenIndex === 3 &&
-          <div>
-            <ChatRoom/>
-
-            <button onClick={closeAccountSetting}>
-              Назад
-            </button>
+          <div className={style.chat_room_container}>
+            <ChatRoom closeWindow={closeAccountSetting}/>
           </div>
         }
 

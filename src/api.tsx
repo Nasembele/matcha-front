@@ -460,6 +460,9 @@ export const likeUserPutQuery = (userId: number, action: string) => (dispatch: a
       if (action === 'DISLIKE' || response.data === 'MATCH') {
         return;
       }
+      if (action === 'TAKE_LIKE') {
+        dispatch(getUserMatch('MATCH', setUserMatchesAC));
+      }
       setAction(action, myId, userId);
 
 

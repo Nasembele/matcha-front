@@ -30,6 +30,7 @@
 
 .name_and_age {
     display: flex;
+    z-index: 1;
 }
 
 .info_card_title {

@@ -16,14 +16,17 @@ import {setAction} from "../../socket";
 import {useDispatch, useSelector} from "react-redux";
 import {deleteNotLikeUserAC} from "../../components/MainPage/MainPageAC";
 
-type Props = {
+type IProps = {
   user: IUserData,
-
+  isCurrentUser: boolean,
+  actionAfterTakeLike?: Function
 }
 
 const UserCard = ({
-                    user
-                  }: Props) => {
+                    user,
+                    isCurrentUser,
+                    actionAfterTakeLike
+                  }: IProps) => {
 
   const dispatch = useDispatch();
 
@@ -63,6 +66,9 @@ const UserCard = ({
   const onClickTakeLikeUser = () => {
     dispatch(likeUserPutQuery(user.id, 'TAKE_LIKE'));
     onClickNotLikeUser();
+    if (actionAfterTakeLike) {
+      actionAfterTakeLike();
+    }
   };
 
   return (
@@ -156,22 +162,31 @@ const UserCard = ({
           </div>
         </div>
       }
+      {!isCurrentUser &&
+        <div className={style.like_container}>
+          {mainPage.currentUser?.match ?
+            <div className={style.like_content}>
+              <MinusCircleTwoTone twoToneColor="#FF0000" style={{fontSize: '3rem'}} onClick={onClickTakeLikeUser}/>
+              <RightCircleTwoTone twoToneColor="#52c41a" style={{fontSize: '3rem'}} onClick={onClickNotLikeUser}/>
+            </div> :
+            <div className={style.like_content}>
+              <HeartTwoTone twoToneColor="#eb2f96" style={{fontSize: '3rem'}} onClick={onClickLikeUser}/>
+              <CloseCircleTwoTone style={{fontSize: '3rem'}} onClick={onClickDisLikeUser}/>
+            </div>
+          }
+          {mainPage.currentUser?.match &&
+          <div className={cc(style.match_text, isShowInfo && style.text_color)}>
+            матч!
+          </div>}
+        </div>
+      }
+      {isCurrentUser &&
       <div className={style.like_container}>
-        {mainPage.currentUser?.match ?
-          <div className={style.like_content}>
-            <MinusCircleTwoTone twoToneColor="#FF0000" style={{fontSize: '3rem'}} onClick={onClickTakeLikeUser}/>
-            <RightCircleTwoTone twoToneColor="#52c41a" style={{fontSize: '3rem'}} onClick={onClickNotLikeUser}/>
-          </div> :
-          <div className={style.like_content}>
-            <HeartTwoTone twoToneColor="#eb2f96" style={{fontSize: '3rem'}} onClick={onClickLikeUser}/>
-            <CloseCircleTwoTone style={{fontSize: '3rem'}} onClick={onClickDisLikeUser}/>
-          </div>
-        }
-        {mainPage.currentUser?.match &&
-        <div className={cc(style.match_text, isShowInfo && style.text_color)}>
-          матч!
-        </div>}
+        <div className={style.like_content}>
+          <MinusCircleTwoTone twoToneColor="#FF0000" style={{fontSize: '3rem'}} onClick={onClickTakeLikeUser}/>
+        </div>
       </div>
+      }
     </div>
   )
 };
