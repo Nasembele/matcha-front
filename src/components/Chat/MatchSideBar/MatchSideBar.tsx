@@ -22,7 +22,7 @@ import Title from "antd/es/typography/Title";
 const matchTitles = ['Пары', 'Сообщения'];
 
 type IProps = {
-  closeAnotherWindowMobile?: VoidFunction
+  closeAnotherWindowMobile: VoidFunction
 }
 
 export const MatchSideBar = ({
@@ -99,7 +99,7 @@ export const MatchSideBar = ({
     <div className={style.match_side_bar}>
       <div className={style.menu}>
         <UserOutlined style={{fontSize: '25px'}}/>
-        <HeartOutlined style={{fontSize: '25px'}}/>
+        {/*<HeartOutlined style={{fontSize: '25px'}}/>*/}
         <LogoutOutlined style={{fontSize: '25px'}} onClick={onClickLogout}/>
         {/*<Logout color={'black'}/>*/}
       </div>
@@ -167,7 +167,7 @@ export const MatchSideBar = ({
         </div>
       </div>
 
-      <Button onClick={getNewMatches} className={style.submit_button}>
+      <Button onClick={getNewMatches} className={style.submit_button_upload}>
         Загрузить ещё
       </Button>
       {chat.messageNotification.map((el, idx) => {

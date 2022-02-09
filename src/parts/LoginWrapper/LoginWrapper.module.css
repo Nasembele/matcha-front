@@ -1,30 +1,33 @@
 /*big*/
-@media (min-width: 768px) {
-    .main {
-        display: grid;
-        /*grid-template-rows: 1fr 1fr 1fr;*/
-        grid-template-columns: 1fr 1fr 1fr;
-    }
-}
+/*@media (min-width: 768px) {*/
+/*    .main {*/
+/*        display: grid;*/
+/*        !*grid-template-rows: 1fr 1fr 1fr;*!*/
+/*        grid-template-columns: 1fr 1fr 1fr;*/
+/*    }*/
+/*}*/
 
-/*small*/
-@media (max-width: 768px) {
-    .main {
-        display: grid;
-        grid-template-rows: 1fr 1fr 1fr;
-        /*grid-template-columns: 1fr;*/
-        /*display: flex;*/
-        /*flex-direction: column;*/
+/*!*small*!*/
+/*@media (max-width: 768px) {*/
+/*    .main {*/
+/*        display: grid;*/
+/*        !*grid-template-rows: 1fr 1fr 1fr;*!*/
+/*        !*grid-template-columns: 1fr;*!*/
+/*        !*display: flex;*!*/
+/*        !*flex-direction: column;*!*/
 
-    }
-}
+/*    }*/
+/*}*/
+
+/*.main {*/
+/*    display: flex;*/
+/*}*/
 
 .wrapper {
-    background: radial-gradient(ellipse, rgb(242, 208, 231) 7%, rgb(179, 181, 238) 99%);
-    height: 100vh;
-}
-
-.children {
+    margin: auto;
     display: flex;
+    background: radial-gradient(ellipse, rgb(242, 208, 231) 7%, rgb(179, 181, 238) 99%);
+    /**/
+    height: 100vh;
     /*min-width: 380px;*/
 }

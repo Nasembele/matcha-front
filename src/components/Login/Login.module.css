@@ -12,7 +12,7 @@
 .whole_form {
     /*float: right !important;*/
     width: 100%;
-    min-width: 300px;
+    min-width: 280px;
     max-width: 450px;
     /*margin-top: 50%;*/
     /*background-color: white;*/
@@ -102,6 +102,15 @@
     /*margin-top: 20px;*/
     /*margin-left: 10px;*/
     /*width: 65%;*/
+}
+
+/*small*/
+
+@media (max-height: 330px) {
+    .buttons_container {
+        height: 60px;
+        overflow-y: scroll;
+    }
 }
 
 .button_container {

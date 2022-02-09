@@ -27,11 +27,18 @@ import Message from "../../../parts/Message/Message";
 import {MatchSideBar} from "../MatchSideBar/MatchSideBar";
 
 type IProps = {
-  closeWindow: VoidFunction
+  closeWindow: VoidFunction,
+  isShowMatchSideBarMobile: boolean,
+  isShowUserCardMobile: boolean,
+  closeAnotherWindowMobile: VoidFunction
+
 }
 
 export const ChatRoom = ({
-                           closeWindow
+                           closeWindow,
+                           isShowMatchSideBarMobile,
+                           isShowUserCardMobile,
+                           closeAnotherWindowMobile
                          }: IProps) => {
 
   const dispatch = useDispatch();
@@ -40,24 +47,26 @@ export const ChatRoom = ({
   const fromUserId = useSelector((state: IState) => state.mainPage.account.id);
 
   const [message, setMessage] = useState('');
-  const [isShowUserCardMobile, setIsShowUserCardMobile] = useState(false);
-  const [isShowMatchSideBarMobile, setIsShowMatchSideBarMobile] = useState(false);
+  // const [isShowUserCardMobile, setIsShowUserCardMobile] = useState(false);
+  // const [isShowMatchSideBarMobile, setIsShowMatchSideBarMobile] = useState(false);
 
   const firstMessagePackByChatId = chat.firstPackMessages.find(el => el.messages.chatId === chat.openChatId)?.messages.messageAnswer;
 
   useEffect(() => {
-    dispatch(getUserById(chat.toUserId));
+    if (chat.toUserId) {
+      dispatch(getUserById(chat.toUserId));
+    }
   }, [chat.toUserId]);
 
-  const changeShowUserCardMobile = () => {
-    setIsShowUserCardMobile(prevState => !prevState);
-    setIsShowMatchSideBarMobile(false);
-  }
-
-  const changeShowMatchSideBarMobile = () => {
-    setIsShowMatchSideBarMobile(prevState => !prevState);
-    setIsShowUserCardMobile(false);
-  }
+  // const changeShowUserCardMobile = () => {
+  //   setIsShowUserCardMobile(prevState => !prevState);
+  //   setIsShowMatchSideBarMobile(false);
+  // }
+  //
+  // const changeShowMatchSideBarMobile = () => {
+  //   setIsShowMatchSideBarMobile(prevState => !prevState);
+  //   setIsShowUserCardMobile(false);
+  // }
 
   const onClickSendMessage = () => {
     if (!message) return;
@@ -90,16 +99,19 @@ export const ChatRoom = ({
   //   dispatch(getUserMatch('MATCH', setUserMatchesAC));
   // }
 
-  const closeAnotherWindowMobile = () => {
-    setIsShowMatchSideBarMobile(false);
-    setIsShowUserCardMobile(false);
-  }
+  // const closeAnotherWindowMobile = () => {
+  //   setIsShowMatchSideBarMobile(false);
+  //   setIsShowUserCardMobile(false);
+  // }
 
   return (
     <div className={style.container}>
       {isShowMatchSideBarMobile && !isShowUserCardMobile &&
+      <div className={style.card_container_mobile}>
         <MatchSideBar closeAnotherWindowMobile={closeAnotherWindowMobile}/>
+      </div>
       }
+
       {isShowUserCardMobile && !isShowMatchSideBarMobile &&
       <div className={style.card_container_mobile}>
         <div className={style.card_wrapper}>
@@ -108,58 +120,58 @@ export const ChatRoom = ({
       </div>
       }
       {!isShowUserCardMobile && !isShowMatchSideBarMobile &&
-        <div className={style.chat_wrapper}>
+      <div className={style.chat_wrapper}>
 
-          <div className={style.chat_header}>
-            {
-              disableButtonGetNewMessage ?
-                <BackwardOutlined style={{color: 'grey', fontSize: '29px'}}/> :
-                <BackwardOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '29px'}}
-                                  onClick={onClickGetPreviousMessages}/>
-            }
+        <div className={style.chat_header}>
+          {
+            disableButtonGetNewMessage ?
+              <BackwardOutlined style={{color: 'grey', fontSize: '29px'}}/> :
+              <BackwardOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '29px'}}
+                                onClick={onClickGetPreviousMessages}/>
+          }
 
-            <FastForwardOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '30px'}}
-                                 onClick={getLastMessageCallBack}/>
+          <FastForwardOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '30px'}}
+                               onClick={getLastMessageCallBack}/>
 
-            <DeleteOutlined style={{color: 'rgb(232,96,144)', fontSize: '30px'}} onClick={onClickDeleteAllMessages}/>
-            <CloseCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}} onClick={closeWindow}/>
-          </div>
-
-
-          <div className={style.message_container}>
+          <DeleteOutlined style={{color: 'rgb(232,96,144)', fontSize: '30px'}} onClick={onClickDeleteAllMessages}/>
+          <CloseCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}} onClick={closeWindow}/>
+        </div>
 
 
-            {
-              firstMessagePackByChatId?.map((el: IMessage) =>
-                <Message message={el}
-                         fromUserId={fromUserId}
-                         userFirstName={chat.userInChat?.firstName}
-                         onClickDeleteMessage={onClickDeleteMessage}
-                         userPhoto={chat.userInChat?.card.photos[0]}/>
-              )
-            }
+        <div className={style.message_container}>
 
 
-          </div>
+          {
+            firstMessagePackByChatId?.map((el: IMessage) =>
+              <Message message={el}
+                       fromUserId={fromUserId}
+                       userFirstName={chat.userInChat?.firstName}
+                       onClickDeleteMessage={onClickDeleteMessage}
+                       userPhoto={chat.userInChat?.card.photos[0]}/>
+            )
+          }
 
-          <Input.Group compact className={style.message_input_container}>
-            <Input style={{width: 'calc(100% - 115px)'}} onChange={(e) => setMessage(e.currentTarget.value)}
-                   value={message}/>
-            <Button type="primary" className={style.submit_button} onClick={onClickSendMessage}>
-              Отправить
-            </Button>
-          </Input.Group>
 
         </div>
-      }
-      <div className={style.chat_footer}>
-        <MessageOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '30px'}} onClick={changeShowMatchSideBarMobile}/>
-        {isShowUserCardMobile ?
-          <DownCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}} onClick={changeShowUserCardMobile}/>
-          :
-          <UpCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}} onClick={changeShowUserCardMobile}/>
-        }
+
+        <Input.Group compact className={style.message_input_container}>
+          <Input style={{width: 'calc(100% - 115px)'}} onChange={(e) => setMessage(e.currentTarget.value)}
+                 value={message}/>
+          <Button type="primary" className={style.submit_button} onClick={onClickSendMessage}>
+            Отправить
+          </Button>
+        </Input.Group>
+
       </div>
+      }
+      {/*<div className={style.mobile_footer}>*/}
+      {/*  <MessageOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '30px'}} onClick={changeShowMatchSideBarMobile}/>*/}
+      {/*  {isShowUserCardMobile ?*/}
+      {/*    <DownCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}} onClick={changeShowUserCardMobile}/>*/}
+      {/*    :*/}
+      {/*    <UpCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}} onClick={changeShowUserCardMobile}/>*/}
+      {/*  }*/}
+      {/*</div>*/}
 
       <div className={style.card_container}>
         {chat.userInChat &&

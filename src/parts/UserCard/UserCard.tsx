@@ -74,7 +74,7 @@ const UserCard = ({
   return (
     <div className={style.wrapper}>
       {!isShowInfo &&
-      <span>
+      <div className={style.width}>
         <div className={style.card_title}>
           <div className={style.name_and_age}>
             <div className={style.name}>
@@ -91,14 +91,16 @@ const UserCard = ({
         <span>
           {!user.card.photos[0]?.content &&
           <Avatar shape="square" size={400} icon={<UserOutlined/>}
-                  style={{backgroundColor: '#fde3cf', height: '600px', width: '400px'}}/>}
+                  style={{backgroundColor: '#fde3cf', height: '600px', width: '100%'}}/>}
           {user.card.photos[photoIndex - 1]?.content &&
         <div className={style.left_arrow} onClick={changePhotoIndex(-1)}>
           <LeftOutlined style={{fontSize: '30px', color: 'white'}}/>
         </div>
+
         }
           {user.card.photos[photoIndex]?.content &&
-          <img height={'100%'}
+          <img width={'100%'}
+               height={'600px'}
                src={`data:${user.card.photos[photoIndex].format};base64,${user.card.photos[photoIndex].content}`}
                alt='фото'/>
           }
@@ -108,7 +110,7 @@ const UserCard = ({
           </div>
           }
         </span>
-      </span>
+      </div>
       }
       {
         isShowInfo &&
@@ -126,7 +128,7 @@ const UserCard = ({
               <div className={cc(style.second_name, style.rating)}>
                 {user.card.rating && user.card.rating.toFixed(1)}
               </div>
-              <DownCircleTwoTone twoToneColor="rgb(75, 79, 206)" style={{fontSize: '2rem'}} onClick={changeShowInfo}/>
+              <DownCircleTwoTone className={style.down_circle} twoToneColor="rgb(75, 79, 206)" style={{fontSize: '2rem'}} onClick={changeShowInfo}/>
             </div>
           </div>
           <div className={cc(style.flex, style.space_between)}>
@@ -164,6 +166,10 @@ const UserCard = ({
       }
       {!isCurrentUser &&
         <div className={style.like_container}>
+          {mainPage.currentUser?.match &&
+          <div className={cc(style.match_text, isShowInfo && style.text_color)}>
+            матч!
+          </div>}
           {mainPage.currentUser?.match ?
             <div className={style.like_content}>
               <MinusCircleTwoTone twoToneColor="#FF0000" style={{fontSize: '3rem'}} onClick={onClickTakeLikeUser}/>
@@ -174,16 +180,16 @@ const UserCard = ({
               <CloseCircleTwoTone style={{fontSize: '3rem'}} onClick={onClickDisLikeUser}/>
             </div>
           }
-          {mainPage.currentUser?.match &&
-          <div className={cc(style.match_text, isShowInfo && style.text_color)}>
-            матч!
-          </div>}
+          {/*{mainPage.currentUser?.match &&*/}
+          {/*<div className={cc(style.match_text, isShowInfo && style.text_color)}>*/}
+          {/*  матч!*/}
+          {/*</div>}*/}
         </div>
       }
       {isCurrentUser &&
       <div className={style.like_container}>
         <div className={style.like_content}>
-          <MinusCircleTwoTone twoToneColor="#FF0000" style={{fontSize: '3rem'}} onClick={onClickTakeLikeUser}/>
+          <MinusCircleTwoTone twoToneColor="#FF0000" style={{fontSize: '2rem'}} onClick={onClickTakeLikeUser}/>
         </div>
       </div>
       }

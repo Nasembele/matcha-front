@@ -48,6 +48,7 @@ import {
 import {getFirstMessages, setAction} from "../../socket";
 import {Button} from "@mui/material";
 import UserCard from "../../parts/UserCard/UserCard";
+import {DownCircleOutlined, LogoutOutlined, MessageOutlined, UpCircleOutlined} from "@ant-design/icons";
 
 // const openChatCanal = (chat: IChat, userId: number) => {
 //
@@ -190,6 +191,8 @@ const MainPage = (state: IState) => {
   const [isShowChangeEmail, setIsShowChangeEmail] = useState(false);
   const [isShowChangePass, setIsShowChangePass] = useState(false);
 
+  const [isShowUserCardMobile, setIsShowUserCardMobile] = useState(false);
+  const [isShowMatchSideBarMobile, setIsShowMatchSideBarMobile] = useState(false);
 
   const countUsers = mainPage.users.length;
 
@@ -205,7 +208,7 @@ const MainPage = (state: IState) => {
   useEffect(() => {
     if (chat.isOpenChatRoom === true) {
       setChosenIndex(3);
-
+      closeAnotherWindowMobile();
     }
   }, [chat.isOpenChatRoom]);
 
@@ -437,10 +440,56 @@ const MainPage = (state: IState) => {
     // dispatch(getUsersPostQuery());
   }
 
+  const changeShowUserCardMobile = () => {
+    setIsShowUserCardMobile(prevState => !prevState);
+    setIsShowMatchSideBarMobile(false);
+  }
+
+  const changeShowMatchSideBarMobile = () => {
+    setChosenIndex(3);
+    setIsShowMatchSideBarMobile(prevState => !prevState);
+    setIsShowUserCardMobile(false);
+  }
+
+  const closeAnotherWindowMobile = () => {
+    setIsShowMatchSideBarMobile(false);
+    setIsShowUserCardMobile(false);
+  }
+
+
+  const onClickLogout = () => {
+    dispatch(logoutGetQuery());
+  }
+
   return (
     <div className={style.content_wrapper}>
+      {isShowMatchSideBarMobile && !isShowUserCardMobile && chosenIndex !== 3 &&
+      <MatchSideBar closeAnotherWindowMobile={closeAnotherWindowMobile}/>
+      }
+
+      <div className={style.mobile_footer}>
+        {!isShowMatchSideBarMobile ?
+          <MessageOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '30px'}}
+                           onClick={changeShowMatchSideBarMobile}/> :
+          <div/>
+        }
+        {(!isShowMatchSideBarMobile && chat.isOpenChatRoom) ? <>
+            {isShowUserCardMobile ?
+              <DownCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}}
+                                  onClick={changeShowUserCardMobile}/>
+              :
+              <UpCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}}
+                                onClick={changeShowUserCardMobile}/>
+            }
+          </> :
+          <div/>
+        }
+        <div/>
+        <LogoutOutlined style={{color: 'rgb(232, 96, 144)', fontSize: '30px'}} onClick={onClickLogout}/>
+      </div>
+
       <div className={style.side_bar_container}>
-        <MatchSideBar/>
+        <MatchSideBar closeAnotherWindowMobile={closeAnotherWindowMobile}/>
       </div>
       <div className={style.main_field}>
         {chosenIndex === 1 &&
@@ -677,52 +726,55 @@ const MainPage = (state: IState) => {
         </div>}
 
         {chosenIndex === 0 &&
-          // <div className={style.button_acc} onClick={openAccountSetting}>Аккаунт</div>
-          // <div className={style.button_acc} onClick={openAccountProperties}>Настройки аккаунта</div>
-          // <div className={style.button_acc} onClick={openUserFilter}>Фильтр</div>
-          // {<div className={style.button_acc} onClick={closeUserFilter}>Закрыть фильтр</div>}
+        // <div className={style.button_acc} onClick={openAccountSetting}>Аккаунт</div>
+        // <div className={style.button_acc} onClick={openAccountProperties}>Настройки аккаунта</div>
+        // <div className={style.button_acc} onClick={openUserFilter}>Фильтр</div>
+        // {<div className={style.button_acc} onClick={closeUserFilter}>Закрыть фильтр</div>}
 
-          // {isOpenFilter &&
-          // <div>
-          //   <div className={style.button_acc} onClick={closeUserFilter}>Закрыть фильтр</div>
-          //   <div className={style.userFilter}>
-          //     <p>Фильтр
-          //     </p>
-          //     <p>Возраст
-          //       <div>От
-          //         <input type='number' onChange={setFilterAge("start")} value={mainPage.userFilters.ageBy}/>
-          //       </div>
-          //       <div>До
-          //         <input type='number' onChange={setFilterAge("end")} value={mainPage.userFilters.ageTo}/>
-          //       </div>
-          //     </p>
-          //     <p>Рейтинг
-          //       <div>
-          //         <input type='number' onChange={setFilterRating} value={mainPage.userFilters.rating}/>
-          //       </div>
-          //     </p>
-          //     <p>Количество общих интересов
-          //       <div>
-          //         <input type='number' onChange={setFilterCommonTags} value={mainPage.userFilters.commonTagsCount}/>
-          //       </div>
-          //     </p>
-          //     <p>Месторасположение
-          //       <div>
-          //         <input type='text' onChange={setFilterLocation} value={mainPage.userFilters.location}/>
-          //       </div>
-          //     </p>
-          //     <button onClick={getUsersByFilters}>Поиск</button>
-          //   </div>
-          // </div>
-          // }
-          mainPage.users[userIndex]
-          && <div className={style.card_wrapper}>
-            <UserCard user={mainPage.users[userIndex]} isCurrentUser={false}/>
-          </div>}
+        // {isOpenFilter &&
+        // <div>
+        //   <div className={style.button_acc} onClick={closeUserFilter}>Закрыть фильтр</div>
+        //   <div className={style.userFilter}>
+        //     <p>Фильтр
+        //     </p>
+        //     <p>Возраст
+        //       <div>От
+        //         <input type='number' onChange={setFilterAge("start")} value={mainPage.userFilters.ageBy}/>
+        //       </div>
+        //       <div>До
+        //         <input type='number' onChange={setFilterAge("end")} value={mainPage.userFilters.ageTo}/>
+        //       </div>
+        //     </p>
+        //     <p>Рейтинг
+        //       <div>
+        //         <input type='number' onChange={setFilterRating} value={mainPage.userFilters.rating}/>
+        //       </div>
+        //     </p>
+        //     <p>Количество общих интересов
+        //       <div>
+        //         <input type='number' onChange={setFilterCommonTags} value={mainPage.userFilters.commonTagsCount}/>
+        //       </div>
+        //     </p>
+        //     <p>Месторасположение
+        //       <div>
+        //         <input type='text' onChange={setFilterLocation} value={mainPage.userFilters.location}/>
+        //       </div>
+        //     </p>
+        //     <button onClick={getUsersByFilters}>Поиск</button>
+        //   </div>
+        // </div>
+        // }
+        mainPage.users[userIndex]
+        && <div className={style.card_wrapper}>
+          <UserCard user={mainPage.users[userIndex]} isCurrentUser={false}/>
+        </div>}
         {
           chosenIndex === 3 &&
           <div className={style.chat_room_container}>
-            <ChatRoom closeWindow={closeAccountSetting}/>
+            <ChatRoom closeWindow={closeAccountSetting}
+                      isShowMatchSideBarMobile={isShowMatchSideBarMobile}
+                      isShowUserCardMobile={isShowUserCardMobile}
+                      closeAnotherWindowMobile={closeAnotherWindowMobile}/>
           </div>
         }
       </div>

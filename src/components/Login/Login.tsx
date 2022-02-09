@@ -160,12 +160,13 @@ const Login = () => {
                     <Input.Password type={'password'} onChange={changePassword} className={style.bottom_margin}
                                     placeholder={'пароль'} size="large"/>
 
+                      <div className={style.buttons_container}>
                     <div className={style.button_container}>
                       <Button type={'primary'} size={'large'}  className={style.submit_button} onClick={signInButton}>
                         Войти
                       </Button>
                       <Button size={'large'} className={style.negative_button} onClick={changeChosenIndex(1)}>
-                        Забыли пароль?
+                          Пароль?
                       </Button>
                         {/*{error.isServerError === true &&*/}
                         {/*<p className={style.error}>Ошибка сервера</p>}*/}
@@ -178,6 +179,7 @@ const Login = () => {
                     <Button block type={'primary'} size={'large'} className={style.reg_button} onClick={changeChosenIndex(2)}>
                       Регистрация
                     </Button>
+                      </div>
                   </div>
 
                 </div>}

@@ -13,13 +13,11 @@ const LoginWrapper = ({
 
 
   return (
-    <div className={cc(style.main, style.wrapper)}>
-      <div/>
-      <div className={style.children}>
+    // <div className={style.wrapper}>
+      <div className={style.wrapper}>
         {children}
       </div>
-      <div/>
-    </div>
+    // </div>
   )
 };
 
