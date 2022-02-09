@@ -3,8 +3,9 @@
     height: 100%;
     /*background-color: rgba(255, 240, 252, 0.27);*/
     /*background-color: rgba(222, 222, 248, 0.2);*/
-    min-width: 300px;
-    max-width: 27vw;
+    /*min-width: 300px;*/
+    /*max-width: 27vw;*/
+    /*display: none;*/
 }
 
 
@@ -30,8 +31,20 @@ float: right;
 
 }
 
-.sidebar_content {
-    padding: 15px;
+/*big*/
+@media (min-width: 950px) {
+    .sidebar_content {
+        padding: 15px;
+        max-width: 27vw;
+    }
+}
+
+/*small*/
+@media (max-width: 950px) {
+    .sidebar_content {
+        padding: 15px;
+        /*max-width: 27vw;*/
+    }
 }
 
 .pair_user {

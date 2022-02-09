@@ -18,11 +18,13 @@ import {Button, Input} from "antd";
 import {
   BackwardOutlined,
   CloseCircleOutlined,
-  DeleteOutlined,
-  FastForwardOutlined,
-  StepBackwardOutlined
+  DeleteOutlined, DownCircleOutlined,
+  FastForwardOutlined, MessageOutlined,
+  StepBackwardOutlined,
+  UpCircleOutlined
 } from "@ant-design/icons";
 import Message from "../../../parts/Message/Message";
+import {MatchSideBar} from "../MatchSideBar/MatchSideBar";
 
 type IProps = {
   closeWindow: VoidFunction
@@ -38,12 +40,24 @@ export const ChatRoom = ({
   const fromUserId = useSelector((state: IState) => state.mainPage.account.id);
 
   const [message, setMessage] = useState('');
+  const [isShowUserCardMobile, setIsShowUserCardMobile] = useState(false);
+  const [isShowMatchSideBarMobile, setIsShowMatchSideBarMobile] = useState(false);
 
   const firstMessagePackByChatId = chat.firstPackMessages.find(el => el.messages.chatId === chat.openChatId)?.messages.messageAnswer;
 
   useEffect(() => {
     dispatch(getUserById(chat.toUserId));
   }, [chat.toUserId]);
+
+  const changeShowUserCardMobile = () => {
+    setIsShowUserCardMobile(prevState => !prevState);
+    setIsShowMatchSideBarMobile(false);
+  }
+
+  const changeShowMatchSideBarMobile = () => {
+    setIsShowMatchSideBarMobile(prevState => !prevState);
+    setIsShowUserCardMobile(false);
+  }
 
   const onClickSendMessage = () => {
     if (!message) return;
@@ -76,49 +90,77 @@ export const ChatRoom = ({
   //   dispatch(getUserMatch('MATCH', setUserMatchesAC));
   // }
 
+  const closeAnotherWindowMobile = () => {
+    setIsShowMatchSideBarMobile(false);
+    setIsShowUserCardMobile(false);
+  }
+
   return (
     <div className={style.container}>
-      <div className={style.chat_wrapper}>
-
-        <div className={style.chat_header}>
-          {
-            disableButtonGetNewMessage ?
-              <BackwardOutlined style={{color: 'grey', fontSize: '29px'}} />:
-              <BackwardOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '29px'}} onClick={onClickGetPreviousMessages}/>
-          }
-
-          <FastForwardOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '30px'}} onClick={getLastMessageCallBack}/>
-
-          <DeleteOutlined style={{color: 'rgb(232,96,144)', fontSize: '30px'}} onClick={onClickDeleteAllMessages}/>
-          <CloseCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}} onClick={closeWindow}/>
+      {isShowMatchSideBarMobile && !isShowUserCardMobile &&
+        <MatchSideBar closeAnotherWindowMobile={closeAnotherWindowMobile}/>
+      }
+      {isShowUserCardMobile && !isShowMatchSideBarMobile &&
+      <div className={style.card_container_mobile}>
+        <div className={style.card_wrapper}>
+          <UserCard user={chat.userInChat!} isCurrentUser={true} actionAfterTakeLike={closeWindow}/>
         </div>
+      </div>
+      }
+      {!isShowUserCardMobile && !isShowMatchSideBarMobile &&
+        <div className={style.chat_wrapper}>
+
+          <div className={style.chat_header}>
+            {
+              disableButtonGetNewMessage ?
+                <BackwardOutlined style={{color: 'grey', fontSize: '29px'}}/> :
+                <BackwardOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '29px'}}
+                                  onClick={onClickGetPreviousMessages}/>
+            }
+
+            <FastForwardOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '30px'}}
+                                 onClick={getLastMessageCallBack}/>
+
+            <DeleteOutlined style={{color: 'rgb(232,96,144)', fontSize: '30px'}} onClick={onClickDeleteAllMessages}/>
+            <CloseCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}} onClick={closeWindow}/>
+          </div>
 
 
-        <div className={style.message_container}>
+          <div className={style.message_container}>
 
 
-          {
-            firstMessagePackByChatId?.map((el: IMessage) =>
+            {
+              firstMessagePackByChatId?.map((el: IMessage) =>
                 <Message message={el}
                          fromUserId={fromUserId}
                          userFirstName={chat.userInChat?.firstName}
                          onClickDeleteMessage={onClickDeleteMessage}
                          userPhoto={chat.userInChat?.card.photos[0]}/>
-            )
-          }
+              )
+            }
 
+
+          </div>
+
+          <Input.Group compact className={style.message_input_container}>
+            <Input style={{width: 'calc(100% - 115px)'}} onChange={(e) => setMessage(e.currentTarget.value)}
+                   value={message}/>
+            <Button type="primary" className={style.submit_button} onClick={onClickSendMessage}>
+              Отправить
+            </Button>
+          </Input.Group>
 
         </div>
-
-        <Input.Group compact className={style.message_input_container}>
-          <Input style={{width: 'calc(100% - 115px)'}} onChange={(e) => setMessage(e.currentTarget.value)}
-                 value={message}/>
-          <Button type="primary" className={style.submit_button} onClick={onClickSendMessage}>
-            Отправить
-          </Button>
-        </Input.Group>
-
+      }
+      <div className={style.chat_footer}>
+        <MessageOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '30px'}} onClick={changeShowMatchSideBarMobile}/>
+        {isShowUserCardMobile ?
+          <DownCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}} onClick={changeShowUserCardMobile}/>
+          :
+          <UpCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}} onClick={changeShowUserCardMobile}/>
+        }
       </div>
+
       <div className={style.card_container}>
         {chat.userInChat &&
         <div className={style.card_wrapper}>

@@ -439,9 +439,8 @@ const MainPage = (state: IState) => {
 
   return (
     <div className={style.content_wrapper}>
-      <div>
+      <div className={style.side_bar_container}>
         <MatchSideBar/>
-
       </div>
       <div className={style.main_field}>
         {chosenIndex === 1 &&
@@ -720,111 +719,13 @@ const MainPage = (state: IState) => {
           && <div className={style.card_wrapper}>
             <UserCard user={mainPage.users[userIndex]} isCurrentUser={false}/>
           </div>}
-
-          {/*          /!*todo от юзер*!/*/}
-          {/*// fakeUsers.map(u => <div key={u.id}>*/}
-          {/*          <span>*/}
-          {/*                <div>*/}
-          {/*                    /!*<img*!/*/}
-          {/*                  /!*     src={mainPage.users[userIndex]?.photoUrl != null ? mainPage.users[userIndex]?.photoUrl : './images/account.png'} height={'100px'}/>*!/*/}
-          {/*                </div>*/}
-          {/*                       </span>*/}
-          {/*          <span>*/}
-          {/*                    <span>*/}
-          {/*                        <div>{mainPage.users[userIndex]?.firstName}</div>*/}
-          {/*                        <div>{mainPage.users[userIndex]?.middleName}</div>*/}
-          {/*                        <div>{mainPage.users[userIndex]?.lastName}</div>*/}
-
-          {/*                      {mainPage.users[userIndex]?.card.photos?.map((el: IPhotos) => {*/}
-          {/*                        return el &&*/}
-          {/*                          <span>*/}
-          {/*                            <img height='100px' src={`data:${el.format};base64,${el.content}`}*/}
-          {/*                                 alt='фото'/>*/}
-          {/*</span>*/}
-          {/*                      })*/}
-          {/*                      }*/}
-
-          {/*                      <div>{mainPage.users[userIndex]?.card.rating}</div>*/}
-          {/*                </span>*/}
-          {/*                    <span>*/}
-          {/*                        <div>{mainPage.users[userIndex]?.yearsOld}</div>*/}
-          {/*                        <div>{mainPage.users[userIndex]?.location}</div>*/}
-          {/*                        <div>{mainPage.users[userIndex]?.card.biography}</div>*/}
-          {/*                        <div>{mainPage.users[userIndex]?.card.workPlace}</div>*/}
-          {/*                        <div>{mainPage.users[userIndex]?.card.position}</div>*/}
-          {/*                        <div>{mainPage.users[userIndex]?.card.education}</div>*/}
-
-          {/*                      <div>*/}
-          {/*                        {mainPage.users[userIndex] &&*/}
-          {/*                          <div>*/}
-          {/*                          Интересы:*/}
-          {/*                        {mainPage.users[userIndex]?.card.tags?.map((item: string) => {*/}
-          {/*                          return <div>{item}</div>*/}
-          {/*                        })}*/}
-          {/*                          </div>*/}
-          {/*                        }*/}
-          {/*                </div>*/}
-
-          {/*                    </span>*/}
-          {/*                </span>*/}
-
-          {/*          /!*{state.users.us.map((item) => {*!/*/}
-          {/*          /!*    return <div key={item.fullName}>{item.fullName}</div>*!/*/}
-          {/*          /!*})}*!/*/}
-
-          {/*          {*/}
-          {/*            mainPage.users[userIndex] &&*/}
-
-          {/*          <div>*/}
-          {/*            <button onClick={onClickVisitUser}>*/}
-          {/*              Посмотреть юзера*/}
-          {/*            </button>*/}
-          {/*            {!mainPage.currentUser?.match &&*/}
-          {/*<span>*/}
-          {/*            <button onClick={onClickLikeUser*/}
-
-          {/*              // props.toggleFollowingProgress(true, u.id);*/}
-          {/*              // usersAPI.unfollow(u.id)*/}
-          {/*              //     .then(data => {*/}
-          {/*              //         if (data.resultCode == 0) {*/}
-          {/*              //             props.follow(u.id)*/}
-          {/*              //         }*/}
-          {/*              //         props.toggleFollowingProgress(false, u.id);*/}
-          {/*              //     }).catch(props.toggleFollowingProgress(false, u.id));*/}
-          {/*            }>Like*/}
-          {/*            </button>*/}
-          {/*            <button onClick={onClickDisLikeUser}>Dislike</button>*/}
-          {/*  </span>*/}
-          {/*            }*/}
-          {/*            {mainPage.currentUser?.match && <div>ПРОИЗОШЕЛ МАТЧ!</div>}*/}
-
-          {/*            {mainPage.currentUser?.match &&*/}
-          {/*              <span>*/}
-          {/*            <button onClick={onClickTakeLikeUser}>Take like</button>*/}
-          {/*                <button onClick={onClickNotLikeUser}>Next</button>*/}
-
-          {/*                </span>*/}
-          {/*            }*/}
-
-          {/*            /!*<button onClick={onClickNotLikeUser}>Next</button>*!/*/}
-          {/*          </div>*/}
-          {/*          }*/}
-
-        {/*        /!*todo до юзер*!/*/}
-
-
         {
           chosenIndex === 3 &&
           <div className={style.chat_room_container}>
             <ChatRoom closeWindow={closeAccountSetting}/>
           </div>
         }
-
-        {/*<p className={style.logout} onClick={onClickLogout}>Выйти</p>*/}
-
       </div>
-      {/*<div className={style.main_field}>*/}
-      {/*</div>*/}
     </div>
   )
 }

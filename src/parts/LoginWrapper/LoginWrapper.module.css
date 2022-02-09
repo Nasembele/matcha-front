@@ -1,5 +1,13 @@
-/*small*/
+/*big*/
+@media (min-width: 768px) {
+    .main {
+        display: grid;
+        /*grid-template-rows: 1fr 1fr 1fr;*/
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
 
+/*small*/
 @media (max-width: 768px) {
     .main {
         display: grid;
@@ -8,15 +16,6 @@
         /*display: flex;*/
         /*flex-direction: column;*/
 
-    }
-}
-
-/*big*/
-@media (min-width: 768px) {
-    .main {
-        display: grid;
-        /*grid-template-rows: 1fr 1fr 1fr;*/
-        grid-template-columns: 1fr 1fr 1fr;
     }
 }
 

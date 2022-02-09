@@ -1,13 +1,52 @@
-.container {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    /*grid-auto-rows: 100vh;*/
-    height: 100%;
-    width: 100%;
+/*.container {*/
+/*    display: grid;*/
+/*    grid-template-columns: 1.5fr 1fr;*/
+/*    !*grid-auto-rows: 100vh;*!*/
+/*    height: 100%;*/
+/*    width: 100%;*/
+/*}*/
+
+/*.card_container {*/
+/*    width: 100%;*/
+/*    display: flex;*/
+/*    !*display: none;*!*/
+/*}*/
+/*big*/
+@media (min-width: 950px) {
+    .container {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        /*grid-auto-rows: 100vh;*/
+        height: 100%;
+        width: 100%;
+    }
+
+    .card_container {
+        width: 100%;
+        display: flex;
+        /*display: none;*/
+    }
 }
 
-.card_container {
-    width: 100%;
+/*small*/
+@media (max-width: 950px) {
+    .container {
+        /*display: grid;*/
+        /*grid-template-columns: 1.5fr 1fr;*/
+        /*grid-auto-rows: 100vh;*/
+        height: 100%;
+        width: 100%;
+    }
+
+    .card_container {
+        /*width: 100%;*/
+        /*display: flex;*/
+        display: none;
+    }
+}
+
+.card_container_mobile {
+    height: calc(100vh - 63px);
     display: flex;
 }
 
@@ -51,6 +90,32 @@
 }
 
 .message_input_container {
-    margin-top: 20px;
+    margin-top: 15px;
     padding: 0 10px;
+}
+
+/*big*/
+@media (min-width: 950px) {
+    .chat_footer {
+       display: none;
+    }
+}
+
+/*small*/
+@media (max-width: 950px) {
+    .chat_footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 50px;
+        border-top: 1px solid rgba(128, 128, 128, 0.4);
+        border-left: 1px solid rgba(128, 128, 128, 0.4);
+        border-right: 1px solid rgba(128, 128, 128, 0.4);
+        /*display: flex;*/
+        padding: 10px;
+        /*background-color: rgba(224, 207, 222, 0.17);*/
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        margin-top: 13px;
+    }
 }

@@ -21,7 +21,13 @@ import Title from "antd/es/typography/Title";
 
 const matchTitles = ['Пары', 'Сообщения'];
 
-export const MatchSideBar = () => {
+type IProps = {
+  closeAnotherWindowMobile?: VoidFunction
+}
+
+export const MatchSideBar = ({
+                               closeAnotherWindowMobile
+                             }: IProps) => {
 
   const dispatch = useDispatch();
 
@@ -41,6 +47,9 @@ export const MatchSideBar = () => {
   };
 
   const showChatRoom = (el: any) => () => {
+    if (closeAnotherWindowMobile) {
+      closeAnotherWindowMobile();
+    }
     if (el.chatId) {
       dispatch(setIsOpenChatRoom(true, el.chatId, el.userId));
       return;
