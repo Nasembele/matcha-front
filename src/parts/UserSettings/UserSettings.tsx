@@ -1,16 +1,24 @@
-import React, {useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import style from './UserSettings.module.css';
 import {tagsArray} from "../../components/MainPage/MainPage.helpers";
 import {useDispatch, useSelector} from "react-redux";
 import {IState} from "../../types";
 import {
+  changeAccBirthdayAC,
+  changeAccFirstNameAC, changeAccLastNameAC, changeAccMiddleNameAC,
   changeBiographyAC,
   changeEducationAC, changeGenderAC,
   changePositionAC, changeSexualPreferenceAC, changeTagsAC,
   changeWorkPlaceAC, setPhotoContent, setPhotoParam
 } from "../../components/MainPage/MainPageAC";
-import {authGetUserQuery, changePhotoPostQuery, saveChangeAccPostQuery} from "../../api";
-import {Avatar, Select, Upload} from "antd";
+import {
+  authGetUserQuery,
+  changeAccEmailPostQuery, changeAccPassPostQuery,
+  changePhotoPostQuery,
+  saveChangeAccPostQuery,
+  updateAccountSettings
+} from "../../api";
+import {Avatar, Button, DatePicker, Select, Upload} from "antd";
 import {
   DeleteOutlined,
   LeftOutlined,
@@ -20,6 +28,10 @@ import {
   UserOutlined
 } from "@ant-design/icons";
 import {Input} from 'antd';
+import Title from "antd/es/typography/Title";
+import cc from "classnames";
+import {changeRegBirthdayAC} from "../../components/Login/LoginAC";
+import moment from 'moment';
 
 const {TextArea} = Input;
 const {Option} = Select;
@@ -45,9 +57,13 @@ const UserSettings = ({}: Props) => {
 
   const dispatch = useDispatch();
 
-  const userAccount = useSelector((state: IState) => state.mainPage.account);
+  const mainPage = useSelector((state: IState) => state.mainPage);
+  const userAccount = mainPage.account;
 
   const [photoIndex, setPhotoIndex] = useState(0);
+
+  const [isShowChangeEmail, setIsShowChangeEmail] = useState(false);
+  const [isShowChangePass, setIsShowChangePass] = useState(false);
 
   const options: any = [];
 
@@ -123,13 +139,46 @@ const UserSettings = ({}: Props) => {
       }
     );
   }
+
   const deletePhoto = (number: number) => (e: any) => {
     dispatch(changePhotoPostQuery(number, 'delete'));
     dispatch(authGetUserQuery());
   };
 
+  const changeFirstAccName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+    dispatch(changeAccFirstNameAC(value));
+  }
+
+  const changeAccLastName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+    dispatch(changeAccLastNameAC(value));
+  }
+
+  const changeAccMiddleName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+    dispatch(changeAccMiddleNameAC(value));
+  }
+
+  const saveChangedFIO = () => {
+    const newFio = `${mainPage.account.lastName} ${mainPage.account.firstName} ${mainPage.account.middleName}`;
+    dispatch(updateAccountSettings("fio", newFio));
+  }
+
+  const changeAccBirthday = (date: any, dateString: string) => {
+    dispatch(changeAccBirthdayAC(dateString));
+    dispatch(updateAccountSettings("birthDate", dateString));
+  }
+
+  const changeAccEmail = () => {
+    dispatch(changeAccEmailPostQuery());
+    setIsShowChangeEmail(true);
+  }
+
+  const changeAccPass = () => {
+    dispatch(changeAccPassPostQuery());
+    setIsShowChangePass(true);
+  }
+
   return (
-    <div className={style.wrapper}>
+    <div>
       <div>
         <div>
           {`${userAccount.lastName} ${userAccount.firstName} ${userAccount.middleName}`}
@@ -184,6 +233,7 @@ const UserSettings = ({}: Props) => {
           size={'small'}
           defaultValue={userAccount.card.gender}
           className={style.elem}
+          onBlur={onClickSaveChangesAcc}
         >
           <Option value="male">М</Option>
           <Option value="female">Ж</Option>
@@ -196,6 +246,7 @@ const UserSettings = ({}: Props) => {
           size={'small'}
           style={{width: '90px', marginLeft: '10px'}}
           defaultValue={userAccount.card.sexualPreference}
+          onBlur={onClickSaveChangesAcc}
         >
           <Option value="getero">гетеро</Option>
           <Option value="bisexual">би</Option>
@@ -243,6 +294,55 @@ const UserSettings = ({}: Props) => {
         />
 
         <Select {...selectProps} className={style.elem}/>
+      </div>
+      <div>
+
+        <Title level={5} className={style.title}>
+          Настройки аккаунта
+        </Title>
+
+        <div className={style.content}>
+
+          <Input type={'text'} onChange={changeFirstAccName}
+                 value={userAccount.firstName}
+                 onBlur={saveChangedFIO}/>
+
+          <Input type={'text'} onChange={changeAccMiddleName} className={style.elem}
+                 value={userAccount.middleName}
+                 onBlur={saveChangedFIO}/>
+
+          <Input type={'text'} onChange={changeAccLastName} className={style.elem}
+                 value={userAccount.lastName}
+                 onBlur={saveChangedFIO}/>
+
+          <DatePicker onChange={changeAccBirthday}
+                      placeholder={'дата рождения'}
+                      value={moment(userAccount.birthday)}
+                      className={cc(style.whole_wide, style.elem)}
+                      allowClear={false}/>
+
+          <Button className={cc(style.elem, style.change_button)}
+                  onClick={changeAccEmail}>
+            Поменять email
+          </Button>
+          {isShowChangeEmail &&
+          <div className={style.text_answer}>
+            Перейдите по ссылке из почты
+          </div>
+          }
+
+          <Button className={cc(style.elem, style.change_button)}
+                  onClick={changeAccPass}>
+            Поменять пароль
+          </Button>
+          {isShowChangePass &&
+          <div className={style.text_answer}>
+            Перейдите по ссылке из почты
+          </div>
+          }
+
+
+        </div>
       </div>
     </div>
   )

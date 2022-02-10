@@ -229,7 +229,8 @@ const Login = () => {
 
                         {/*<div className={style.form_header}>Дата рождения</div>*/}
                         {/*<Input type={'date'} onBlur={changeRegBirthday} className={style.form_input}/>*/}
-                        <DatePicker onChange={changeRegBirthday} placeholder={'дата рождения'} className={cc(style.whole_wide, style.input_margin)}/>
+                        <DatePicker onChange={changeRegBirthday} placeholder={'дата рождения'} className={cc(style.whole_wide, style.input_margin)}
+                                    allowClear={false}/>
 
                         {/*<div className={style.form_header}>Пол</div>*/}
                         <Select onChange={changeRegGender} placeholder={'пол'} className={cc(style.whole_wide, style.input_margin)}>

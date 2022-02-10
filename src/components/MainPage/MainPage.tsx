@@ -170,9 +170,9 @@ const MainPage = (state: IState) => {
   // const [isSaveChange, setIsSaveChange] = useState(false); //выключать при логауте
   const [isOpenFilter, setIsOpenFilter] = useState(false); //выключать при логауте
 
-  const [isShowChangeBirthday, setIsShowChangeBirthday] = useState(false);
-  const [isShowChangeEmail, setIsShowChangeEmail] = useState(false);
-  const [isShowChangePass, setIsShowChangePass] = useState(false);
+  // const [isShowChangeBirthday, setIsShowChangeBirthday] = useState(false);
+  // const [isShowChangeEmail, setIsShowChangeEmail] = useState(false);
+  // const [isShowChangePass, setIsShowChangePass] = useState(false);
 
   const [isShowUserCardMobile, setIsShowUserCardMobile] = useState(false);
   const [isShowMatchSideBarMobile, setIsShowMatchSideBarMobile] = useState(false);
@@ -370,11 +370,11 @@ const MainPage = (state: IState) => {
   //   dispatch(changePhotoPostQuery(number, 'delete'));
   //   dispatch(authGetUserQuery());
   // };
-
-  const saveChangedFIO = () => {
-    const newFio = `${mainPage.account.lastName} ${mainPage.account.firstName} ${mainPage.account.middleName}`;
-    dispatch(updateAccountSettings("fio", newFio));
-  }
+  //
+  // const saveChangedFIO = () => {
+  //   const newFio = `${mainPage.account.lastName} ${mainPage.account.firstName} ${mainPage.account.middleName}`;
+  //   dispatch(updateAccountSettings("fio", newFio));
+  // }
 
   const saveChangedBirthday = () => {
     dispatch(updateAccountSettings("birthDate", mainPage.account.birthday));
@@ -386,36 +386,36 @@ const MainPage = (state: IState) => {
   //сделать кнопук удаления каждой отдельной фотки и после этого обновлять инфу
 
 
-  const changeFirstAccName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeAccFirstNameAC(value));
-  }
+  // const changeFirstAccName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+  //   dispatch(changeAccFirstNameAC(value));
+  // }
+  //
+  // const changeAccLastName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+  //   dispatch(changeAccLastNameAC(value));
+  // }
+  //
+  // const changeAccMiddleName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+  //   dispatch(changeAccMiddleNameAC(value));
+  // }
 
-  const changeAccLastName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeAccLastNameAC(value));
-  }
+  // const changeAccBirthday = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+  //   dispatch(changeAccBirthdayAC(value));
+  //   dispatch(updateAccountSettings("birthDate", value));
+  // }
 
-  const changeAccMiddleName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeAccMiddleNameAC(value));
-  }
+  // const changeShowBirthday = () => {
+  //   setIsShowChangeBirthday(true);
+  // }
 
-  const changeAccBirthday = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeAccBirthdayAC(value));
-    dispatch(updateAccountSettings("birthDate", value));
-  }
-
-  const changeShowBirthday = () => {
-    setIsShowChangeBirthday(true);
-  }
-
-  const changeAccEmail = () => {
-    dispatch(changeAccEmailPostQuery());
-    setIsShowChangeEmail(true);
-  }
-
-  const changeAccPass = () => {
-    dispatch(changeAccPassPostQuery());
-    setIsShowChangePass(true);
-  }
+  // const changeAccEmail = () => {
+  //   dispatch(changeAccEmailPostQuery());
+  //   setIsShowChangeEmail(true);
+  // }
+  //
+  // const changeAccPass = () => {
+  //   dispatch(changeAccPassPostQuery());
+  //   setIsShowChangePass(true);
+  // }
 
   const getUsersByFilters = () => {
     //запрос на фильтры
@@ -475,280 +475,47 @@ const MainPage = (state: IState) => {
         <MatchSideBar closeAnotherWindowMobile={closeAnotherWindowMobile}/>
       </div>
       <div className={style.main_field}>
-        {/*//todo*/}
-{/*        {chosenIndex === 1 &&*/}
-{/*        <div>*/}
-{/*          <div className={style.button_acc} onClick={closeAccountSetting}>Выйти из настроек аккаунта</div>*/}
-{/*          <div>*/}
-{/*            <div className={style.content}>*/}
-{/*              <div className={style.form_header}>Имя</div>*/}
-{/*              <span>{mainPage.account.firstName}</span>*/}
 
-{/*              <div className={style.form_header}>Отчество</div>*/}
-{/*              <span>{mainPage.account.middleName}</span>*/}
+      {/*  {chosenIndex === 0 &&*/}
+      {/*  // <div className={style.button_acc} onClick={openAccountSetting}>Аккаунт</div>*/}
+      {/*  // <div className={style.button_acc} onClick={openAccountProperties}>Настройки аккаунта</div>*/}
+      {/*  // <div className={style.button_acc} onClick={openUserFilter}>Фильтр</div>*/}
+      {/*  // {<div className={style.button_acc} onClick={closeUserFilter}>Закрыть фильтр</div>}*/}
 
-{/*              <div className={style.form_header}>Фамилия</div>*/}
-{/*              <span>{mainPage.account.lastName}</span>*/}
-
-{/*              <div className={style.form_header}>Возраст</div>*/}
-{/*              <span>{mainPage.account.yearsOld}</span>*/}
-
-{/*              <div className={style.form_header}>Главное фото</div>*/}
-{/*              {!mainPage.account.card.photos[0]?.content &&*/}
-{/*              <input type="file" id="file" name="file" onChange={changePhoto(0)}/>}*/}
-
-{/*              {mainPage.account.card.photos[0]?.content &&*/}
-{/*              <span>*/}
-{/*                <img height='100px'*/}
-{/*                     src={`data:${mainPage.account.card.photos[0]?.format};base64,${mainPage.account.card.photos[0]?.content}`}*/}
-{/*                     alt='фото 1'/>*/}
-{/*                <div onClick={deletePhoto(0)}>Удалить фото</div>*/}
-
-{/*                <div className={style.form_header}>Фото 2</div>*/}
-{/*                {!mainPage.account.card.photos[1]?.content &&*/}
-{/*                <input type="file" id="file" name="file" onChange={changePhoto(1)}/>}*/}
-{/*              </span>*/}
-{/*              }*/}
-
-{/*              {mainPage.account.card.photos[1]?.content &&*/}
-{/*              <span>*/}
-{/*                            <img height='100px'*/}
-{/*                                 src={`data:${mainPage.account.card.photos[1]?.format};base64,${mainPage.account.card.photos[1]?.content}`}*/}
-{/*                                 alt='фото 2'/>*/}
-{/*                <div onClick={deletePhoto(1)}>Удалить фото</div>*/}
-
-{/*                            <div className={style.form_header}>Фото 3</div>*/}
-{/*                {!mainPage.account.card.photos[2]?.content &&*/}
-{/*                <input type="file" id="file" name="file" onChange={changePhoto(2)}/>}*/}
-{/*                                  </span>}*/}
-
-{/*              {mainPage.account.card.photos[2]?.content &&*/}
-{/*              <span>*/}
-{/*                            <img height='100px'*/}
-{/*                                 src={`data:${mainPage.account.card.photos[2]?.format};base64,${mainPage.account.card.photos[2]?.content}`}*/}
-{/*                                 alt='фото 3'/>*/}
-{/*                <div onClick={deletePhoto(2)}>Удалить фото</div>*/}
-
-{/*                            <div className={style.form_header}>Фото 4</div>*/}
-{/*                {!mainPage.account.card.photos[3]?.content &&*/}
-{/*                <input type="file" id="file" name="file" onChange={changePhoto(3)}/>}*/}
-{/*</span>}*/}
-{/*              {mainPage.account.card.photos[3]?.content &&*/}
-{/*              <span>*/}
-{/*                            <img height='100px'*/}
-{/*                                 src={`data:${mainPage.account.card.photos[3]?.format};base64,${mainPage.account.card.photos[3]?.content}`}*/}
-{/*                                 alt='фото 4'/>*/}
-{/*                <div onClick={deletePhoto(3)}>Удалить фото</div>*/}
-
-{/*                            <div className={style.form_header}>Фото 5</div>*/}
-{/*                {!mainPage.account.card.photos[4]?.content &&*/}
-{/*                <input type="file" id="file" name="file" onChange={changePhoto(4)}/>}*/}
-{/*                                    </span>}*/}
-
-{/*              {mainPage.account.card.photos[4]?.content &&*/}
-{/*              <span>*/}
-{/*                            <img height='100px'*/}
-{/*                                 src={`data:${mainPage.account.card.photos[4]?.format};base64,${mainPage.account.card.photos[4]?.content}`}*/}
-{/*                                 alt='фото 5'/>*/}
-{/*                                <div onClick={deletePhoto(4)}>Удалить фото</div>*/}
-
-{/*</span>}*/}
-{/*              <div className={style.form_header}>Месторасположение</div>*/}
-{/*              <span>{mainPage.account.location}</span>*/}
-
-{/*              <div className={style.form_header}>Рейтинг</div>*/}
-{/*              <span>{mainPage.account.card.rating}</span>*/}
-
-{/*              <div className={style.form_header}>Пол</div>*/}
-{/*              <select onChange={changeGender}>*/}
-{/*                <option>{'Не выбрано'}</option>*/}
-{/*                <option value={'male'} selected={mainPage.account.card.gender === 'male'}>{'M'}</option>*/}
-{/*                <option value={'female'} selected={mainPage.account.card.gender === 'female'}>{'Ж'}</option>*/}
-{/*              </select>*/}
-
-{/*              <div className={style.form_header}>Сексуальные предпочтения</div>*/}
-{/*              <select onChange={changeSexualPreference}>*/}
-{/*                <option>{'Не выбрано'}</option>*/}
-{/*                <option value={'getero'}*/}
-{/*                        selected={mainPage.account.card.sexualPreference === 'getero'}>{'гетеро'}</option>*/}
-{/*                <option value={'bisexual'}*/}
-{/*                        selected={mainPage.account.card.sexualPreference === 'bisexual'}>{'би'}</option>*/}
-{/*                {mainPage.account?.card?.gender === 'male' &&*/}
-{/*                <option value={'gay'} selected={mainPage.account.card.sexualPreference === 'gay'}>{'гей'}</option>}*/}
-{/*                {mainPage.account?.card?.gender === 'female' &&*/}
-{/*                <option value={'lesbi'}*/}
-{/*                        selected={mainPage.account.card.sexualPreference === 'lesbi'}>{'лесби'}</option>}*/}
-{/*              </select>*/}
-
-{/*              <div className={style.form_header}>Биография</div>*/}
-{/*              <textarea onChange={changeBiography} className={style.form_input}*/}
-{/*                        value={mainPage.account?.card?.biography}/>*/}
-
-{/*              /!*<div className={style.form_header}>Фото</div>*!/*/}
-
-{/*              <div className={style.form_header}>Образование</div>*/}
-{/*              <textarea onChange={changeEducation} className={style.form_input}*/}
-{/*                        value={mainPage.account?.card?.education}/>*/}
-
-
-{/*              <div className={style.form_header}>Место работы</div>*/}
-{/*              <textarea onChange={changeWorkPlace} className={style.form_input}*/}
-{/*                        value={mainPage.account?.card?.workPlace}/>*/}
-
-
-{/*              <div className={style.form_header}>Должность</div>*/}
-{/*              <textarea onChange={changePosition} className={style.form_input}*/}
-{/*                        value={mainPage.account?.card?.position}/>*/}
-
-
-{/*              <div className={style.form_header}>Интересы</div>*/}
-{/*              <div className={style.tags}>*/}
-{/*                {hasChangeTags &&*/}
-{/*                <select*/}
-{/*                  onChange={changeTags} multiple={true} size={10}*/}
-{/*                >*/}
-{/*                  {tagsArray.map((item: string) => {*/}
-{/*                    return <option key={item}>{item}</option>*/}
-{/*                  })}*/}
-{/*                </select>}*/}
-
-{/*                <div>*/}
-{/*                  {mainPage.account?.card?.tags?.map((item: string) => {*/}
-{/*                    return <div>{item}</div>*/}
-{/*                  })}*/}
-{/*                </div>*/}
-{/*              </div>*/}
-
-{/*              {!hasChangeTags &&*/}
-{/*              <button className={style.change_button} onClick={onClickChangeTags}>*/}
-{/*                Изменить*/}
-{/*              </button>}*/}
-{/*              <div>*/}
-{/*                <button onClick={onClickSaveChangesAcc}>*/}
-{/*                  Сохранить*/}
-{/*                </button>*/}
-{/*              </div>*/}
-{/*              {*/}
-{/*                isSaveChange &&*/}
-{/*                <div>Изменения сохранены</div>*/}
-{/*              }*/}
-{/*            </div>*/}
-{/*          </div>*/}
-{/*        </div>}*/}
-
-        {chosenIndex === 2 &&
-        <div>
-          <div className={style.button_acc} onClick={closeAccountSetting}>Выйти из настроек аккаунта</div>
-          <div>
-            <div className={style.content}>
-
-              <div className={style.form_header}>Имя</div>
-              <input type={'text'} onChange={changeFirstAccName} className={style.form_input}
-                     value={mainPage.account.firstName}/>
-
-              <div className={style.form_header}>Отчество</div>
-              <input type={'text'} onChange={changeAccMiddleName} className={style.form_input}
-                     value={mainPage.account.middleName}/>
-
-
-              <div className={style.form_header}>Фамилия</div>
-              <input type={'text'} onChange={changeAccLastName} className={style.form_input}
-                     value={mainPage.account.lastName}/>
-
-              <button onClick={saveChangedFIO}>
-                Сохранить изменения
-              </button>
-
-              <div className={style.form_header}>Дата рождения</div>
-
-              <div>{mainPage.account.birthday}</div>
-
-              {
-                !isShowChangeBirthday &&
-                <button onClick={changeShowBirthday}>
-                  Поменять дату рождения
-                </button>
-              }
-              {isShowChangeBirthday &&
-              <input className={style.form_input} type={'date'}
-                     onChange={changeAccBirthday}
-                     value={mainPage.account.birthday}/>}
-
-              {/*<button onClick={saveChangedBirthday}>*/}
-              {/*  Сохранить изменения*/}
-              {/*</button>*/}
-
-
-              <div className={style.form_header}>e-mail</div>
-              <button onClick={changeAccEmail}>
-                Поменять email
-              </button>
-              {isShowChangeEmail &&
-              <div>{'Перейдите по ссылке из почты'}</div>
-              }
-              {/*TODO change pass*/}
-
-              <div className={style.form_header}>Пароль</div>
-              <button onClick={changeAccPass}>
-                Поменять пароль
-              </button>
-              {isShowChangePass &&
-              <div>{'Перейдите по ссылке из почты'}</div>
-              }
-
-              {mainPage.changeAccountSetting.isValidPrevEmail &&
-              <div>
-
-              </div>
-              }
-
-              {/*<input className={style.form_input}*/}
-              {/*       value={login.authData.email}/>*/}
-
-            </div>
-          </div>
-        </div>}
-
-        {chosenIndex === 0 &&
-        // <div className={style.button_acc} onClick={openAccountSetting}>Аккаунт</div>
-        // <div className={style.button_acc} onClick={openAccountProperties}>Настройки аккаунта</div>
-        // <div className={style.button_acc} onClick={openUserFilter}>Фильтр</div>
-        // {<div className={style.button_acc} onClick={closeUserFilter}>Закрыть фильтр</div>}
-
-        // {isOpenFilter &&
-        // <div>
-        //   <div className={style.button_acc} onClick={closeUserFilter}>Закрыть фильтр</div>
-        //   <div className={style.userFilter}>
-        //     <p>Фильтр
-        //     </p>
-        //     <p>Возраст
-        //       <div>От
-        //         <input type='number' onChange={setFilterAge("start")} value={mainPage.userFilters.ageBy}/>
-        //       </div>
-        //       <div>До
-        //         <input type='number' onChange={setFilterAge("end")} value={mainPage.userFilters.ageTo}/>
-        //       </div>
-        //     </p>
-        //     <p>Рейтинг
-        //       <div>
-        //         <input type='number' onChange={setFilterRating} value={mainPage.userFilters.rating}/>
-        //       </div>
-        //     </p>
-        //     <p>Количество общих интересов
-        //       <div>
-        //         <input type='number' onChange={setFilterCommonTags} value={mainPage.userFilters.commonTagsCount}/>
-        //       </div>
-        //     </p>
-        //     <p>Месторасположение
-        //       <div>
-        //         <input type='text' onChange={setFilterLocation} value={mainPage.userFilters.location}/>
-        //       </div>
-        //     </p>
-        //     <button onClick={getUsersByFilters}>Поиск</button>
-        //   </div>
-        // </div>
-        // }
-        mainPage.users[userIndex]
+      {/*  // {isOpenFilter &&*/}
+      {/*  // <div>*/}
+      {/*  //   <div className={style.button_acc} onClick={closeUserFilter}>Закрыть фильтр</div>*/}
+      {/*  //   <div className={style.userFilter}>*/}
+      {/*  //     <p>Фильтр*/}
+      {/*  //     </p>*/}
+      {/*  //     <p>Возраст*/}
+      {/*  //       <div>От*/}
+      {/*  //         <input type='number' onChange={setFilterAge("start")} value={mainPage.userFilters.ageBy}/>*/}
+      {/*  //       </div>*/}
+      {/*  //       <div>До*/}
+      {/*  //         <input type='number' onChange={setFilterAge("end")} value={mainPage.userFilters.ageTo}/>*/}
+      {/*  //       </div>*/}
+      {/*  //     </p>*/}
+      {/*  //     <p>Рейтинг*/}
+      {/*  //       <div>*/}
+      {/*  //         <input type='number' onChange={setFilterRating} value={mainPage.userFilters.rating}/>*/}
+      {/*  //       </div>*/}
+      {/*  //     </p>*/}
+      {/*  //     <p>Количество общих интересов*/}
+      {/*  //       <div>*/}
+      {/*  //         <input type='number' onChange={setFilterCommonTags} value={mainPage.userFilters.commonTagsCount}/>*/}
+      {/*  //       </div>*/}
+      {/*  //     </p>*/}
+      {/*  //     <p>Месторасположение*/}
+      {/*  //       <div>*/}
+      {/*  //         <input type='text' onChange={setFilterLocation} value={mainPage.userFilters.location}/>*/}
+      {/*  //       </div>*/}
+      {/*  //     </p>*/}
+      {/*  //     <button onClick={getUsersByFilters}>Поиск</button>*/}
+      {/*  //   </div>*/}
+      {/*  // </div>*/}
+      {/*  // }*/}
+        {chosenIndex !== 3 && mainPage.users[userIndex]
         && <div className={style.card_wrapper}>
           <UserCard user={mainPage.users[userIndex]} isCurrentUser={false}/>
         </div>}

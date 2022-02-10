@@ -24,6 +24,12 @@
     margin-top: 10px;
 }
 
+.change_button {
+    color: rgb(53, 138, 217) !important;;
+    background: #ffffff !important;
+    border: 1px solid rgb(53, 138, 217) !important;;
+}
+
 .image {
     margin: auto;
 }
@@ -36,4 +42,18 @@
 .empty_image {
     margin: auto;
     height: 200px;
+}
+
+.title {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.whole_wide {
+    width: 100%;
+}
+
+.text_answer {
+    font-size: 13px;
+    font-weight: bold;
 }
