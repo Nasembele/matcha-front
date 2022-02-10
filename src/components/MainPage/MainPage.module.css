@@ -299,4 +299,12 @@
 
 .chat_room_container {
     width: 100%;
+    background-color: rgba(255, 240, 252, 0.27);
+    height: 100%;
+}
+
+.user_settings_wrapper {
+    padding: 10px;
+    height: calc(100% - 60px);
+    overflow-y: scroll;
 }
