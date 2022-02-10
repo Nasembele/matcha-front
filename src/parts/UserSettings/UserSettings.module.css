@@ -1,0 +1,39 @@
+.left_arrow {
+    position: absolute;
+    top: 95px;
+    left: 10px;
+    color: black;
+    cursor: pointer;
+}
+
+.right_arrow {
+    position: absolute;
+    top: 95px;
+    right: 10px;
+    color: black;
+    cursor: pointer;
+}
+
+.user_photos {
+    position: relative;
+    display: flex;
+    margin: 10px 0 15px;
+}
+
+.elem {
+    margin-top: 10px;
+}
+
+.image {
+    margin: auto;
+}
+
+.image_bucket {
+    position: relative;
+    left: 45%;
+}
+
+.empty_image {
+    margin: auto;
+    height: 200px;
+}

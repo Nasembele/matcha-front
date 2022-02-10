@@ -129,20 +129,20 @@ import {DownCircleOutlined, LogoutOutlined, MessageOutlined, UpCircleOutlined} f
 // }
 
 
-const getBase64 = (file: File) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      let encoded = reader.result!.toString().replace(/^data:(.*,)?/, '');
-      if ((encoded.length % 4) > 0) {
-        encoded += '='.repeat(4 - (encoded.length % 4));
-      }
-      resolve(encoded);
-    };
-    reader.onerror = error => reject(error);
-  });
-}
+// const getBase64 = (file: File) => {
+//   return new Promise((resolve, reject) => {
+//     const reader = new FileReader();
+//     reader.readAsDataURL(file);
+//     reader.onload = () => {
+//       let encoded = reader.result!.toString().replace(/^data:(.*,)?/, '');
+//       if ((encoded.length % 4) > 0) {
+//         encoded += '='.repeat(4 - (encoded.length % 4));
+//       }
+//       resolve(encoded);
+//     };
+//     reader.onerror = error => reject(error);
+//   });
+// }
 
 // const chat = useSelector((state: IState) => state.chat);
 // const userId = useSelector((state: IState) => state.mainPage.use);
@@ -153,23 +153,6 @@ const getBase64 = (file: File) => {
 // export const socket = new WebSocket(`ws://localhost:8080/chat/${userIdChat}/${chatToken}/${chatFingerprint}`); //TODO вписать id меня и чата и вынести вотдельный файл
 
 const MainPage = (state: IState) => {
-
-  const fakeUsers = [{
-    id: 1, photoUrl: 'https://i.pinimg.com/originals/f3/ea/14/f3ea147653aee2883c9e54545b8963f9.jpg',
-    followed: false, fullName: "Nadegda", status: "I am frontender", location: {city: 'Ekb', country: 'Russia'}
-  },
-    {
-      id: 2, photoUrl: 'https://i.pinimg.com/originals/f3/ea/14/f3ea147653aee2883c9e54545b8963f9.jpg',
-      followed: true, fullName: "Elena", status: "Hello everybody!", location: {city: 'Ekb', country: 'Russia'}
-    },
-    {
-      id: 3, photoUrl: 'https://i.pinimg.com/originals/f3/ea/14/f3ea147653aee2883c9e54545b8963f9.jpg',
-      followed: true, fullName: "Yurii", status: "How are you?", location: {city: 'Ekb', country: 'Russia'}
-    },
-    {
-      id: 4, photoUrl: 'https://i.pinimg.com/originals/f3/ea/14/f3ea147653aee2883c9e54545b8963f9.jpg',
-      followed: true, fullName: "Andrey", status: "I am cook", location: {city: 'Spb', country: 'Russia'}
-    }]
 
   const dispatch = useDispatch();
 
@@ -182,9 +165,9 @@ const MainPage = (state: IState) => {
 
   const [chosenIndex, setChosenIndex] = useState(0);
   const [hasGetUser, setHasGetUser] = useState(false); //выключать при логауте
-  const [hasChangeTags, setHasChangeTags] = useState(false); //выключать при логауте
+  // const [hasChangeTags, setHasChangeTags] = useState(false); //выключать при логауте
   const [userIndex, setUserIndex] = useState(0); //возможно просто задать 0?
-  const [isSaveChange, setIsSaveChange] = useState(false); //выключать при логауте
+  // const [isSaveChange, setIsSaveChange] = useState(false); //выключать при логауте
   const [isOpenFilter, setIsOpenFilter] = useState(false); //выключать при логауте
 
   const [isShowChangeBirthday, setIsShowChangeBirthday] = useState(false);
@@ -295,38 +278,38 @@ const MainPage = (state: IState) => {
     // dispatch(changeOrientAC(orient.target.value));
   };
 
-  const changeEducation = (education: any) => {
-    dispatch(changeEducationAC(education.target.value));
-  };
-
-  const changeWorkPlace = (workPlace: any) => {
-    dispatch(changeWorkPlaceAC(workPlace.target.value));
-  };
-
-  const changePosition = (position: any) => {
-    dispatch(changePositionAC(position.target.value));
-  };
-
-  const changeBiography = (biography: any) => {
-    dispatch(changeBiographyAC(biography.target.value));
-  };
-
-  const changeTags = (tags: any) => {
-    dispatch(changeTagsAC(tags.target.value));
-    if (mainPage.account.card.tags?.length === 5) {
-      setHasChangeTags(false)
-    }
-  };
-
-  const onClickChangeTags = () => {
-    setHasChangeTags(true)
-    dispatch(deleteTagsAC());
-  };
-
-  const onClickSaveChangesAcc = () => {
-    dispatch(saveChangeAccPostQuery(mainPage.account.card));
-    setIsSaveChange(true);
-  };
+  // const changeEducation = (education: any) => {
+  //   dispatch(changeEducationAC(education.target.value));
+  // };
+  //
+  // const changeWorkPlace = (workPlace: any) => {
+  //   dispatch(changeWorkPlaceAC(workPlace.target.value));
+  // };
+  //
+  // const changePosition = (position: any) => {
+  //   dispatch(changePositionAC(position.target.value));
+  // };
+  //
+  // const changeBiography = (biography: any) => {
+  //   dispatch(changeBiographyAC(biography.target.value));
+  // };
+  //
+  // const changeTags = (tags: any) => {
+  //   dispatch(changeTagsAC(tags.target.value));
+  //   if (mainPage.account.card.tags?.length === 5) {
+  //     setHasChangeTags(false)
+  //   }
+  // };
+  //
+  // const onClickChangeTags = () => {
+  //   setHasChangeTags(true)
+  //   dispatch(deleteTagsAC());
+  // };
+  //
+  // const onClickSaveChangesAcc = () => {
+  //   dispatch(saveChangeAccPostQuery(mainPage.account.card));
+  //   setIsSaveChange(true);
+  // };
 
   const onClickLikeUser = () => {
     dispatch(likeUserPutQuery(mainPage.users[userIndex]?.id, 'LIKE'));
@@ -365,28 +348,28 @@ const MainPage = (state: IState) => {
   //   dispatch(logoutGetQuery());
   // }
 
-  const changeGender = (e: React.FormEvent<HTMLSelectElement>) => {
-    dispatch(changeGenderAC(e.currentTarget.value));
-  };
+  // const changeGender = (e: React.FormEvent<HTMLSelectElement>) => {
+  //   dispatch(changeGenderAC(e.currentTarget.value));
+  // };
+  //
+  // const changeSexualPreference = (e: React.FormEvent<HTMLSelectElement>) => {
+  //   dispatch(changeSexualPreferenceAC(e.currentTarget.value));
+  // };
 
-  const changeSexualPreference = (e: React.FormEvent<HTMLSelectElement>) => {
-    dispatch(changeSexualPreferenceAC(e.currentTarget.value));
-  };
-
-  const changePhoto = (number: number) => (e: any) => {
-    dispatch(setPhotoParam(number, e.target.files[0].name, e.target.files[0].type));
-    getBase64(e.target.files[0]).then(
-      res => {
-        dispatch(setPhotoContent(res, number));
-        dispatch(changePhotoPostQuery(number, 'save'));
-        // dispatch(authGetUserQuery()); TODO открыть когда заработает запрос
-      }
-    );
-  }
-  const deletePhoto = (number: number) => (e: any) => {
-    dispatch(changePhotoPostQuery(number, 'delete'));
-    dispatch(authGetUserQuery());
-  };
+  // const changePhoto = (number: number) => (e: any) => {
+  //   dispatch(setPhotoParam(number, e.target.files[0].name, e.target.files[0].type));
+  //   getBase64(e.target.files[0]).then(
+  //     res => {
+  //       dispatch(setPhotoContent(res, number));
+  //       dispatch(changePhotoPostQuery(number, 'save'));
+  //       // dispatch(authGetUserQuery()); TODO открыть когда заработает запрос
+  //     }
+  //   );
+  // }
+  // const deletePhoto = (number: number) => (e: any) => {
+  //   dispatch(changePhotoPostQuery(number, 'delete'));
+  //   dispatch(authGetUserQuery());
+  // };
 
   const saveChangedFIO = () => {
     const newFio = `${mainPage.account.lastName} ${mainPage.account.firstName} ${mainPage.account.middleName}`;
@@ -492,165 +475,166 @@ const MainPage = (state: IState) => {
         <MatchSideBar closeAnotherWindowMobile={closeAnotherWindowMobile}/>
       </div>
       <div className={style.main_field}>
-        {chosenIndex === 1 &&
-        <div>
-          <div className={style.button_acc} onClick={closeAccountSetting}>Выйти из настроек аккаунта</div>
-          <div>
-            <div className={style.content}>
-              <div className={style.form_header}>Имя</div>
-              <span>{mainPage.account.firstName}</span>
+        {/*//todo*/}
+{/*        {chosenIndex === 1 &&*/}
+{/*        <div>*/}
+{/*          <div className={style.button_acc} onClick={closeAccountSetting}>Выйти из настроек аккаунта</div>*/}
+{/*          <div>*/}
+{/*            <div className={style.content}>*/}
+{/*              <div className={style.form_header}>Имя</div>*/}
+{/*              <span>{mainPage.account.firstName}</span>*/}
 
-              <div className={style.form_header}>Отчество</div>
-              <span>{mainPage.account.middleName}</span>
+{/*              <div className={style.form_header}>Отчество</div>*/}
+{/*              <span>{mainPage.account.middleName}</span>*/}
 
-              <div className={style.form_header}>Фамилия</div>
-              <span>{mainPage.account.lastName}</span>
+{/*              <div className={style.form_header}>Фамилия</div>*/}
+{/*              <span>{mainPage.account.lastName}</span>*/}
 
-              <div className={style.form_header}>Возраст</div>
-              <span>{mainPage.account.yearsOld}</span>
+{/*              <div className={style.form_header}>Возраст</div>*/}
+{/*              <span>{mainPage.account.yearsOld}</span>*/}
 
-              <div className={style.form_header}>Главное фото</div>
-              {!mainPage.account.card.photos[0]?.content &&
-              <input type="file" id="file" name="file" onChange={changePhoto(0)}/>}
+{/*              <div className={style.form_header}>Главное фото</div>*/}
+{/*              {!mainPage.account.card.photos[0]?.content &&*/}
+{/*              <input type="file" id="file" name="file" onChange={changePhoto(0)}/>}*/}
 
-              {mainPage.account.card.photos[0]?.content &&
-              <span>
-                <img height='100px'
-                     src={`data:${mainPage.account.card.photos[0]?.format};base64,${mainPage.account.card.photos[0]?.content}`}
-                     alt='фото 1'/>
-                <div onClick={deletePhoto(0)}>Удалить фото</div>
+{/*              {mainPage.account.card.photos[0]?.content &&*/}
+{/*              <span>*/}
+{/*                <img height='100px'*/}
+{/*                     src={`data:${mainPage.account.card.photos[0]?.format};base64,${mainPage.account.card.photos[0]?.content}`}*/}
+{/*                     alt='фото 1'/>*/}
+{/*                <div onClick={deletePhoto(0)}>Удалить фото</div>*/}
 
-                <div className={style.form_header}>Фото 2</div>
-                {!mainPage.account.card.photos[1]?.content &&
-                <input type="file" id="file" name="file" onChange={changePhoto(1)}/>}
-              </span>
-              }
+{/*                <div className={style.form_header}>Фото 2</div>*/}
+{/*                {!mainPage.account.card.photos[1]?.content &&*/}
+{/*                <input type="file" id="file" name="file" onChange={changePhoto(1)}/>}*/}
+{/*              </span>*/}
+{/*              }*/}
 
-              {mainPage.account.card.photos[1]?.content &&
-              <span>
-                            <img height='100px'
-                                 src={`data:${mainPage.account.card.photos[1]?.format};base64,${mainPage.account.card.photos[1]?.content}`}
-                                 alt='фото 2'/>
-                <div onClick={deletePhoto(1)}>Удалить фото</div>
+{/*              {mainPage.account.card.photos[1]?.content &&*/}
+{/*              <span>*/}
+{/*                            <img height='100px'*/}
+{/*                                 src={`data:${mainPage.account.card.photos[1]?.format};base64,${mainPage.account.card.photos[1]?.content}`}*/}
+{/*                                 alt='фото 2'/>*/}
+{/*                <div onClick={deletePhoto(1)}>Удалить фото</div>*/}
 
-                            <div className={style.form_header}>Фото 3</div>
-                {!mainPage.account.card.photos[2]?.content &&
-                <input type="file" id="file" name="file" onChange={changePhoto(2)}/>}
-                                  </span>}
+{/*                            <div className={style.form_header}>Фото 3</div>*/}
+{/*                {!mainPage.account.card.photos[2]?.content &&*/}
+{/*                <input type="file" id="file" name="file" onChange={changePhoto(2)}/>}*/}
+{/*                                  </span>}*/}
 
-              {mainPage.account.card.photos[2]?.content &&
-              <span>
-                            <img height='100px'
-                                 src={`data:${mainPage.account.card.photos[2]?.format};base64,${mainPage.account.card.photos[2]?.content}`}
-                                 alt='фото 3'/>
-                <div onClick={deletePhoto(2)}>Удалить фото</div>
+{/*              {mainPage.account.card.photos[2]?.content &&*/}
+{/*              <span>*/}
+{/*                            <img height='100px'*/}
+{/*                                 src={`data:${mainPage.account.card.photos[2]?.format};base64,${mainPage.account.card.photos[2]?.content}`}*/}
+{/*                                 alt='фото 3'/>*/}
+{/*                <div onClick={deletePhoto(2)}>Удалить фото</div>*/}
 
-                            <div className={style.form_header}>Фото 4</div>
-                {!mainPage.account.card.photos[3]?.content &&
-                <input type="file" id="file" name="file" onChange={changePhoto(3)}/>}
-</span>}
-              {mainPage.account.card.photos[3]?.content &&
-              <span>
-                            <img height='100px'
-                                 src={`data:${mainPage.account.card.photos[3]?.format};base64,${mainPage.account.card.photos[3]?.content}`}
-                                 alt='фото 4'/>
-                <div onClick={deletePhoto(3)}>Удалить фото</div>
+{/*                            <div className={style.form_header}>Фото 4</div>*/}
+{/*                {!mainPage.account.card.photos[3]?.content &&*/}
+{/*                <input type="file" id="file" name="file" onChange={changePhoto(3)}/>}*/}
+{/*</span>}*/}
+{/*              {mainPage.account.card.photos[3]?.content &&*/}
+{/*              <span>*/}
+{/*                            <img height='100px'*/}
+{/*                                 src={`data:${mainPage.account.card.photos[3]?.format};base64,${mainPage.account.card.photos[3]?.content}`}*/}
+{/*                                 alt='фото 4'/>*/}
+{/*                <div onClick={deletePhoto(3)}>Удалить фото</div>*/}
 
-                            <div className={style.form_header}>Фото 5</div>
-                {!mainPage.account.card.photos[4]?.content &&
-                <input type="file" id="file" name="file" onChange={changePhoto(4)}/>}
-                                    </span>}
+{/*                            <div className={style.form_header}>Фото 5</div>*/}
+{/*                {!mainPage.account.card.photos[4]?.content &&*/}
+{/*                <input type="file" id="file" name="file" onChange={changePhoto(4)}/>}*/}
+{/*                                    </span>}*/}
 
-              {mainPage.account.card.photos[4]?.content &&
-              <span>
-                            <img height='100px'
-                                 src={`data:${mainPage.account.card.photos[4]?.format};base64,${mainPage.account.card.photos[4]?.content}`}
-                                 alt='фото 5'/>
-                                <div onClick={deletePhoto(4)}>Удалить фото</div>
+{/*              {mainPage.account.card.photos[4]?.content &&*/}
+{/*              <span>*/}
+{/*                            <img height='100px'*/}
+{/*                                 src={`data:${mainPage.account.card.photos[4]?.format};base64,${mainPage.account.card.photos[4]?.content}`}*/}
+{/*                                 alt='фото 5'/>*/}
+{/*                                <div onClick={deletePhoto(4)}>Удалить фото</div>*/}
 
-</span>}
-              <div className={style.form_header}>Месторасположение</div>
-              <span>{mainPage.account.location}</span>
+{/*</span>}*/}
+{/*              <div className={style.form_header}>Месторасположение</div>*/}
+{/*              <span>{mainPage.account.location}</span>*/}
 
-              <div className={style.form_header}>Рейтинг</div>
-              <span>{mainPage.account.card.rating}</span>
+{/*              <div className={style.form_header}>Рейтинг</div>*/}
+{/*              <span>{mainPage.account.card.rating}</span>*/}
 
-              <div className={style.form_header}>Пол</div>
-              <select onChange={changeGender}>
-                <option>{'Не выбрано'}</option>
-                <option value={'male'} selected={mainPage.account.card.gender === 'male'}>{'M'}</option>
-                <option value={'female'} selected={mainPage.account.card.gender === 'female'}>{'Ж'}</option>
-              </select>
+{/*              <div className={style.form_header}>Пол</div>*/}
+{/*              <select onChange={changeGender}>*/}
+{/*                <option>{'Не выбрано'}</option>*/}
+{/*                <option value={'male'} selected={mainPage.account.card.gender === 'male'}>{'M'}</option>*/}
+{/*                <option value={'female'} selected={mainPage.account.card.gender === 'female'}>{'Ж'}</option>*/}
+{/*              </select>*/}
 
-              <div className={style.form_header}>Сексуальные предпочтения</div>
-              <select onChange={changeSexualPreference}>
-                <option>{'Не выбрано'}</option>
-                <option value={'getero'}
-                        selected={mainPage.account.card.sexualPreference === 'getero'}>{'гетеро'}</option>
-                <option value={'bisexual'}
-                        selected={mainPage.account.card.sexualPreference === 'bisexual'}>{'би'}</option>
-                {mainPage.account?.card?.gender === 'male' &&
-                <option value={'gay'} selected={mainPage.account.card.sexualPreference === 'gay'}>{'гей'}</option>}
-                {mainPage.account?.card?.gender === 'female' &&
-                <option value={'lesbi'}
-                        selected={mainPage.account.card.sexualPreference === 'lesbi'}>{'лесби'}</option>}
-              </select>
+{/*              <div className={style.form_header}>Сексуальные предпочтения</div>*/}
+{/*              <select onChange={changeSexualPreference}>*/}
+{/*                <option>{'Не выбрано'}</option>*/}
+{/*                <option value={'getero'}*/}
+{/*                        selected={mainPage.account.card.sexualPreference === 'getero'}>{'гетеро'}</option>*/}
+{/*                <option value={'bisexual'}*/}
+{/*                        selected={mainPage.account.card.sexualPreference === 'bisexual'}>{'би'}</option>*/}
+{/*                {mainPage.account?.card?.gender === 'male' &&*/}
+{/*                <option value={'gay'} selected={mainPage.account.card.sexualPreference === 'gay'}>{'гей'}</option>}*/}
+{/*                {mainPage.account?.card?.gender === 'female' &&*/}
+{/*                <option value={'lesbi'}*/}
+{/*                        selected={mainPage.account.card.sexualPreference === 'lesbi'}>{'лесби'}</option>}*/}
+{/*              </select>*/}
 
-              <div className={style.form_header}>Биография</div>
-              <textarea onChange={changeBiography} className={style.form_input}
-                        value={mainPage.account?.card?.biography}/>
+{/*              <div className={style.form_header}>Биография</div>*/}
+{/*              <textarea onChange={changeBiography} className={style.form_input}*/}
+{/*                        value={mainPage.account?.card?.biography}/>*/}
 
-              {/*<div className={style.form_header}>Фото</div>*/}
+{/*              /!*<div className={style.form_header}>Фото</div>*!/*/}
 
-              <div className={style.form_header}>Образование</div>
-              <textarea onChange={changeEducation} className={style.form_input}
-                        value={mainPage.account?.card?.education}/>
-
-
-              <div className={style.form_header}>Место работы</div>
-              <textarea onChange={changeWorkPlace} className={style.form_input}
-                        value={mainPage.account?.card?.workPlace}/>
+{/*              <div className={style.form_header}>Образование</div>*/}
+{/*              <textarea onChange={changeEducation} className={style.form_input}*/}
+{/*                        value={mainPage.account?.card?.education}/>*/}
 
 
-              <div className={style.form_header}>Должность</div>
-              <textarea onChange={changePosition} className={style.form_input}
-                        value={mainPage.account?.card?.position}/>
+{/*              <div className={style.form_header}>Место работы</div>*/}
+{/*              <textarea onChange={changeWorkPlace} className={style.form_input}*/}
+{/*                        value={mainPage.account?.card?.workPlace}/>*/}
 
 
-              <div className={style.form_header}>Интересы</div>
-              <div className={style.tags}>
-                {hasChangeTags &&
-                <select
-                  onChange={changeTags} multiple={true} size={10}
-                >
-                  {tagsArray.map((item: string) => {
-                    return <option key={item}>{item}</option>
-                  })}
-                </select>}
+{/*              <div className={style.form_header}>Должность</div>*/}
+{/*              <textarea onChange={changePosition} className={style.form_input}*/}
+{/*                        value={mainPage.account?.card?.position}/>*/}
 
-                <div>
-                  {mainPage.account?.card?.tags?.map((item: string) => {
-                    return <div>{item}</div>
-                  })}
-                </div>
-              </div>
 
-              {!hasChangeTags &&
-              <button className={style.change_button} onClick={onClickChangeTags}>
-                Изменить
-              </button>}
-              <div>
-                <button onClick={onClickSaveChangesAcc}>
-                  Сохранить
-                </button>
-              </div>
-              {
-                isSaveChange &&
-                <div>Изменения сохранены</div>
-              }
-            </div>
-          </div>
-        </div>}
+{/*              <div className={style.form_header}>Интересы</div>*/}
+{/*              <div className={style.tags}>*/}
+{/*                {hasChangeTags &&*/}
+{/*                <select*/}
+{/*                  onChange={changeTags} multiple={true} size={10}*/}
+{/*                >*/}
+{/*                  {tagsArray.map((item: string) => {*/}
+{/*                    return <option key={item}>{item}</option>*/}
+{/*                  })}*/}
+{/*                </select>}*/}
+
+{/*                <div>*/}
+{/*                  {mainPage.account?.card?.tags?.map((item: string) => {*/}
+{/*                    return <div>{item}</div>*/}
+{/*                  })}*/}
+{/*                </div>*/}
+{/*              </div>*/}
+
+{/*              {!hasChangeTags &&*/}
+{/*              <button className={style.change_button} onClick={onClickChangeTags}>*/}
+{/*                Изменить*/}
+{/*              </button>}*/}
+{/*              <div>*/}
+{/*                <button onClick={onClickSaveChangesAcc}>*/}
+{/*                  Сохранить*/}
+{/*                </button>*/}
+{/*              </div>*/}
+{/*              {*/}
+{/*                isSaveChange &&*/}
+{/*                <div>Изменения сохранены</div>*/}
+{/*              }*/}
+{/*            </div>*/}
+{/*          </div>*/}
+{/*        </div>}*/}
 
         {chosenIndex === 2 &&
         <div>

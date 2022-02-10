@@ -76,7 +76,8 @@ export default function MainPageReducer(state: IMainPage = initialState, action:
                     ...state.account,
                     card: {
                         ...state.account.card,
-                        tags: getArrayWithNewEl(state.account.card.tags, action.payload)
+                        // tags: getArrayWithNewEl(state.account.card.tags, action.payload)
+                        tags: action.payload
                     }
                 }
             };

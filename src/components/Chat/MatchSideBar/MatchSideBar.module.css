@@ -54,6 +54,11 @@
 
 /*}*/
 
+.user_settings {
+    height: calc(100% - 75px);
+    overflow-y: scroll;
+}
+
 /*big*/
 @media (min-width: 950px) {
     .sidebar_content {
