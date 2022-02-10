@@ -5,20 +5,31 @@ import {useDispatch, useSelector} from "react-redux";
 import {IState} from "../../types";
 import {
   changeAccBirthdayAC,
-  changeAccFirstNameAC, changeAccLastNameAC, changeAccMiddleNameAC,
+  changeAccFirstNameAC,
+  changeAccLastNameAC,
+  changeAccMiddleNameAC,
   changeBiographyAC,
-  changeEducationAC, changeGenderAC,
-  changePositionAC, changeSexualPreferenceAC, changeTagsAC,
-  changeWorkPlaceAC, setPhotoContent, setPhotoParam
+  changeEducationAC,
+  changeGenderAC,
+  changePositionAC,
+  changeSexualPreferenceAC,
+  changeTagsAC,
+  changeWorkPlaceAC,
+  setEndFilterAgeAC,
+  setFilterCommonTagsAC, setFilterLocationAC,
+  setFilterRatingAC,
+  setPhotoContent,
+  setPhotoParam,
+  setStartFilterAgeAC
 } from "../../components/MainPage/MainPageAC";
 import {
   authGetUserQuery,
   changeAccEmailPostQuery, changeAccPassPostQuery,
   changePhotoPostQuery,
-  saveChangeAccPostQuery,
+  saveChangeAccPostQuery, setUserFilterPutQuery,
   updateAccountSettings
 } from "../../api";
-import {Avatar, Button, DatePicker, Select, Upload} from "antd";
+import {Avatar, Button, DatePicker, InputNumber, Select, Upload} from "antd";
 import {
   DeleteOutlined,
   LeftOutlined,
@@ -177,6 +188,31 @@ const UserSettings = ({}: Props) => {
     setIsShowChangePass(true);
   }
 
+  const setFilterAge = (parameter: string) => (value: number) => {
+    if (parameter === 'start') {
+      dispatch(setStartFilterAgeAC(value));
+    }
+    if (parameter === 'end') {
+      dispatch(setEndFilterAgeAC(value));
+
+    }
+  }
+
+  const setFilterRating = (value: number) => {
+    dispatch(setFilterRatingAC(value));
+  }
+  const setFilterCommonTags = (value: number) => {
+    dispatch(setFilterCommonTagsAC(value));
+  }
+
+  const setFilterLocation = (e: any) => {
+    dispatch(setFilterLocationAC(e.currentTarget.value));
+  }
+
+  const getUsersByFilters = () => {
+    dispatch(setUserFilterPutQuery());
+  }
+
   return (
     <div>
       <div>
@@ -194,7 +230,7 @@ const UserSettings = ({}: Props) => {
               <img height={'200px'}
                    src={`data:${userAccount.card.photos[photoIndex].format};base64,${userAccount.card.photos[photoIndex].content}`}
                    alt='фото'/>
-              {photoIndex === userAccount.card.photos.length - 1 &&
+              {photoIndex === userAccount.card.photos.length - 2 &&
               <div className={style.image_bucket}>
                 <DeleteOutlined onClick={deletePhoto(photoIndex)}/>
               </div>
@@ -320,18 +356,19 @@ const UserSettings = ({}: Props) => {
                       value={moment(userAccount.birthday)}
                       className={cc(style.whole_wide, style.elem)}
                       allowClear={false}/>
-
-          <Button className={cc(style.elem, style.change_button)}
-                  onClick={changeAccEmail}>
-            Поменять email
-          </Button>
-          {isShowChangeEmail &&
-          <div className={style.text_answer}>
-            Перейдите по ссылке из почты
+          <div>
+            <Button className={cc(style.elem, style.change_button)}
+                    onClick={changeAccEmail} size={'small'}>
+              Поменять email
+            </Button>
+            {isShowChangeEmail &&
+            <div className={style.text_answer}>
+              Перейдите по ссылке из почты
+            </div>
+            }
           </div>
-          }
 
-          <Button className={cc(style.elem, style.change_button)}
+          <Button className={cc(style.elem, style.change_button)} size={'small'}
                   onClick={changeAccPass}>
             Поменять пароль
           </Button>
@@ -344,6 +381,56 @@ const UserSettings = ({}: Props) => {
 
         </div>
       </div>
+
+      <div>
+        <Title level={5} className={style.title}>
+          Настройки поиска
+        </Title>
+
+        <div>
+          <div>
+            Возраст
+          </div>
+          <div>
+            <InputNumber size="small" min={1} max={150} defaultValue={18}
+                         value={mainPage.userFilters.ageBy} onChange={setFilterAge("start")}
+                          onBlur={getUsersByFilters}/>
+            {' - '}
+            <InputNumber size="small" min={1} max={150} defaultValue={90}
+                         value={mainPage.userFilters.ageTo} onChange={setFilterAge("end")}
+                         onBlur={getUsersByFilters}/>
+          </div>
+          <div className={style.elem}>
+            Рейтинг
+          </div>
+          <div>
+            <InputNumber size="small" min={0} max={10} defaultValue={0}
+                         value={mainPage.userFilters.rating} onChange={setFilterRating}
+                         onBlur={getUsersByFilters}/>
+          </div>
+
+          <div className={style.elem}>
+            Количество общих интересов
+          </div>
+          <div>
+            <InputNumber size="small" min={0} max={5} defaultValue={0}
+                         value={mainPage.userFilters.commonTagsCount} onChange={setFilterCommonTags}
+                         onBlur={getUsersByFilters}/>
+          </div>
+
+          <div className={style.elem}>
+            Месторасположение
+          </div>
+          <div>
+            <Input size="small" type={'text'} defaultValue={'Moscow'}
+                   value={mainPage.userFilters.location} onChange={setFilterLocation}
+                   onBlur={getUsersByFilters}/>
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
   )
 };

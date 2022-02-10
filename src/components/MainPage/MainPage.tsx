@@ -165,14 +165,8 @@ const MainPage = (state: IState) => {
 
   const [chosenIndex, setChosenIndex] = useState(0);
   const [hasGetUser, setHasGetUser] = useState(false); //выключать при логауте
-  // const [hasChangeTags, setHasChangeTags] = useState(false); //выключать при логауте
   const [userIndex, setUserIndex] = useState(0); //возможно просто задать 0?
-  // const [isSaveChange, setIsSaveChange] = useState(false); //выключать при логауте
-  const [isOpenFilter, setIsOpenFilter] = useState(false); //выключать при логауте
 
-  // const [isShowChangeBirthday, setIsShowChangeBirthday] = useState(false);
-  // const [isShowChangeEmail, setIsShowChangeEmail] = useState(false);
-  // const [isShowChangePass, setIsShowChangePass] = useState(false);
 
   const [isShowUserCardMobile, setIsShowUserCardMobile] = useState(false);
   const [isShowMatchSideBarMobile, setIsShowMatchSideBarMobile] = useState(false);
@@ -227,89 +221,10 @@ const MainPage = (state: IState) => {
     setHasGetUser(true);
   }
 
-  const openAccountProperties = () => {
-    // dispatch(setUserDataAC(userData));
-    setChosenIndex(2);
-    //   !hasGetUser && dispatch(getUserAccountGetQuery());
-    // setHasGetUser(true);
-  }
-
-  const openUserFilter = () => {
-    setIsOpenFilter(true);
-
-  }
-
-  const closeUserFilter = () => {
-    setIsOpenFilter(false);
-
-  }
-  const setFilterAge = (parameter: string) => (e: any) => {
-    if (parameter === 'start') {
-      dispatch(setStartFilterAgeAC(Number(e.target.value)));
-    }
-    if (parameter === 'end') {
-      dispatch(setEndFilterAgeAC(Number(e.target.value)));
-
-    }
-  }
-
-
-  const setFilterRating = (e: any) => {
-    dispatch(setFilterRatingAC(Number(e.target.value)));
-  }
-  const setFilterCommonTags = (e: any) => {
-    dispatch(setFilterCommonTagsAC(Number(e.target.value)));
-  }
-
-  const setFilterLocation = (e: any) => {
-    dispatch(setFilterLocationAC(e.target.value));
-  }
-
   const closeAccountSetting = () => {
     setChosenIndex(0);
     dispatch(setIsOpenChatRoom(false));
   }
-
-  // const changeOrient = (orient: any) => {
-  //     dispatch(changeOrientAC(orient.target.value));
-  // };
-
-  const changeRegName = () => {
-    // dispatch(changeOrientAC(orient.target.value));
-  };
-
-  // const changeEducation = (education: any) => {
-  //   dispatch(changeEducationAC(education.target.value));
-  // };
-  //
-  // const changeWorkPlace = (workPlace: any) => {
-  //   dispatch(changeWorkPlaceAC(workPlace.target.value));
-  // };
-  //
-  // const changePosition = (position: any) => {
-  //   dispatch(changePositionAC(position.target.value));
-  // };
-  //
-  // const changeBiography = (biography: any) => {
-  //   dispatch(changeBiographyAC(biography.target.value));
-  // };
-  //
-  // const changeTags = (tags: any) => {
-  //   dispatch(changeTagsAC(tags.target.value));
-  //   if (mainPage.account.card.tags?.length === 5) {
-  //     setHasChangeTags(false)
-  //   }
-  // };
-  //
-  // const onClickChangeTags = () => {
-  //   setHasChangeTags(true)
-  //   dispatch(deleteTagsAC());
-  // };
-  //
-  // const onClickSaveChangesAcc = () => {
-  //   dispatch(saveChangeAccPostQuery(mainPage.account.card));
-  //   setIsSaveChange(true);
-  // };
 
   const onClickLikeUser = () => {
     dispatch(likeUserPutQuery(mainPage.users[userIndex]?.id, 'LIKE'));
@@ -344,83 +259,8 @@ const MainPage = (state: IState) => {
     dispatch(deleteNotLikeUserAC());
   }
 
-  // const onClickLogout = () => {
-  //   dispatch(logoutGetQuery());
-  // }
-
-  // const changeGender = (e: React.FormEvent<HTMLSelectElement>) => {
-  //   dispatch(changeGenderAC(e.currentTarget.value));
-  // };
-  //
-  // const changeSexualPreference = (e: React.FormEvent<HTMLSelectElement>) => {
-  //   dispatch(changeSexualPreferenceAC(e.currentTarget.value));
-  // };
-
-  // const changePhoto = (number: number) => (e: any) => {
-  //   dispatch(setPhotoParam(number, e.target.files[0].name, e.target.files[0].type));
-  //   getBase64(e.target.files[0]).then(
-  //     res => {
-  //       dispatch(setPhotoContent(res, number));
-  //       dispatch(changePhotoPostQuery(number, 'save'));
-  //       // dispatch(authGetUserQuery()); TODO открыть когда заработает запрос
-  //     }
-  //   );
-  // }
-  // const deletePhoto = (number: number) => (e: any) => {
-  //   dispatch(changePhotoPostQuery(number, 'delete'));
-  //   dispatch(authGetUserQuery());
-  // };
-  //
-  // const saveChangedFIO = () => {
-  //   const newFio = `${mainPage.account.lastName} ${mainPage.account.firstName} ${mainPage.account.middleName}`;
-  //   dispatch(updateAccountSettings("fio", newFio));
-  // }
-
   const saveChangedBirthday = () => {
     dispatch(updateAccountSettings("birthDate", mainPage.account.birthday));
-  }
-
-  // dispatch(changePhotoPostQuery(number));
-//отправлять на сервер каждую фотку
-//     обновлять всю инфу
-  //сделать кнопук удаления каждой отдельной фотки и после этого обновлять инфу
-
-
-  // const changeFirstAccName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-  //   dispatch(changeAccFirstNameAC(value));
-  // }
-  //
-  // const changeAccLastName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-  //   dispatch(changeAccLastNameAC(value));
-  // }
-  //
-  // const changeAccMiddleName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-  //   dispatch(changeAccMiddleNameAC(value));
-  // }
-
-  // const changeAccBirthday = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-  //   dispatch(changeAccBirthdayAC(value));
-  //   dispatch(updateAccountSettings("birthDate", value));
-  // }
-
-  // const changeShowBirthday = () => {
-  //   setIsShowChangeBirthday(true);
-  // }
-
-  // const changeAccEmail = () => {
-  //   dispatch(changeAccEmailPostQuery());
-  //   setIsShowChangeEmail(true);
-  // }
-  //
-  // const changeAccPass = () => {
-  //   dispatch(changeAccPassPostQuery());
-  //   setIsShowChangePass(true);
-  // }
-
-  const getUsersByFilters = () => {
-    //запрос на фильтры
-    dispatch(setUserFilterPutQuery());
-    // dispatch(getUsersPostQuery());
   }
 
   const changeShowUserCardMobile = () => {
@@ -475,46 +315,6 @@ const MainPage = (state: IState) => {
         <MatchSideBar closeAnotherWindowMobile={closeAnotherWindowMobile}/>
       </div>
       <div className={style.main_field}>
-
-      {/*  {chosenIndex === 0 &&*/}
-      {/*  // <div className={style.button_acc} onClick={openAccountSetting}>Аккаунт</div>*/}
-      {/*  // <div className={style.button_acc} onClick={openAccountProperties}>Настройки аккаунта</div>*/}
-      {/*  // <div className={style.button_acc} onClick={openUserFilter}>Фильтр</div>*/}
-      {/*  // {<div className={style.button_acc} onClick={closeUserFilter}>Закрыть фильтр</div>}*/}
-
-      {/*  // {isOpenFilter &&*/}
-      {/*  // <div>*/}
-      {/*  //   <div className={style.button_acc} onClick={closeUserFilter}>Закрыть фильтр</div>*/}
-      {/*  //   <div className={style.userFilter}>*/}
-      {/*  //     <p>Фильтр*/}
-      {/*  //     </p>*/}
-      {/*  //     <p>Возраст*/}
-      {/*  //       <div>От*/}
-      {/*  //         <input type='number' onChange={setFilterAge("start")} value={mainPage.userFilters.ageBy}/>*/}
-      {/*  //       </div>*/}
-      {/*  //       <div>До*/}
-      {/*  //         <input type='number' onChange={setFilterAge("end")} value={mainPage.userFilters.ageTo}/>*/}
-      {/*  //       </div>*/}
-      {/*  //     </p>*/}
-      {/*  //     <p>Рейтинг*/}
-      {/*  //       <div>*/}
-      {/*  //         <input type='number' onChange={setFilterRating} value={mainPage.userFilters.rating}/>*/}
-      {/*  //       </div>*/}
-      {/*  //     </p>*/}
-      {/*  //     <p>Количество общих интересов*/}
-      {/*  //       <div>*/}
-      {/*  //         <input type='number' onChange={setFilterCommonTags} value={mainPage.userFilters.commonTagsCount}/>*/}
-      {/*  //       </div>*/}
-      {/*  //     </p>*/}
-      {/*  //     <p>Месторасположение*/}
-      {/*  //       <div>*/}
-      {/*  //         <input type='text' onChange={setFilterLocation} value={mainPage.userFilters.location}/>*/}
-      {/*  //       </div>*/}
-      {/*  //     </p>*/}
-      {/*  //     <button onClick={getUsersByFilters}>Поиск</button>*/}
-      {/*  //   </div>*/}
-      {/*  // </div>*/}
-      {/*  // }*/}
         {chosenIndex !== 3 && mainPage.users[userIndex]
         && <div className={style.card_wrapper}>
           <UserCard user={mainPage.users[userIndex]} isCurrentUser={false}/>
