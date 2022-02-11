@@ -80,6 +80,7 @@ const MainPage = () => {
   }
 
   const changeShowMatchSideBarMobile = () => {
+    dispatch(setIsOpenChatRoom(false));
     setChosenIndex(2);
     setIsShowMatchSideBarMobile(prevState => !prevState);
     setIsShowUserCardMobile(false);
