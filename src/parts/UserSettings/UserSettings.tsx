@@ -392,11 +392,11 @@ const UserSettings = ({}: Props) => {
             Возраст
           </div>
           <div>
-            <InputNumber size="small" min={1} max={150} defaultValue={18}
+            <InputNumber size="small" min={0} max={150} defaultValue={18}
                          value={mainPage.userFilters.ageBy} onChange={setFilterAge("start")}
                           onBlur={getUsersByFilters}/>
             {' - '}
-            <InputNumber size="small" min={1} max={150} defaultValue={90}
+            <InputNumber size="small" min={0} max={150} defaultValue={90}
                          value={mainPage.userFilters.ageTo} onChange={setFilterAge("end")}
                          onBlur={getUsersByFilters}/>
           </div>
