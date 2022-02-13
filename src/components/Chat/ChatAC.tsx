@@ -1,4 +1,4 @@
-import {IMatches, IMessage, IUserData} from "../../types";
+import {IChatMessage, IMatches, IMessage, IUserData} from "../../types";
 import * as constants from "./Chat.consts";
 
 export const setUserMatchesAC = (matches: IMatches) => ({
@@ -39,4 +39,19 @@ export const closeNotificationAboutNewMessageAC = (isShow: boolean, messageId: n
 export const setNotificationAboutNewVisitAC = (isShow: boolean, fromUsr?: number, toUsr?: number, action?: string) => ({
   type: constants.SET_NOTIFICATION_ABOUT_NEW_VISIT,
   payload: {isShow, fromUsr, toUsr, action}
+});
+
+export const setReceivedNotice = (notice: any) => ({
+  type: constants.SET_RECEVIED_CHAT_NOTICE,
+  payload: notice
+});
+
+export const setCurrentUserMessages = (messages: IMessage[]) => ({
+  type: constants.SET_CURRENT_USER_MESSAGES,
+  payload: messages
+});
+
+export const setUserFiInLastNotification = (user: IUserData) => ({
+  type: constants.SET_USER_FI_IN_LAST_NOTIFICATION,
+  payload: user
 });

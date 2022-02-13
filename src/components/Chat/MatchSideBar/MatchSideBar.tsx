@@ -61,32 +61,32 @@ export const MatchSideBar = ({
     dispatch(createChat(el.userId));
   }
 
-  const showChatRoomAndCloseNotification = (el: any) => () => {
-    if (el.chatId) {
-      dispatch(setIsOpenChatRoom(true, el.chatId, el.userId));
-      dispatch(closeNotificationAboutNewMessageAC(false, el.messageId));
-      return;
-    }
-  }
+  // const showChatRoomAndCloseNotification = (el: any) => () => {
+  //   if (el.chatId) {
+  //     dispatch(setIsOpenChatRoom(true, el.chatId, el.userId));
+  //     dispatch(closeNotificationAboutNewMessageAC(false, el.messageId));
+  //     return;
+  //   }
+  // }
 
   const onClickLogout = () => {
     dispatch(logoutGetQuery());
   }
 
-  useEffect(() => {
-    const setFirstPackMessagesCallBack = (parseEvent: any) => dispatch(setFirstPackMessagesAC(parseEvent));
-    const setNotificationAboutNewMessageCallBack = (hasNewMessage: boolean, chatId: number, senderId: number, messageId: number) =>
-      dispatch(setNotificationAboutNewMessageAC(hasNewMessage, chatId, senderId, messageId));
-    // const setNotificationAboutNewVisitCallBack = (hasNewVisit: boolean, fromUsr: number, toUsr: number, action: string) =>
-    //   dispatch(setNotificationAboutNewVisitAC(hasNewVisit, fromUsr, toUsr, action));
-
-    chat.matches.map((el: IMatches) => {
-      if (el.chatId) {
-        return getFirstMessages(el.chatId, setFirstPackMessagesCallBack, setNotificationAboutNewMessageCallBack);
-      }
-      return ''
-    })
-  }, [chat.matches]);
+  // useEffect(() => {
+  //   const setFirstPackMessagesCallBack = (parseEvent: any) => dispatch(setFirstPackMessagesAC(parseEvent));
+  //   const setNotificationAboutNewMessageCallBack = (hasNewMessage: boolean, chatId: number, senderId: number, messageId: number) =>
+  //     dispatch(setNotificationAboutNewMessageAC(hasNewMessage, chatId, senderId, messageId));
+  //   // const setNotificationAboutNewVisitCallBack = (hasNewVisit: boolean, fromUsr: number, toUsr: number, action: string) =>
+  //   //   dispatch(setNotificationAboutNewVisitAC(hasNewVisit, fromUsr, toUsr, action));
+  //
+  //   chat.matches.map((el: IMatches) => {
+  //     if (el.chatId) {
+  //       return getFirstMessages(el.chatId, setFirstPackMessagesCallBack, setNotificationAboutNewMessageCallBack);
+  //     }
+  //     return ''
+  //   })
+  // }, [chat.matches]);
 
 
   // const openLikesHistory = () => {
@@ -129,7 +129,7 @@ export const MatchSideBar = ({
             <Title level={5}>Пары</Title>
 
             <div className={style.pair_users}>
-              {chat.matches.map((el: IMatches) => {
+              {chat.matches?.map((el: IMatches) => {
                 return !el.chatId &&
                   <div className={style.pair_user} onClick={showChatRoom(el)}>
                     {el.icon?.content ?
@@ -155,8 +155,8 @@ export const MatchSideBar = ({
             <div className={style.message_pairs}>
               {
                 chat.matches.map((el: IMatches) => {
-                  const currentPackMessages = chat.firstPackMessages.find(messageEl => messageEl.messages.chatId === el.chatId)?.messages.messageAnswer;
-                  const lastMessage = currentPackMessages ? currentPackMessages[currentPackMessages.length - 1]?.content : '';
+                  // const currentPackMessages = chat.firstPackMessages.find(messageEl => messageEl.messages.chatId === el.chatId)?.messages.messageAnswer;
+                  // const lastMessage = 'dd';//currentPackMessages ? currentPackMessages[currentPackMessages.length - 1]?.content : '';
                   return el.chatId &&
                     <div className={style.message_pair} onClick={showChatRoom(el)}>
                       {el.icon?.content ?
@@ -170,9 +170,9 @@ export const MatchSideBar = ({
                         <div className={style.name}>
                           {el.firstName}
                         </div>
-                        <div>
-                          {lastMessage}
-                        </div>
+                        {/*<div>*/}
+                        {/*  {lastMessage}*/}
+                        {/*</div>*/}
                       </div>
                     </div>
 
@@ -185,28 +185,28 @@ export const MatchSideBar = ({
           </Button>
         </div>
       }
-      {chat.messageNotification.map((el, idx) => {
-        if (el.isShow) {
-          return <div className={style.notification}
-                      style={{bottom: `${idx * 30}px`}}
-                      onClick={showChatRoomAndCloseNotification(el)}>
-            НОВОЕ СООБЩЕНИЕ!
-          </div>
-        }
-      })}
-      {chat.actionNotifications.map((el, idx) => {
-        if (el.isShow) {
-          return <div className={style.notification}
-                      style={{bottom: `${idx * 20 + 10}px`}}
-            // onClick={showChatRoomAndCloseNotification(el)} todo показывать кто посетил по клику
-          >
-            {el.action === 'VISIT' && 'НОВЫЙ ВИЗИТ!'}
-            {el.action === 'LIKE' && 'НОВЫЙ LIKE!'}
-            {el.action === 'MATCH' && 'НОВЫЙ MATCH!'}
-            {el.action === 'TAKE_LIKE' && 'НОВЫЙ TAKE_LIKE!'}
-          </div>
-        }
-      })}
+      {/*{chat.messageNotification.map((el, idx) => {*/}
+      {/*  if (el.isShow) {*/}
+      {/*    return <div className={style.notification}*/}
+      {/*                style={{bottom: `${idx * 30}px`}}*/}
+      {/*                onClick={showChatRoomAndCloseNotification(el)}>*/}
+      {/*      НОВОЕ СООБЩЕНИЕ!*/}
+      {/*    </div>*/}
+      {/*  }*/}
+      {/*})}*/}
+      {/*{chat.actionNotifications?.map((el, idx) => {*/}
+      {/*  if (el.isShow) {*/}
+      {/*    return <div className={style.notification}*/}
+      {/*                style={{bottom: `${idx * 20 + 10}px`}}*/}
+      {/*      // onClick={showChatRoomAndCloseNotification(el)} todo показывать кто посетил по клику*/}
+      {/*    >*/}
+      {/*      {el.action === 'VISIT' && 'НОВЫЙ ВИЗИТ!'}*/}
+      {/*      {el.action === 'LIKE' && 'НОВЫЙ LIKE!'}*/}
+      {/*      {el.action === 'MATCH' && 'НОВЫЙ MATCH!'}*/}
+      {/*      {el.action === 'TAKE_LIKE' && 'НОВЫЙ TAKE_LIKE!'}*/}
+      {/*    </div>*/}
+      {/*  }*/}
+      {/*})}*/}
     </div>
   )
 }

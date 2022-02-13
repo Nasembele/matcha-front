@@ -1,4 +1,4 @@
-import {IFirstPackMessagesWithChatId, IMessage} from "./types";
+import {ICurrentUserMessages, IMessage} from "./types";
 import {setFirstPackMessagesAC, setNotificationAboutNewMessageAC} from "./components/Chat/ChatAC";
 
 const userIdChat = sessionStorage.getItem('userId');
@@ -6,10 +6,10 @@ const chatToken = sessionStorage.getItem('chatToken');
 const chatFingerprint = sessionStorage.getItem('chatFingerprint');
 
 
-export const socket = new WebSocket(`ws://localhost:8080/${userIdChat}/${chatToken}/${chatFingerprint}`);
+// export const socket = new WebSocket(`ws://localhost:8080/${userIdChat}/${chatToken}/${chatFingerprint}`);
 
-export const getActualMessages = (openChatId: number, firstMessagePackByChatId?: IMessage[]) => {
-
+export const getActualMessages = (openChatId: number, firstMessagePackByChatId?: IMessage[]) => { //todo
+// debugger;
   const getActualMessages = {
     type: 'CHAT',
     transportMessage: {
@@ -20,7 +20,8 @@ export const getActualMessages = (openChatId: number, firstMessagePackByChatId?:
     }
   };
 
-  socket.send(JSON.stringify(getActualMessages));
+
+  // socket.send(JSON.stringify(getActualMessages));
 
   const receivedMessages = firstMessagePackByChatId?.filter(el => el.status === 'RECEIVED');
 
@@ -40,11 +41,11 @@ export const getActualMessages = (openChatId: number, firstMessagePackByChatId?:
       }
     };
 
-    socket.send(JSON.stringify(deliveryMesssage));
+    // socket.send(JSON.stringify(deliveryMesssage));
   }
 }
 
-export const sendMessage = (openChatId: number, fromUserId: number, toUserId: number, message: string, firstMessagePackByChatId?: IMessage[]) => {
+export const sendMessage = (openChatId: number, fromUserId: number, toUserId: number, message: string, firstMessagePackByChatId?: IMessage[]) => { //+-
   const newMessage = {
     type: 'CHAT',
     transportMessage: {
@@ -59,12 +60,12 @@ export const sendMessage = (openChatId: number, fromUserId: number, toUserId: nu
     }
   };
 
-  socket.send(JSON.stringify(newMessage));
+  // socket.send(JSON.stringify(newMessage));
 
   getActualMessages(openChatId, firstMessagePackByChatId);
 }
 
-export const getPreviousMessages = (openChatId: number, firstPackMessages: IFirstPackMessagesWithChatId[],
+export const getPreviousMessages = (openChatId: number, firstPackMessages: ICurrentUserMessages[], //+-
                                     setFirstPackMessagesCallBack: Function, firstMessagePackByChatId?: IMessage[]) => {
   const getFirstMessage = {
     type: 'CHAT',
@@ -72,24 +73,24 @@ export const getPreviousMessages = (openChatId: number, firstPackMessages: IFirs
       chatId: openChatId,
       getMessageRq: {
         type: "BEFORE_FIRST",
-        specificId: firstPackMessages.find((el) => el.messages.chatId === openChatId)?.oldestMessagesId
+        // specificId: firstPackMessages.find((el) => el.messages.chatId === openChatId)?.oldestMessagesId
       }
     }
   };
 
-  socket.send(JSON.stringify(getFirstMessage));
+  // socket.send(JSON.stringify(getFirstMessage));
 
-  socket.onmessage = function (event) {
-    const parseEvent = JSON.parse(event.data);
-    if (parseEvent.transportMessage?.chatId && parseEvent.transportMessage?.messageAnswer) {
-      setFirstPackMessagesCallBack(parseEvent.transportMessage);
-    } else if (parseEvent.transportMessage?.chatId && parseEvent.transportMessage?.messageNotification) {
-      getActualMessages(openChatId, firstMessagePackByChatId);
-    }
-  };
+  // socket.onmessage = function (event) {
+  //   const parseEvent = JSON.parse(event.data);
+  //   if (parseEvent.transportMessage?.chatId && parseEvent.transportMessage?.messageAnswer) {
+  //     setFirstPackMessagesCallBack(parseEvent.transportMessage);
+  //   } else if (parseEvent.transportMessage?.chatId && parseEvent.transportMessage?.messageNotification) {
+  //     getActualMessages(openChatId, firstMessagePackByChatId);
+  //   }
+  // };
 }
 
-export const deleteMessage = (openChatId: number, messageId: number, firstMessagePackByChatId?: IMessage[]) => {
+export const deleteMessage = (openChatId: number, messageId: number, firstMessagePackByChatId?: IMessage[]) => { //+-
   const deleteMessage = {
     type: 'CHAT',
     transportMessage: {
@@ -101,12 +102,12 @@ export const deleteMessage = (openChatId: number, messageId: number, firstMessag
     }
   };
 
-  socket.send(JSON.stringify(deleteMessage));
+  // socket.send(JSON.stringify(deleteMessage));
 
   getActualMessages(openChatId, firstMessagePackByChatId);
 }
 
-export const deleteAllMessages = (openChatId: number, firstMessagePackByChatId?: IMessage[]) => {
+export const deleteAllMessages = (openChatId: number, firstMessagePackByChatId?: IMessage[]) => { //+-
   const deleteMessage = {
     type: 'CHAT',
     transportMessage: {
@@ -117,13 +118,13 @@ export const deleteAllMessages = (openChatId: number, firstMessagePackByChatId?:
     }
   };
 
-  socket.send(JSON.stringify(deleteMessage));
+  // socket.send(JSON.stringify(deleteMessage));
 
   getActualMessages(openChatId, firstMessagePackByChatId);
 }
 
 
-export const getFirstMessages = (chatId: number | undefined, setFirstPackMessagesCallBack: Function,
+export const getFirstMessages = (chatId: number | undefined, setFirstPackMessagesCallBack: Function, //todo
                                  setNotificationAboutNewMessageCallBack: Function,
                                  setNotificationAboutNewVisitCallBack?: Function) => {
   const getFirstMessage = {
@@ -136,36 +137,36 @@ export const getFirstMessages = (chatId: number | undefined, setFirstPackMessage
     }
   };
 
-  socket.send(JSON.stringify(getFirstMessage));
+  // socket.send(JSON.stringify(getFirstMessage));
 
-  socket.onmessage = function (event) {
-    const parseEvent = JSON.parse(event.data);
-
-    if (parseEvent.transportMessage?.chatId && parseEvent.transportMessage?.messageAnswer) {
-      setFirstPackMessagesCallBack(parseEvent.transportMessage);
-    }
-
-    else if (parseEvent.transportMessage?.chatId && parseEvent.transportMessage?.messageNotification) {
-      setNotificationAboutNewMessageCallBack(true, parseEvent.transportMessage.chatId,
-        parseEvent.transportMessage.messageNotification.senderId, parseEvent.transportMessage.messageNotification.messageId)
-      socket.send(JSON.stringify(getFirstMessage));
-    }
-    else if (setNotificationAboutNewVisitCallBack && parseEvent.likeAction && parseEvent.type === 'ACTION_NOTIFICATION') {
-      setNotificationAboutNewVisitCallBack(true, parseEvent.likeAction.fromUsr, parseEvent.likeAction.toUsr, parseEvent.likeAction.action)
+  // socket.onmessage = function (event) {
+  //   const parseEvent = JSON.parse(event.data);
+  //
+  //   if (parseEvent.transportMessage?.chatId && parseEvent.transportMessage?.messageAnswer) {
+  //     setFirstPackMessagesCallBack(parseEvent.transportMessage);
+  //   }
+  //
+  //   else if (parseEvent.transportMessage?.chatId && parseEvent.transportMessage?.messageNotification) {
+  //     setNotificationAboutNewMessageCallBack(true, parseEvent.transportMessage.chatId,
+  //       parseEvent.transportMessage.messageNotification.senderId, parseEvent.transportMessage.messageNotification.messageId)
+  //     socket.send(JSON.stringify(getFirstMessage));
+  //   }
+  //   else if (setNotificationAboutNewVisitCallBack && parseEvent.likeAction && parseEvent.type === 'ACTION_NOTIFICATION') {
+  //     setNotificationAboutNewVisitCallBack(true, parseEvent.likeAction.fromUsr, parseEvent.likeAction.toUsr, parseEvent.likeAction.action)
       // socket.send(JSON.stringify(getFirstMessage));
-    }
-  };
+    // }
+  // };
 }
 
 
-export const setAction = (action: string, fromUsr: number, toUsr: number) => {
-  const setVisitMessage = {
-    type: 'ACTION_NOTIFICATION',
-    likeAction: {
-      fromUsr,
-      toUsr,
-      action
-    }
-  };
-  socket.send(JSON.stringify(setVisitMessage));
-}
+// export const setAction = (action: string, fromUsr: number, toUsr: number) => { //+
+//   const setVisitMessage = {
+//     type: 'ACTION_NOTIFICATION',
+//     likeAction: {
+//       fromUsr,
+//       toUsr,
+//       action
+//     }
+//   };
+//   // socket.send(JSON.stringify(setVisitMessage));
+// }

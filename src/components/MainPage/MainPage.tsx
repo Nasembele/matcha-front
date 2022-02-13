@@ -2,6 +2,7 @@ import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
 import style from './MainPage.module.css';
 import {
+  getUserById, getUserByIdWithAction,
   getUsersPostQuery,
   logoutGetQuery,
 } from "../../api";
@@ -12,13 +13,17 @@ import {
   setFirstPackMessagesAC,
   setIsOpenChatRoom,
   setNotificationAboutNewMessageAC,
-  setNotificationAboutNewVisitAC
+  setNotificationAboutNewVisitAC, setUserFiInLastNotification
 } from "../Chat/ChatAC";
 import {getFirstMessages} from "../../socket";
 import UserCard from "../../parts/UserCard/UserCard";
 import {DownCircleOutlined, LogoutOutlined, MessageOutlined, UpCircleOutlined, UserOutlined} from "@ant-design/icons";
 import UserSettings from "../../parts/UserSettings/UserSettings";
 import cc from "classnames";
+import {sendNewMessage, startMessagesListening} from "../Chat/Chat.reducer";
+
+// export const socket = new WebSocket(`ws://localhost:8080/pul`);
+// export const socket = new WebSocket(`ws://localhost:8080/${userIdChat}/${chatToken}/${chatFingerprint}`);
 
 const MainPage = () => {
 
@@ -50,22 +55,67 @@ const MainPage = () => {
     }
   }, [chat.isOpenChatRoom, chat.toUserId, chat.userInChat]);
 
+  // useEffect(() => {
+  //   const setFirstPackMessagesCallBack = (parseEvent: any) => dispatch(setFirstPackMessagesAC(parseEvent));
+  //   const setNotificationAboutNewMessageCallBack = (hasNewMessage: boolean, chatId: number, senderId: number, messageId: number) =>
+  //     dispatch(setNotificationAboutNewMessageAC(hasNewMessage, chatId, senderId, messageId));
+  //   const setNotificationAboutNewVisitCallBack = (hasNewVisit: boolean, fromUsr: number, toUsr: number, action: string) =>
+  //     dispatch(setNotificationAboutNewVisitAC(hasNewVisit, fromUsr, toUsr, action));
+  //
+  //   // chat.matches.map((el: IMatches) => {
+  //   // if (el.chatId) {
+  //   // return
+  //   getFirstMessages(undefined, setFirstPackMessagesCallBack, setNotificationAboutNewMessageCallBack, setNotificationAboutNewVisitCallBack);
+  //   // }
+  //   // return ''
+  //   // })
+  // }, []);
+
   useEffect(() => {
-    const setFirstPackMessagesCallBack = (parseEvent: any) => dispatch(setFirstPackMessagesAC(parseEvent));
-    const setNotificationAboutNewMessageCallBack = (hasNewMessage: boolean, chatId: number, senderId: number, messageId: number) =>
-      dispatch(setNotificationAboutNewMessageAC(hasNewMessage, chatId, senderId, messageId));
-    const setNotificationAboutNewVisitCallBack = (hasNewVisit: boolean, fromUsr: number, toUsr: number, action: string) =>
-      dispatch(setNotificationAboutNewVisitAC(hasNewVisit, fromUsr, toUsr, action));
+    if (sessionStorage.chatFingerprint) {
+      const dateForChannel = {
+        chatFingerprint: sessionStorage.chatFingerprint,
+        chatToken: sessionStorage.chatToken,
+        userId: sessionStorage.userId
+      }
+      dispatch(startMessagesListening(dateForChannel));
+    }
+  }, [sessionStorage.length]);
 
-    // chat.matches.map((el: IMatches) => {
-    // if (el.chatId) {
-    // return
-    getFirstMessages(undefined, setFirstPackMessagesCallBack, setNotificationAboutNewMessageCallBack, setNotificationAboutNewVisitCallBack);
-    // }
-    // return ''
-    // })
-  }, []);
+  const getFirstMessage = {
+    type: 'CHAT',
+    transportMessage: {
+      chatId: chat.openChatId,
+      getMessageRq: {
+        type: "GET_FIRST_PACK"
+      }
+    }
+  };
 
+  useEffect(() => {
+    chat.actionNotifications?.map((el) => {
+      if (el?.isPrepareForShow === false) {
+        if (el.chatId === chat.openChatId) {
+          dispatch(sendNewMessage(getFirstMessage));
+        }
+        // if (el.messageId) {
+        //   const getMessageById = {
+        //     type: 'CHAT',
+        //     transportMessage: {
+        //       chatId: el.chatId,
+        //       getMessageRq: {
+        //         type: "BY_IDS",
+        //         messageIds: [el.messageId],
+        //       }
+        //     }
+        //   };
+        //
+        //   // dispatch(sendNewMessage(getMessageById));
+        // }
+        dispatch(getUserByIdWithAction(el.fromUsr, setUserFiInLastNotification));
+      }
+    })
+  }, [chat.actionNotifications]);
 
   const closeCard = () => {
     setChosenIndex(0);

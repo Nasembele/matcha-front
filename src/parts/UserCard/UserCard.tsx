@@ -12,9 +12,9 @@ import {
 } from "@ant-design/icons";
 import {Avatar, Tag} from "antd";
 import {likeUserPutQuery, setVisitUserPutQuery} from "../../api";
-import {setAction} from "../../socket";
 import {useDispatch, useSelector} from "react-redux";
 import {deleteNotLikeUserAC} from "../../components/MainPage/MainPageAC";
+import {setAction} from "../../components/Chat/Chat.reducer";
 
 type IProps = {
   user: IUserData,
@@ -42,7 +42,7 @@ const UserCard = ({
 
   const onClickVisitUser = () => {
     dispatch(setVisitUserPutQuery(user.id));
-    setAction('VISIT', mainPage.account.id, user.id);
+    dispatch(setAction('VISIT', mainPage.account.id, user.id));
   };
 
   const changeShowInfo = () => {

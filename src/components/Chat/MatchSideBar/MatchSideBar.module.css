@@ -153,8 +153,10 @@
 
 .name {
     font-weight: bold;
+    margin: auto 0;
 }
 
 .text_container {
     margin-left: 10px;
+    display: flex;
 }

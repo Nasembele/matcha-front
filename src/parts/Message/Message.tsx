@@ -12,7 +12,6 @@ import {
 } from "@ant-design/icons";
 import {Avatar, Tag} from "antd";
 import {likeUserPutQuery, setVisitUserPutQuery} from "../../api";
-import {setAction} from "../../socket";
 import {useDispatch, useSelector} from "react-redux";
 import {deleteNotLikeUserAC} from "../../components/MainPage/MainPageAC";
 

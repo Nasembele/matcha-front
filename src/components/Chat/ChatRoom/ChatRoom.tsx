@@ -25,6 +25,7 @@ import {
 } from "@ant-design/icons";
 import Message from "../../../parts/Message/Message";
 import {MatchSideBar} from "../MatchSideBar/MatchSideBar";
+import {sendNewMessage, startMessagesListening} from "../Chat.reducer";
 
 type IProps = {
   closeWindow: VoidFunction,
@@ -50,7 +51,17 @@ export const ChatRoom = ({
   // const [isShowUserCardMobile, setIsShowUserCardMobile] = useState(false);
   // const [isShowMatchSideBarMobile, setIsShowMatchSideBarMobile] = useState(false);
 
-  const firstMessagePackByChatId = chat.firstPackMessages.find(el => el.messages.chatId === chat.openChatId)?.messages.messageAnswer;
+  const firstMessagePackByChatId = ['d'];//chat.firstPackMessages.find(el => el.messages.chatId === chat.openChatId)?.messages.messageAnswer;
+
+  const getFirstMessage = {
+    type: 'CHAT',
+    transportMessage: {
+      chatId: chat.openChatId,
+      getMessageRq: {
+        type: "GET_FIRST_PACK"
+      }
+    }
+  };
 
   useEffect(() => {
     if (chat.toUserId) {
@@ -70,29 +81,76 @@ export const ChatRoom = ({
 
   const onClickSendMessage = () => {
     if (!message) return;
-    sendMessage(chat.openChatId, fromUserId, chat.toUserId, message, firstMessagePackByChatId);
+    const newMessage = {
+      type: 'CHAT',
+      transportMessage: {
+        chatId: chat.openChatId,
+        message: {
+          chatId: chat.openChatId,
+          fromId: fromUserId,
+          toId: chat.toUserId,
+          type: "TEXT",
+          content: message
+        }
+      }
+    };
+    // sendMessage(chat.openChatId, fromUserId, chat.toUserId, message, firstMessagePackByChatId); //todo
+    dispatch(sendNewMessage(newMessage));
+    dispatch(sendNewMessage(getFirstMessage));
     setMessage('');
   }
 
   const onClickGetPreviousMessages = () => {
-    const setFirstPackMessagesCallBack = (parseEvent: any) => dispatch(setFirstPackMessagesAC(parseEvent));
-    getPreviousMessages(chat.openChatId, chat.firstPackMessages, setFirstPackMessagesCallBack, firstMessagePackByChatId);
+    const getPreviousMessages = {
+      type: 'CHAT',
+      transportMessage: {
+        chatId: chat.openChatId,
+        getMessageRq: {
+          type: "BEFORE_FIRST",
+          specificId: chat.currentUserMessages?.oldestMessagesId
+        }
+      }
+    };
+    dispatch(sendNewMessage(getPreviousMessages));
   }
 
   const onClickDeleteMessage = (e: any) => {
-    deleteMessage(chat.openChatId, e.currentTarget.dataset.messageId, firstMessagePackByChatId);
+    const deleteMessage = {
+      type: 'CHAT',
+      transportMessage: {
+        chatId: chat.openChatId,
+        deleteMessage: {
+          type: "BY_IDS",
+          ids: [e.currentTarget.dataset.messageId]
+        }
+      }
+    };
+
+    dispatch(sendNewMessage(deleteMessage));
+    dispatch(sendNewMessage(getFirstMessage));
   }
 
   const onClickDeleteAllMessages = () => {
-    deleteAllMessages(chat.openChatId, firstMessagePackByChatId);
+    const deleteMessage = {
+      type: 'CHAT',
+      transportMessage: {
+        chatId: chat.openChatId,
+        deleteMessage: {
+          type: "ALL",
+        }
+      }
+    };
+
+    dispatch(sendNewMessage(deleteMessage));
+    dispatch(sendNewMessage(getFirstMessage));
   }
 
   const getLastMessageCallBack = () => {
-    getActualMessages(chat.openChatId, firstMessagePackByChatId);
+    dispatch(sendNewMessage(getFirstMessage));
   }
 
-  const currentPack = chat.firstPackMessages.find((el) => el.messages.chatId === chat.openChatId)?.messages.messageAnswer;
-  const disableButtonGetNewMessage = currentPack?.length ? currentPack?.length < 10 : true;
+  // const currentPack = chat.firstPackMessages.find((el) => el.messages.chatId === chat.openChatId)?.messages.messageAnswer; todo
+  const disableButtonGetNewMessage = !Boolean(chat.currentUserMessages?.oldestMessagesId);
 
   // const actionAfterTaeLike = () => {
   //   closeWindow();
@@ -103,6 +161,10 @@ export const ChatRoom = ({
   //   setIsShowMatchSideBarMobile(false);
   //   setIsShowUserCardMobile(false);
   // }
+
+  useEffect(() => { //todo
+    dispatch(sendNewMessage(getFirstMessage));
+  }, [chat.openChatId]);
 
   return (
     <div className={style.container}>
@@ -142,8 +204,9 @@ export const ChatRoom = ({
 
 
           {
-            firstMessagePackByChatId?.map((el: IMessage) =>
-              <Message message={el}
+            chat.currentUserMessages?.messages?.map((el: IMessage) =>
+              <Message key={el.id}
+                       message={el}
                        fromUserId={fromUserId}
                        userFirstName={chat.userInChat?.firstName}
                        onClickDeleteMessage={onClickDeleteMessage}

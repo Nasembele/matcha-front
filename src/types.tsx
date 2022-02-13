@@ -1,3 +1,5 @@
+import {message} from "antd";
+
 export interface IAction {
     type: string,
     payload: any
@@ -131,11 +133,8 @@ export interface IMessage {
     type: string
 }
 
-export interface IFirstPackMessagesWithChatId {
-    messages: {
-        chatId: number,
-        messageAnswer: IMessage[]
-    },
+export interface ICurrentUserMessages {
+    messages: IMessage[],
     oldestMessagesId?: number,
     freshMessagesId?: number
 }
@@ -147,19 +146,26 @@ export interface IChat {
     openChatId: number,
     toUserId: number,
     matches: IMatches[],
-    firstPackMessages: IFirstPackMessagesWithChatId[],
+    currentUserMessages?: ICurrentUserMessages,
     userInChat?: IUserData,
-    messageNotification: Array<{
-        isShow: boolean,
-        chatId: number,
-        userId: number
-    }>,
-    actionNotifications: Array<{
-        action: string,
-        isShow: boolean,
-        fromUsr: number,
-        toUsr: number
-    }>
+    // messageNotification: Array<{
+    //     isShow: boolean,
+    //     chatId: number,
+    //     userId: number
+    // }>,
+    actionNotifications: INotification[]
+}
+
+export interface INotification {
+    action: string,
+    isShow?: boolean,
+    isPrepareForShow: boolean,
+    fromUsr: number,
+    toUsr?: number,
+    messageId?: number,
+    chatId?: number,
+    messageText?: string,
+    fromUsrFI?: string,
 }
 
 export interface IState {
@@ -167,4 +173,10 @@ export interface IState {
     mainPage: IMainPage,
     chat: IChat,
     error: IError,
+}
+
+export type SubscriberType = (messages: IChatMessage[]) => void;
+
+export interface IChatMessage { //todo
+
 }

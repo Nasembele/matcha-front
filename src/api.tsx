@@ -22,7 +22,8 @@ import {prepareDateToSendServer} from "./helpers";
 import {ChangeEvent} from "react";
 import {setChatTokenAC, setIsOpenChatRoom, setUserInChatAC, setUserMatchesAC} from "./components/Chat/ChatAC";
 import {useSelector} from "react-redux";
-import {setAction} from "./socket";
+import {chatAPI} from "./chat-api";
+import {setAction} from "./components/Chat/Chat.reducer";
 
 // const userId = sessionStorage.getItem('userId');
 // const chatToken = sessionStorage.getItem('chatToken');
@@ -453,7 +454,7 @@ export const likeUserPutQuery = (userId: number, action: string) => (dispatch: a
       if (response.data === 'MATCH') {
         dispatch(setMatchCurrentUserAC());
         dispatch(getUserMatch('MATCH', setUserMatchesAC));
-        setAction('MATCH', myId, userId);
+        dispatch(setAction('MATCH', myId, userId));
       } else {
         dispatch(deleteNotLikeUserAC());
       }
@@ -463,7 +464,7 @@ export const likeUserPutQuery = (userId: number, action: string) => (dispatch: a
       if (action === 'TAKE_LIKE') {
         dispatch(getUserMatch('MATCH', setUserMatchesAC));
       }
-      setAction(action, myId, userId);
+      dispatch(setAction(action, myId, userId));
 
 
     })
@@ -651,7 +652,17 @@ export const getUserById = (userId: number) => (dispatch: any, getState: any) =>
     .then((response: any) => { //валидация?
       dispatch(setUserInChatAC(response.data));
       dispatch(setVisitUserPutQuery(userId));
-      setAction('VISIT', myId, userId);
+      dispatch(setAction('VISIT', myId, userId));
+    })
+    .catch(() => {
+      dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
+    });
+}
+
+export const getUserByIdWithAction = (userId: number, actionAfterSuccess: Function) => (dispatch: any, getState: any) => {
+  usersAPI.getUserByIdGetQuery(userId)
+    .then((response: any) => { //валидация?
+      dispatch(actionAfterSuccess(response.data));
     })
     .catch(() => {
       dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
