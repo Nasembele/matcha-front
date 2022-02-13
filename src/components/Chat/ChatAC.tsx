@@ -51,9 +51,9 @@ export const setCurrentUserMessages = (messages: IMessage[]) => ({
   payload: messages
 });
 
-export const setUserFiInLastNotification = (user: IUserData) => ({
+export const setUserFiInLastNotification = (user: {firstName: string, lastName: string}) => ({
   type: constants.SET_USER_FI_IN_LAST_NOTIFICATION,
-  payload: user
+  payload: {firstName: user.firstName, lastName: user.lastName}
 });
 
 export const setIsShowFalseForNotifications = () => ({

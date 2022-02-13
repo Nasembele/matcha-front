@@ -4,7 +4,7 @@ import {
   addElemInArray,
   addNewFirstPack,
   closeNotificationAboutMessage,
-  prepareNotificationForSave, setUserFiInLastNotificationHelp
+  prepareNotificationForSave, setIsShowFalseInLastNotification, setUserFiInLastNotificationHelp
 } from "../../helpers";
 import {message} from "antd";
 import {Dispatch} from "redux";
@@ -108,13 +108,7 @@ export default function ChatReducer(state: IChat = initialChatState, action: IAc
     case constants.SET_IS_SHOW_FALSE_FOR_NOTIFICATION:
       return {
         ...state,
-        actionNotifications: state.actionNotifications?.map((el) => {
-            return {
-              ...el,
-              isCanShow: false
-            }
-          }
-        )
+        actionNotifications: setIsShowFalseInLastNotification(state.actionNotifications)
       }
     default:
       return state;

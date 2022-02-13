@@ -104,10 +104,17 @@ const MainPage = () => {
             duration: 0,
           };
           notification.open(args);
+
           dispatch(setIsShowFalseForNotifications());
       }
     })
   }
+
+  // if (width > 450) {
+  //   notification.open(args);
+  // } else {
+  //   notification.open(args);
+  // }
 
   useEffect(() => {
     chat.actionNotifications?.map((el) => {
@@ -162,21 +169,6 @@ const MainPage = () => {
   return (
     <div className={style.content_wrapper}>
       <div className={style.notification_container}>
-      {/*{*/}
-      {/*  chat.actionNotifications?.map((el) => {*/}
-      {/*    const title = getNotificationTitleByAction(el.action);*/}
-      {/*    if (el?.isPrepareForShow && el?.isCanShow) {*/}
-      {/*      const args = {*/}
-      {/*        message: title,*/}
-      {/*        description: getDescriptionByAction(el.action, el.fromUsrFI, title),*/}
-      {/*        duration: 0,*/}
-      {/*        */}
-      {/*      };*/}
-      {/*      notification.open(args);*/}
-      {/*    }*/}
-      {/*    dispatch(setIsShowFalseForNotifications());*/}
-      {/*  })*/}
-      {/*}*/}
       </div>
       {chosenIndex === 2 &&
       <MatchSideBar closeAnotherWindowMobile={closeAnotherWindowMobile}/>

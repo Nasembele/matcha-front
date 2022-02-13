@@ -60,7 +60,7 @@ export const prepareNotificationForSave = (notification: any): INotification | u
   }
 }
 
-export const setUserFiInLastNotificationHelp = (notifications: INotification[], user: IUserData) => {
+export const setUserFiInLastNotificationHelp = (notifications: INotification[], user: {firstName: string, lastName: string}) => {
   notifications[notifications.length - 1].fromUsrFI = `${user.firstName} ${user.lastName}`;
   notifications[notifications.length - 1].isPrepareForShow = true;
   return notifications;
@@ -101,4 +101,9 @@ export const getDescriptionByAction = (action: string, fromFI?: string, title?: 
       break;
   }
   return `${fromFI || ''} ${description}`
+}
+
+export const setIsShowFalseInLastNotification = (notifications: INotification[]) => {
+  notifications[notifications.length - 1].isCanShow = false;
+  return notifications;
 }
