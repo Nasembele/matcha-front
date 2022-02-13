@@ -11,7 +11,7 @@ import {MatchSideBar} from "../Chat/MatchSideBar/MatchSideBar";
 import {ChatRoom} from "../Chat/ChatRoom/ChatRoom";
 import {
   setFirstPackMessagesAC,
-  setIsOpenChatRoom,
+  setIsOpenChatRoom, setIsShowFalseForNotifications,
   setNotificationAboutNewMessageAC,
   setNotificationAboutNewVisitAC, setUserFiInLastNotification
 } from "../Chat/ChatAC";
@@ -21,6 +21,8 @@ import {DownCircleOutlined, LogoutOutlined, MessageOutlined, UpCircleOutlined, U
 import UserSettings from "../../parts/UserSettings/UserSettings";
 import cc from "classnames";
 import {sendNewMessage, startMessagesListening} from "../Chat/Chat.reducer";
+import {notification} from "antd";
+import {getDescriptionByAction, getNotificationTitleByAction} from "../../helpers";
 
 // export const socket = new WebSocket(`ws://localhost:8080/pul`);
 // export const socket = new WebSocket(`ws://localhost:8080/${userIdChat}/${chatToken}/${chatFingerprint}`);
@@ -92,27 +94,28 @@ const MainPage = () => {
     }
   };
 
+  const secondAction = () => {
+    chat.actionNotifications?.map((el) => {
+      if (el?.isPrepareForShow && el?.isCanShow) {
+        const title = getNotificationTitleByAction(el.action);
+          const args = {
+            message: title,
+            description: getDescriptionByAction(el.action, el.fromUsrFI, title),
+            duration: 0,
+          };
+          notification.open(args);
+          dispatch(setIsShowFalseForNotifications());
+      }
+    })
+  }
+
   useEffect(() => {
     chat.actionNotifications?.map((el) => {
       if (el?.isPrepareForShow === false) {
         if (el.chatId === chat.openChatId) {
           dispatch(sendNewMessage(getFirstMessage));
         }
-        // if (el.messageId) {
-        //   const getMessageById = {
-        //     type: 'CHAT',
-        //     transportMessage: {
-        //       chatId: el.chatId,
-        //       getMessageRq: {
-        //         type: "BY_IDS",
-        //         messageIds: [el.messageId],
-        //       }
-        //     }
-        //   };
-        //
-        //   // dispatch(sendNewMessage(getMessageById));
-        // }
-        dispatch(getUserByIdWithAction(el.fromUsr, setUserFiInLastNotification));
+        dispatch(getUserByIdWithAction(el.fromUsr, setUserFiInLastNotification, secondAction));
       }
     })
   }, [chat.actionNotifications]);
@@ -158,6 +161,23 @@ const MainPage = () => {
 
   return (
     <div className={style.content_wrapper}>
+      <div className={style.notification_container}>
+      {/*{*/}
+      {/*  chat.actionNotifications?.map((el) => {*/}
+      {/*    const title = getNotificationTitleByAction(el.action);*/}
+      {/*    if (el?.isPrepareForShow && el?.isCanShow) {*/}
+      {/*      const args = {*/}
+      {/*        message: title,*/}
+      {/*        description: getDescriptionByAction(el.action, el.fromUsrFI, title),*/}
+      {/*        duration: 0,*/}
+      {/*        */}
+      {/*      };*/}
+      {/*      notification.open(args);*/}
+      {/*    }*/}
+      {/*    dispatch(setIsShowFalseForNotifications());*/}
+      {/*  })*/}
+      {/*}*/}
+      </div>
       {chosenIndex === 2 &&
       <MatchSideBar closeAnotherWindowMobile={closeAnotherWindowMobile}/>
       }

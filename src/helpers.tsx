@@ -47,13 +47,15 @@ export const prepareNotificationForSave = (notification: any): INotification | u
       fromUsr: notification.transportMessage?.messageNotification.senderId,
       messageId: notification.transportMessage?.messageNotification.messageId,
       chatId: notification.transportMessage?.chatId,
-      isPrepareForShow: false
+      isPrepareForShow: false,
+      isCanShow: true
     }
   } else if (notification.likeAction) {
     return {
       action: notification.likeAction?.action,
       fromUsr: notification.likeAction?.fromUsr,
-      isPrepareForShow: false
+      isPrepareForShow: false,
+      isCanShow: true
     }
   }
 }
@@ -62,4 +64,41 @@ export const setUserFiInLastNotificationHelp = (notifications: INotification[], 
   notifications[notifications.length - 1].fromUsrFI = `${user.firstName} ${user.lastName}`;
   notifications[notifications.length - 1].isPrepareForShow = true;
   return notifications;
+}
+
+export const getNotificationTitleByAction = (action: string) => {
+ switch (action) {
+   case 'NEW_MESSAGE':
+     return 'Новое сообщение';
+   case 'VISIT':
+     return 'Новый визит';
+   case 'LIKE':
+     return 'Новый лайк';
+   case 'MATCH':
+     return 'Новый матч';
+   case 'TAKE_LIKE':
+     return 'Забрали лайк';
+ }
+}
+
+export const getDescriptionByAction = (action: string, fromFI?: string, title?: string) => {
+  let description;
+  switch (action) {
+    case 'NEW_MESSAGE':
+      description = 'прислал(а) сообщение';
+      break;
+    case 'VISIT':
+      description = 'просматривал(а) Ваш профиль';
+      break;
+    case 'LIKE':
+      description = 'поставил(а) Вам лайк';
+      break;
+    case 'MATCH':
+      description = 'поставил(а) Вам лайк в ответ, у вас матч';
+      break;
+    case 'TAKE_LIKE':
+      description = 'забрал(а) свой лайк';
+      break;
+  }
+  return `${fromFI || ''} ${description}`
 }

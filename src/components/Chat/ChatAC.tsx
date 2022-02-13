@@ -55,3 +55,7 @@ export const setUserFiInLastNotification = (user: IUserData) => ({
   type: constants.SET_USER_FI_IN_LAST_NOTIFICATION,
   payload: user
 });
+
+export const setIsShowFalseForNotifications = () => ({
+  type: constants.SET_IS_SHOW_FALSE_FOR_NOTIFICATION,
+});

@@ -158,7 +158,7 @@ export interface IChat {
 
 export interface INotification {
     action: string,
-    isShow?: boolean,
+    isCanShow: boolean,
     isPrepareForShow: boolean,
     fromUsr: number,
     toUsr?: number,

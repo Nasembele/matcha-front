@@ -105,6 +105,17 @@ export default function ChatReducer(state: IChat = initialChatState, action: IAc
         ...state,
         actionNotifications: setUserFiInLastNotificationHelp(state.actionNotifications, action.payload)
       }
+    case constants.SET_IS_SHOW_FALSE_FOR_NOTIFICATION:
+      return {
+        ...state,
+        actionNotifications: state.actionNotifications?.map((el) => {
+            return {
+              ...el,
+              isCanShow: false
+            }
+          }
+        )
+      }
     default:
       return state;
   }
@@ -133,7 +144,7 @@ const newMessageHandlerCreator = (dispatch: Dispatch) => {
 
         // dispatch(sendNewMessage(getMessageById));
         dispatch(setReceivedNotice(messages)) //todo гдето тут классифицировать поступающие сообщения?
-      }
+    }
 
   }
 
@@ -150,7 +161,7 @@ export const stopMessagesListening = () => async (dispatch: Dispatch) => {
   chatAPI.stop();
 }
 
-export const sendNewMessage = (newMessage: any):any => async (dispatch: Dispatch) => {
+export const sendNewMessage = (newMessage: any): any => async (dispatch: Dispatch) => {
   chatAPI.sendMessage(JSON.stringify(newMessage));
 }
 

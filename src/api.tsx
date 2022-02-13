@@ -659,10 +659,11 @@ export const getUserById = (userId: number) => (dispatch: any, getState: any) =>
     });
 }
 
-export const getUserByIdWithAction = (userId: number, actionAfterSuccess: Function) => (dispatch: any, getState: any) => {
+export const getUserByIdWithAction = (userId: number, actionAfterSuccess: Function, secondAction?: Function) => (dispatch: any, getState: any) => {
   usersAPI.getUserByIdGetQuery(userId)
     .then((response: any) => { //валидация?
       dispatch(actionAfterSuccess(response.data));
+      secondAction && secondAction();
     })
     .catch(() => {
       dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
