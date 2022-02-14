@@ -311,9 +311,10 @@
 
 .notification {
     background: #d0e4ff !important;
-    margin-bottom: 7px !important;
+    margin-bottom: 5px !important;
     box-shadow: none !important;
     font-size: 8px !important;
+    padding: 14px 18px !important;
 }
 
 .notification div:first-child div:first-child div:first-child {
@@ -344,7 +345,7 @@
 {
     position: relative !important;
     top: 0  !important;
-    margin-right: 3px;
+    /*margin-right: 3px;*/
     /*margin: 0;*/
 
 }
@@ -356,8 +357,8 @@
     .not {
         position: absolute;
         right: 0;
-        top: 10px;
-        height: 150px;
+        top: 5px;
+        height: 128px;
         overflow: scroll;
     }
 
@@ -383,9 +384,5 @@
     .notification div:first-child div:first-child div:nth-child(2) {
         font-size: 9px;
         line-height: 9px;
-    }
-
-    .notification {
-        padding: 14px 24px !important;
     }
 }
