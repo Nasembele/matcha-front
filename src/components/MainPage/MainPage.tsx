@@ -94,6 +94,8 @@ const MainPage = () => {
     }
   };
 
+  const notificationContainer = document.getElementById("not-cont");
+
   const secondAction = () => {
     chat.actionNotifications?.map((el) => {
       if (el?.isPrepareForShow && el?.isCanShow) {
@@ -102,8 +104,10 @@ const MainPage = () => {
             message: title,
             description: getDescriptionByAction(el.action, el.fromUsrFI, title),
             duration: 0,
+            getContainer: () => notificationContainer!,
+            className: style.notification
           };
-          notification.open(args);
+        notification.open(args);
 
           dispatch(setIsShowFalseForNotifications());
       }
@@ -168,7 +172,7 @@ const MainPage = () => {
 
   return (
     <div className={style.content_wrapper}>
-      <div className={style.notification_container}>
+      <div id="not-cont" className={style.not}>
       </div>
       {chosenIndex === 2 &&
       <MatchSideBar closeAnotherWindowMobile={closeAnotherWindowMobile}/>
