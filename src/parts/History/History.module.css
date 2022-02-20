@@ -1,0 +1,45 @@
+.wrapper {
+    width: 100%;
+    height: calc(100% - 30px);
+}
+
+.title {
+    margin-top: 10px;
+    /*text-align: center;*/
+    color: rgb(91, 91, 144) !important;
+}
+
+.margin {
+    margin-top: 25px;
+}
+
+.message_pair {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+/*big*/
+@media (min-height: 600px) {
+    .message_pairs {
+        max-height: 40%;
+        overflow-y: scroll;
+    }
+}
+
+/*small*/
+@media (max-height: 600px) {
+    .message_pairs {
+        max-height: calc(40% - 75px);
+        overflow-y: scroll;
+    }
+}
+
+.name {
+    font-weight: bold;
+    margin: auto 0;
+}
+
+.text_container {
+    margin-left: 10px;
+    display: flex;
+}

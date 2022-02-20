@@ -169,4 +169,12 @@ export const setMatchCurrentUserAC = () => ({
     type: constants.SET_MATCH_CURRENT_USER,
 });
 
+export const addUserFromLikesHistoryToUsersList = (user: IUserData) => ({
+    type: constants.ADD_USER_TO_USERS_LIST_FROM_LIKES_HISTORY,
+    payload: user
+});
 
+export const addUserFromVisitsHistoryToUsersList = (user: IUserData) => ({
+    type: constants.ADD_USER_TO_USERS_LIST_FROM_VISITS_HISTORY,
+    payload: user
+});

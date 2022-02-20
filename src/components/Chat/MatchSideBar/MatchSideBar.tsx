@@ -14,21 +14,24 @@ import {
 import {getFirstMessages} from "../../../socket";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "antd/dist/antd.css";
-import {HeartOutlined, LogoutOutlined, UserOutlined} from "@ant-design/icons";
+import {HeartOutlined, HistoryOutlined, LogoutOutlined, UserOutlined} from "@ant-design/icons";
 import {Logout} from "grommet-icons";
 import {Avatar, Button} from "antd";
 import Title from "antd/es/typography/Title";
 import UserSettings from "../../../parts/UserSettings/UserSettings";
 import cc from "classnames";
+import History from "../../../parts/History/History";
 
 const matchTitles = ['Пары', 'Сообщения'];
 
 type IProps = {
-  closeAnotherWindowMobile: VoidFunction
+  closeAnotherWindowMobile: VoidFunction,
+  changeChosenIndex?: Function
 }
 
 export const MatchSideBar = ({
-                               closeAnotherWindowMobile
+                               closeAnotherWindowMobile,
+                               changeChosenIndex
                              }: IProps) => {
 
   const dispatch = useDispatch();
@@ -38,6 +41,7 @@ export const MatchSideBar = ({
   const [matchTypeIdx, setMatchTypeIdx] = useState(0);
 
   const [isShowUserSettings, setIsShowUserSettings] = useState(false);
+  const [isShowHistory, setIsShowHistory] = useState(false);
 
   const onChangeMatchTypeIdx = (chosenIdx: number) => {
     setMatchTypeIdx(chosenIdx);
@@ -100,7 +104,13 @@ export const MatchSideBar = ({
   // // {/*todo история визитов*/}
 
   const changeShowUserSettings = () => {
+    setIsShowHistory(false);
     setIsShowUserSettings(prevState => !prevState);
+  }
+
+  const changeShowHistory = () => {
+    setIsShowUserSettings(false);
+    setIsShowHistory(prevState => !prevState);
   }
 
   return (
@@ -108,6 +118,7 @@ export const MatchSideBar = ({
       <div className={style.menu}>
         <UserOutlined style={{fontSize: '25px'}} onClick={changeShowUserSettings}/>
         {/*<HeartOutlined style={{fontSize: '25px'}}/>*/}
+        <HistoryOutlined style={{fontSize: '25px'}} onClick={changeShowHistory}/>
         <LogoutOutlined style={{fontSize: '25px'}} onClick={onClickLogout}/>
         {/*<Logout color={'black'}/>*/}
       </div>
@@ -119,71 +130,73 @@ export const MatchSideBar = ({
 
       {/*{*/}
       {/*  matchTypeIdx === 0 &&*/}
-      {isShowUserSettings ?
-        <div className={cc(style.sidebar_content, style.user_settings)}>
-          <UserSettings/>
-        </div>
-        :
-        <div>
-          <div className={style.sidebar_content}>
-            <Title level={5}>Пары</Title>
+      {isShowUserSettings &&
+      <div className={cc(style.sidebar_content, style.user_settings)}>
+        <UserSettings/>
+      </div>
+      }
+      {isShowHistory &&
+      <div className={cc(style.sidebar_content, style.user_settings)}>
+        <History changeChosenIndex={changeChosenIndex!}/>
+      </div>
+      }
+      {!isShowUserSettings && !isShowHistory &&
+      <div>
+        <div className={style.sidebar_content}>
+          <Title level={5} className={style.title}>Пары</Title>
 
-            <div className={style.pair_users}>
-              {chat.matches?.map((el: IMatches) => {
-                return !el.chatId &&
-                  <div className={style.pair_user} onClick={showChatRoom(el)}>
+
+          <div className={style.pair_users}>
+            {chat.matches?.map((el: IMatches) => {
+              return !el.chatId &&
+                <div className={style.pair_user} onClick={showChatRoom(el)}>
+                  {el.icon?.content ?
+                    <img height='100px'
+                         width='75px'
+                         src={`data:${el.icon?.format};base64,${el.icon?.content}`}
+                         alt='фото'/> :
+                    <Avatar shape="square" size={75} icon={<UserOutlined/>}
+                            style={{backgroundColor: '#fde3cf', height: '100px'}}/>
+                  }
+                  <div className={style.pair_name}>
+                    {el.firstName}
+                  </div>
+                </div>
+            })}
+          </div>
+          {/*/!*todo история лайков*  куда то отдельно их засунуть!/*/}
+          {/*<div onClick={openLikesHistory}>История лайков</div>*/}
+          {/*<div onClick={openVisitsHistory}>История визитов</div>*/}
+
+          {/*}*/}
+          <Title level={5} className={style.title}>Сообщения</Title>
+          <div className={style.message_pairs}>
+            {
+              chat.matches.map((el: IMatches) => {
+                return el.chatId &&
+                  <div className={style.message_pair} onClick={showChatRoom(el)}>
                     {el.icon?.content ?
-                      <img height='100px'
-                           width='75px'
+                      <img height='50px'
+                           width={'40px'}
                            src={`data:${el.icon?.format};base64,${el.icon?.content}`}
                            alt='фото'/> :
-                      <Avatar shape="square" size={75} icon={<UserOutlined/>}
-                              style={{backgroundColor: '#fde3cf', height: '100px'}}/>
-                    }
-                    <div className={style.pair_name}>
-                      {el.firstName}
-                    </div>
-                  </div>
-              })}
-            </div>
-            {/*/!*todo история лайков*  куда то отдельно их засунуть!/*/}
-            {/*<div onClick={openLikesHistory}>История лайков</div>*/}
-            {/*<div onClick={openVisitsHistory}>История визитов</div>*/}
-
-            {/*}*/}
-            <Title level={5}>Сообщения</Title>
-            <div className={style.message_pairs}>
-              {
-                chat.matches.map((el: IMatches) => {
-                  // const currentPackMessages = chat.firstPackMessages.find(messageEl => messageEl.messages.chatId === el.chatId)?.messages.messageAnswer;
-                  // const lastMessage = 'dd';//currentPackMessages ? currentPackMessages[currentPackMessages.length - 1]?.content : '';
-                  return el.chatId &&
-                    <div className={style.message_pair} onClick={showChatRoom(el)}>
-                      {el.icon?.content ?
-                        <img height='50px'
-                             width={'40px'}
-                             src={`data:${el.icon?.format};base64,${el.icon?.content}`}
-                             alt='фото'/> :
-                        <Avatar shape="square" size={40} icon={<UserOutlined/>}
-                                style={{backgroundColor: '#fde3cf', height: '50px'}}/>}
-                      <div className={style.text_container}>
-                        <div className={style.name}>
-                          {el.firstName}
-                        </div>
-                        {/*<div>*/}
-                        {/*  {lastMessage}*/}
-                        {/*</div>*/}
+                      <Avatar shape="square" size={40} icon={<UserOutlined/>}
+                              style={{backgroundColor: '#fde3cf', height: '50px'}}/>}
+                    <div className={style.text_container}>
+                      <div className={style.name}>
+                        {el.firstName}
                       </div>
                     </div>
+                  </div>
 
-                })
-              }
-            </div>
+              })
+            }
           </div>
-          <Button onClick={getNewMatches} className={style.submit_button_upload}>
-            Загрузить ещё
-          </Button>
         </div>
+        <Button onClick={getNewMatches} className={style.submit_button_upload}>
+          Посмотреть ещё
+        </Button>
+      </div>
       }
       {/*{chat.messageNotification.map((el, idx) => {*/}
       {/*  if (el.isShow) {*/}

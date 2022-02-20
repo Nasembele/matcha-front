@@ -64,6 +64,8 @@
     .sidebar_content {
         padding: 15px;
         max-width: 27vw;
+        min-width: 270px;
+
     }
 
     .submit_button_upload {
@@ -159,4 +161,9 @@
 .text_container {
     margin-left: 10px;
     display: flex;
+}
+
+.title {
+    /*text-align: center;*/
+    color: rgb(91, 91, 144) !important;
 }

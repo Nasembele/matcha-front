@@ -9,6 +9,7 @@ import * as constants from "./MainPage.consts";
 import {setLikeUserAC, setPhotoParam} from "./MainPageAC";
 import {IAction, IMainPage, IPhotos, IUserData} from "../../types";
 import {SET_ACC_BIRTHDAY, SET_FILTER_COMMON_TAGS, SET_FILTER_RATING, SET_VALID_NEW_EMAIL} from "./MainPage.consts";
+import {addNewElemInArray} from "../../helpers";
 
 export default function MainPageReducer(state: IMainPage = initialState, action: IAction) {
     switch (action.type) {
@@ -330,6 +331,24 @@ export default function MainPageReducer(state: IMainPage = initialState, action:
             return {
                 ...state,
                 userFilters: action.payload
+            };
+        case constants.ADD_USER_TO_USERS_LIST_FROM_LIKES_HISTORY:
+            return {
+                ...state,
+                users: addNewElemInArray(state.users, action.payload, true),
+                currentUser: {
+                    userData: action.payload,
+                    match: false
+                }
+            };
+        case constants.ADD_USER_TO_USERS_LIST_FROM_VISITS_HISTORY:
+            return {
+                ...state,
+                users: addNewElemInArray(state.users, action.payload, false),
+                currentUser: {
+                    userData: action.payload,
+                    match: false
+                }
             };
         default:
             return state;

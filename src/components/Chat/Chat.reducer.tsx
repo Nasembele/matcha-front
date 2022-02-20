@@ -12,6 +12,7 @@ import {setCurrentUserMessages, setReceivedNotice, setUserFiInLastNotification} 
 import {ThunkAction, ThunkDispatch} from "redux-thunk";
 import {chatAPI} from "../../chat-api";
 import {getUserById} from "../../api";
+import {SET_USER_LIKES} from "./Chat.consts";
 
 export const initialChatState: IChat = {
   chatToken: '',
@@ -20,6 +21,8 @@ export const initialChatState: IChat = {
   openChatId: 0,
   toUserId: 0,
   matches: [],
+  likes: [],
+  visits: [],
   // currentUserMessages?: {},
   // messageNotification: [],
   actionNotifications: []
@@ -31,6 +34,16 @@ export default function ChatReducer(state: IChat = initialChatState, action: IAc
       return {
         ...state,
         matches: action.payload
+      };
+    case constants.SET_USER_LIKES:
+      return {
+        ...state,
+        likes: action.payload
+      };
+    case constants.SET_USER_VISITS:
+      return {
+        ...state,
+        visits: action.payload
       };
     case constants.SET_IS_OPEN_CHAT_ROOM:
       return {

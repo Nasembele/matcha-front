@@ -19,13 +19,15 @@ import {setAction} from "../../components/Chat/Chat.reducer";
 type IProps = {
   user: IUserData,
   isCurrentUser: boolean,
-  actionAfterTakeLike?: Function
+  actionAfterTakeLike?: Function,
+  isShowButton?: boolean,
 }
 
 const UserCard = ({
                     user,
                     isCurrentUser,
-                    actionAfterTakeLike
+                    actionAfterTakeLike,
+                    isShowButton = true
                   }: IProps) => {
 
   const dispatch = useDispatch();
@@ -56,7 +58,7 @@ const UserCard = ({
 
   const onClickDisLikeUser = () => {
     dispatch(likeUserPutQuery(user.id, 'DISLIKE'));
-    dispatch(deleteNotLikeUserAC());
+    // dispatch(deleteNotLikeUserAC());
   };
 
   const onClickNotLikeUser = () => {
@@ -85,19 +87,19 @@ const UserCard = ({
             </div>
           </div>
         </div>
-         <div className={style.icon_info_container} onClick={changeShowInfo}>
-            <InfoCircleTwoTone twoToneColor="rgb(75, 79, 206)" style={{fontSize: '2rem'}}/>
-          </div>
+        <div className={style.icon_info_container} onClick={changeShowInfo}>
+          <InfoCircleTwoTone twoToneColor="rgb(75, 79, 206)" style={{fontSize: '2rem'}}/>
+        </div>
         <span>
           {!user.card.photos[0]?.content &&
           <Avatar shape="square" size={400} icon={<UserOutlined/>}
                   style={{backgroundColor: '#fde3cf', height: '600px', width: '100%'}}/>}
           {user.card.photos[photoIndex - 1]?.content &&
-        <div className={style.left_arrow} onClick={changePhotoIndex(-1)}>
-          <LeftOutlined style={{fontSize: '30px', color: 'white'}}/>
-        </div>
+          <div className={style.left_arrow} onClick={changePhotoIndex(-1)}>
+            <LeftOutlined style={{fontSize: '30px', color: 'white'}}/>
+          </div>
 
-        }
+          }
           {user.card.photos[photoIndex]?.content &&
           <img width={'100%'}
                height={'600px'}
@@ -128,7 +130,8 @@ const UserCard = ({
               <div className={cc(style.second_name, style.rating)}>
                 {user.card.rating && user.card.rating.toFixed(1)}
               </div>
-              <DownCircleTwoTone className={style.down_circle} twoToneColor="rgb(75, 79, 206)" style={{fontSize: '2rem'}} onClick={changeShowInfo}/>
+              <DownCircleTwoTone className={style.down_circle} twoToneColor="rgb(75, 79, 206)"
+                                 style={{fontSize: '2rem'}} onClick={changeShowInfo}/>
             </div>
           </div>
           <div className={cc(style.flex, style.space_between)}>
@@ -164,7 +167,9 @@ const UserCard = ({
           </div>
         </div>
       }
-      {!isCurrentUser &&
+      {isShowButton &&
+      <>
+        {!isCurrentUser &&
         <div className={style.like_container}>
           {mainPage.currentUser?.match &&
           <div className={cc(style.match_text, isShowInfo && style.text_color)}>
@@ -185,11 +190,20 @@ const UserCard = ({
           {/*  матч!*/}
           {/*</div>}*/}
         </div>
+        }
+        {isCurrentUser &&
+        <div className={style.like_container}>
+          <div className={style.like_content}>
+            <MinusCircleTwoTone twoToneColor="#FF0000" style={{fontSize: '2rem'}} onClick={onClickTakeLikeUser}/>
+          </div>
+        </div>
+        }
+      </>
       }
-      {isCurrentUser &&
+      {user.isUserFromVisitHistory &&
       <div className={style.like_container}>
         <div className={style.like_content}>
-          <MinusCircleTwoTone twoToneColor="#FF0000" style={{fontSize: '2rem'}} onClick={onClickTakeLikeUser}/>
+          <RightCircleTwoTone twoToneColor="#52c41a" style={{fontSize: '3rem'}} onClick={onClickNotLikeUser}/>
         </div>
       </div>
       }

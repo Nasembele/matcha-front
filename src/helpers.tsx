@@ -107,3 +107,15 @@ export const setIsShowFalseInLastNotification = (notifications: INotification[])
   notifications[notifications.length - 1].isCanShow = false;
   return notifications;
 }
+
+export const addNewElemInArray = (users: IUserData[], user: IUserData, isLikeHistory: boolean) => {
+  if (users[0]?.isUserFromLikeHistory || users[0]?.isUserFromVisitHistory) {
+    users = users.slice(1);
+  }
+  users.unshift({
+    ...user,
+    isUserFromLikeHistory: isLikeHistory,
+    isUserFromVisitHistory: !isLikeHistory
+  });
+  return users;
+}

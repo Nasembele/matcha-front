@@ -47,7 +47,9 @@ export interface IUserData {
     location: string,
     card: IUserCard,
     // match?: boolean,
-    filter?: IUserFilter
+    filter?: IUserFilter,
+    isUserFromLikeHistory?: boolean,
+    isUserFromVisitHistory?: boolean
 }
 
 export interface IRegData {
@@ -146,6 +148,8 @@ export interface IChat {
     openChatId: number,
     toUserId: number,
     matches: IMatches[],
+    likes: IMatches[],
+    visits: IMatches[],
     currentUserMessages?: ICurrentUserMessages,
     userInChat?: IUserData,
     // messageNotification: Array<{

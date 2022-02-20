@@ -6,6 +6,16 @@ export const setUserMatchesAC = (matches: IMatches) => ({
   payload: matches
 });
 
+export const setUserLikesAC = (likes: IMatches) => ({
+  type: constants.SET_USER_LIKES,
+  payload: likes
+});
+
+export const setUserVisitsAC = (visits: IMatches) => ({
+  type: constants.SET_USER_VISITS,
+  payload: visits
+});
+
 export const setIsOpenChatRoom = (isOpenChatRoom: boolean, chatId?: number, toUserId?: number) => ({
   type: constants.SET_IS_OPEN_CHAT_ROOM,
   payload: {isOpenChatRoom, chatId, toUserId}
@@ -51,7 +61,7 @@ export const setCurrentUserMessages = (messages: IMessage[]) => ({
   payload: messages
 });
 
-export const setUserFiInLastNotification = (user: {firstName: string, lastName: string}) => ({
+export const setUserFiInLastNotification = (user: IUserData) => ({
   type: constants.SET_USER_FI_IN_LAST_NOTIFICATION,
   payload: {firstName: user.firstName, lastName: user.lastName}
 });

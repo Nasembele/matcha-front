@@ -20,7 +20,13 @@ import {
 import {setServerErrorAC} from "./components/ErrorWrapper/ErrorWrapperAC";
 import {prepareDateToSendServer} from "./helpers";
 import {ChangeEvent} from "react";
-import {setChatTokenAC, setIsOpenChatRoom, setUserInChatAC, setUserMatchesAC} from "./components/Chat/ChatAC";
+import {
+  setChatTokenAC,
+  setIsOpenChatRoom,
+  setUserInChatAC,
+  setUserLikesAC,
+  setUserMatchesAC
+} from "./components/Chat/ChatAC";
 import {useSelector} from "react-redux";
 import {chatAPI} from "./chat-api";
 import {setAction} from "./components/Chat/Chat.reducer";
@@ -138,7 +144,7 @@ export const usersAPI = {
     return instance.put(`passchange`, data)
   },
 
-  getUserMatchGetQuery(action: string, lastId?: number) {
+  getUserMatchGetQuery(action: string, lastId?: number) { //todo
     return lastId ? instance.get(`main?act=getActions&action=${action}&after=${lastId}`)
       : instance.get(`main?act=getActions&action=${action}`)
   },
@@ -451,6 +457,10 @@ export const likeUserPutQuery = (userId: number, action: string) => (dispatch: a
     .then((response: any) => { //валидация?
       // dispatch(setLikeUserAC()); TODO тут подумать!!!
 
+      if (action === 'LIKE') {
+        dispatch(getUserMatch('LIKE', setUserLikesAC));
+      }
+
       if (response.data === 'MATCH') {
         dispatch(setMatchCurrentUserAC());
         dispatch(getUserMatch('MATCH', setUserMatchesAC));
@@ -662,7 +672,7 @@ export const getUserById = (userId: number) => (dispatch: any, getState: any) =>
 export const getUserByIdWithAction = (userId: number, actionAfterSuccess: Function, secondAction?: Function) => (dispatch: any, getState: any) => {
   usersAPI.getUserByIdGetQuery(userId)
     .then((response: any) => { //валидация?
-      dispatch(actionAfterSuccess({firstName: response.data.firstName, lastName: response.data.lastName}));
+      dispatch(actionAfterSuccess(response.data));
       secondAction && secondAction();
     })
     .catch(() => {

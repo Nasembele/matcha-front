@@ -17,12 +17,20 @@ import {
 } from "../Chat/ChatAC";
 import {getFirstMessages} from "../../socket";
 import UserCard from "../../parts/UserCard/UserCard";
-import {DownCircleOutlined, LogoutOutlined, MessageOutlined, UpCircleOutlined, UserOutlined} from "@ant-design/icons";
+import {
+  DownCircleOutlined,
+  HistoryOutlined,
+  LogoutOutlined,
+  MessageOutlined,
+  UpCircleOutlined,
+  UserOutlined
+} from "@ant-design/icons";
 import UserSettings from "../../parts/UserSettings/UserSettings";
 import cc from "classnames";
 import {sendNewMessage, startMessagesListening} from "../Chat/Chat.reducer";
 import {notification} from "antd";
 import {getDescriptionByAction, getNotificationTitleByAction} from "../../helpers";
+import History from "../../parts/History/History";
 
 // export const socket = new WebSocket(`ws://localhost:8080/pul`);
 // export const socket = new WebSocket(`ws://localhost:8080/${userIdChat}/${chatToken}/${chatFingerprint}`);
@@ -100,16 +108,16 @@ const MainPage = () => {
     chat.actionNotifications?.map((el) => {
       if (el?.isPrepareForShow && el?.isCanShow) {
         const title = getNotificationTitleByAction(el.action);
-          const args = {
-            message: title,
-            description: getDescriptionByAction(el.action, el.fromUsrFI, title),
-            duration: 0,
-            getContainer: () => notificationContainer!,
-            className: style.notification
-          };
+        const args = {
+          message: title,
+          description: getDescriptionByAction(el.action, el.fromUsrFI, title),
+          duration: 0,
+          getContainer: () => notificationContainer!,
+          className: style.notification
+        };
         notification.open(args);
 
-          dispatch(setIsShowFalseForNotifications());
+        dispatch(setIsShowFalseForNotifications());
       }
     })
   }
@@ -134,6 +142,10 @@ const MainPage = () => {
   const closeCard = () => {
     setChosenIndex(0);
     dispatch(setIsOpenChatRoom(false));
+  }
+
+  const changeChosenIndex = (index: number) => {
+    setChosenIndex(index);
   }
 
   const changeShowUserCardMobile = () => {
@@ -170,6 +182,15 @@ const MainPage = () => {
     closeAnotherWindowMobile();
   }
 
+  const changeShowHistory = () => {
+    if (chosenIndex === 4) {
+      setChosenIndex(0);
+    } else {
+      setChosenIndex(4);
+    }
+    closeAnotherWindowMobile();
+  }
+
   return (
     <div className={style.content_wrapper}>
       <div id="not-cont" className={style.not}>
@@ -182,6 +203,11 @@ const MainPage = () => {
         <UserSettings/>
       </div>
       }
+      {chosenIndex === 4 &&
+      <div className={style.user_settings_wrapper}>
+        <History changeChosenIndex={changeChosenIndex}/>
+      </div>
+      }
 
       <div className={style.mobile_footer}>
 
@@ -191,34 +217,40 @@ const MainPage = () => {
           <div/>
         }
 
+        {(!isShowMatchSideBarMobile && !chat.isOpenChatRoom) &&
+        <HistoryOutlined style={{fontSize: '30px', color: 'green'}} onClick={changeShowHistory}/>
+        }
+
         {!isShowMatchSideBarMobile ?
           <MessageOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '30px'}}
                            onClick={changeShowMatchSideBarMobile}/> :
           <div/>
         }
-        {(!isShowMatchSideBarMobile && chat.isOpenChatRoom) ? <>
-            {isShowUserCardMobile ?
-              <DownCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}}
-                                  onClick={changeShowUserCardMobile}/>
-              :
-              <UpCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}}
+        {(!isShowMatchSideBarMobile && chat.isOpenChatRoom) && <>
+          {isShowUserCardMobile ?
+            <DownCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}}
                                 onClick={changeShowUserCardMobile}/>
-            }
-          </> :
-          <div/>
+            :
+            <UpCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}}
+                              onClick={changeShowUserCardMobile}/>
+          }
+        </>
         }
 
         <LogoutOutlined style={{color: 'rgb(232, 96, 144)', fontSize: '30px'}} onClick={onClickLogout}/>
       </div>
 
       <div className={style.side_bar_container}>
-        <MatchSideBar closeAnotherWindowMobile={closeAnotherWindowMobile}/>
+        <MatchSideBar closeAnotherWindowMobile={closeAnotherWindowMobile} changeChosenIndex={changeChosenIndex}/>
       </div>
-      {chosenIndex === 0 && mainPage.users[userIndex]
+      {chosenIndex === 0
       && <div className={style.main_field}>
+        {mainPage.users[userIndex] &&
         <div className={style.card_wrapper}>
-          <UserCard user={mainPage.users[userIndex]} isCurrentUser={false}/>
+          <UserCard user={mainPage.users[userIndex]} isCurrentUser={false}
+                    isShowButton={mainPage.users[userIndex].isUserFromLikeHistory}/>
         </div>
+        }
       </div>}
       {
         chosenIndex === 3 &&
@@ -231,6 +263,6 @@ const MainPage = () => {
       }
     </div>
   )
-}
+};
 
 export default MainPage;
