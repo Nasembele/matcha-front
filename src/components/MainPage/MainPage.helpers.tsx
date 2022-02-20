@@ -69,7 +69,8 @@ export const initialUserData = {
       }
     ]
   },
-  match: false
+  match: false,
+  status: ''
 }
 
 export const initialUserFilter = {

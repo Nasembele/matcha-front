@@ -49,7 +49,9 @@ export interface IUserData {
     // match?: boolean,
     filter?: IUserFilter,
     isUserFromLikeHistory?: boolean,
-    isUserFromVisitHistory?: boolean
+    isUserFromVisitHistory?: boolean,
+    status: string,
+    lastAction?: string
 }
 
 export interface IRegData {

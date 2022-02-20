@@ -159,6 +159,10 @@ export const usersAPI = {
 
   getUserByIdGetQuery(userId: number) {
     return instance.get(`main/getuser?id=${userId}`);
+  },
+
+  getUserStatus(userId: number) {
+    return instance.post(`/main/getstatus`, {ids: [userId]}); //todo status
   }
 
   // fetch('http://localhost:8080/registration', {
@@ -674,6 +678,16 @@ export const getUserByIdWithAction = (userId: number, actionAfterSuccess: Functi
     .then((response: any) => { //валидация?
       dispatch(actionAfterSuccess(response.data));
       secondAction && secondAction();
+    })
+    .catch(() => {
+      dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
+    });
+}
+
+export const getUserStatus = (userId: number) => (dispatch: any, getState: any) => {
+  usersAPI.getUserStatus(userId)
+    .then((response: any) => { //валидация?
+      // dispatch(actionAfterSuccess(response.data)); //todo
     })
     .catch(() => {
       dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху

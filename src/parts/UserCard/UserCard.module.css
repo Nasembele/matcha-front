@@ -58,6 +58,7 @@
     font-size: 2.5rem;
     color: white;
     font-weight: bold;
+    z-index: 1;
 }
 
 .second_name {
@@ -74,6 +75,7 @@
     font-size: 2.5rem;
     color: white;
     margin-left: 15px;
+    z-index: 1;
 }
 
 .second_age {
@@ -169,4 +171,29 @@
 
 .space_between {
     justify-content: space-between;
+}
+
+.online {
+    border-radius: 50%;
+    border: 1px solid white;
+    background-color: green;
+    height: 20px;
+    width: 20px;
+    margin: 22px 10px 0 0;
+    z-index: 1;
+}
+
+.offline {
+    border-radius: 50%;
+    border: 1px solid white;
+    background-color: rgba(255, 0, 0, 0.72);
+    height: 20px;
+    width: 20px;
+    margin: 22px 10px 0 0;
+    z-index: 1;
+}
+
+.last_action {
+    color: white;
+    font-weight: 800;
 }

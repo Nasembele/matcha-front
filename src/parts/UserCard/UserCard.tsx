@@ -1,4 +1,4 @@
-import React, {Children, ReactNode, useState} from 'react';
+import React, {Children, ReactNode, useEffect, useState} from 'react';
 import style from './UserCard.module.css';
 import cc from "classnames";
 import {IPhotos, IState, IUserData} from "../../types";
@@ -11,10 +11,14 @@ import {
   RightOutlined, UserOutlined
 } from "@ant-design/icons";
 import {Avatar, Tag} from "antd";
-import {likeUserPutQuery, setVisitUserPutQuery} from "../../api";
+import {getUsersPostQuery, getUserStatus, likeUserPutQuery, setVisitUserPutQuery} from "../../api";
 import {useDispatch, useSelector} from "react-redux";
 import {deleteNotLikeUserAC} from "../../components/MainPage/MainPageAC";
 import {setAction} from "../../components/Chat/Chat.reducer";
+import {Typography} from 'antd';
+import moment from "moment";
+
+const {Text} = Typography;
 
 type IProps = {
   user: IUserData,
@@ -73,12 +77,21 @@ const UserCard = ({
     }
   };
 
+  useEffect(() => {
+    // dispatch(getUserStatus(user.id)); //todo status
+  }, [user.id]);
+
   return (
     <div className={style.wrapper}>
       {!isShowInfo &&
       <div className={style.width}>
         <div className={style.card_title}>
           <div className={style.name_and_age}>
+            {
+              user.status === 'ONLINE' ?  //todo status
+                <div className={style.online}/> :
+                <div className={style.offline}/>
+            }
             <div className={style.name}>
               {user.firstName}
             </div>
@@ -86,6 +99,12 @@ const UserCard = ({
               {user.yearsOld}
             </div>
           </div>
+          {
+            user.status === 'ONLINE' &&
+            <Text italic className={style.last_action}>
+              {`Был(а) в сети ${moment(user.lastAction).format('ll')} в ${moment(user.lastAction).format('LT')}`}
+            </Text>
+          }
         </div>
         <div className={style.icon_info_container} onClick={changeShowInfo}>
           <InfoCircleTwoTone twoToneColor="rgb(75, 79, 206)" style={{fontSize: '2rem'}}/>
