@@ -49,7 +49,7 @@ export const MatchSideBar = ({
 
   const getNewMatches = () => {
     const numberLastId = chat.matches.length - 1;
-    const lastId = chat.matches[numberLastId]?.matchId;
+    const lastId = chat.matches[numberLastId]?.id;
 
     dispatch(getUserMatch('MATCH', setUserMatchesAC, lastId));
   };

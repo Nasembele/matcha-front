@@ -106,7 +106,8 @@ export interface IMainPage {
     users: IUserData[],
     likeUsers: IUserData[],
     userFilters: IUserFilter,
-    currentUser?: IUserDataWithMatch
+    currentUser?: IUserDataWithMatch,
+    userInCardStatus?: IStatus[]
 }
 
 export interface IUserDataWithMatch {
@@ -119,7 +120,7 @@ export interface IError {
 }
 
 export interface IMatches {
-    matchId: number,
+    id: number,
     userId: number,
     chatId?: number,
     firstName?: string,
@@ -141,6 +142,12 @@ export interface ICurrentUserMessages {
     messages: IMessage[],
     oldestMessagesId?: number,
     freshMessagesId?: number
+}
+
+export interface IStatus {
+    userId: 11245,
+    status: "OFFLINE",
+    lastAction: "2021-12-20 22:28:32"
 }
 
 export interface IChat {

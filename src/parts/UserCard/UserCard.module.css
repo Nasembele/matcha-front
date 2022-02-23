@@ -25,13 +25,12 @@
 }
 
 .card_title {
-    display: flex;
-    justify-content: space-between;
     position: absolute;
     top: 0;
     left: 20px;
     width: calc(100% - 30px);
     overflow-x: scroll;
+    height: 100px;
 }
 
 .name_and_age {
@@ -196,4 +195,7 @@
 .last_action {
     color: white;
     font-weight: 800;
+    z-index: 10;
+    position: absolute;
+    top: 50px;
 }

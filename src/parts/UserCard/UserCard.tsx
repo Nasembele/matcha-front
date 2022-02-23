@@ -1,14 +1,15 @@
-import React, {Children, ReactNode, useEffect, useState} from 'react';
+import React, {Children, ReactNode, useEffect, useMemo, useState} from 'react';
 import style from './UserCard.module.css';
 import cc from "classnames";
 import {IPhotos, IState, IUserData} from "../../types";
 import {
+  AlertTwoTone,
   CloseCircleTwoTone,
   DownCircleTwoTone,
   HeartTwoTone,
   InfoCircleTwoTone,
   LeftOutlined, MinusCircleTwoTone, RadiusBottomrightOutlined, RightCircleTwoTone,
-  RightOutlined, UserOutlined
+  RightOutlined, StopOutlined, StopTwoTone, UserOutlined
 } from "@ant-design/icons";
 import {Avatar, Tag} from "antd";
 import {getUsersPostQuery, getUserStatus, likeUserPutQuery, setVisitUserPutQuery} from "../../api";
@@ -77,38 +78,37 @@ const UserCard = ({
     }
   };
 
+  const onClickBlockUser = () => {
+    dispatch(likeUserPutQuery(user.id, 'BLOCK'));
+    if (actionAfterTakeLike) {
+      actionAfterTakeLike();
+    }
+  };
+
+  const onClickFakeUser = () => {
+    dispatch(likeUserPutQuery(user.id, 'FAKE'));
+  };
+
   useEffect(() => {
-    // dispatch(getUserStatus(user.id)); //todo status
+    dispatch(getUserStatus(user.id));
   }, [user.id]);
+
+  const status = useMemo(() => {
+    // debugger;
+    if (mainPage.userInCardStatus && mainPage.userInCardStatus[0].status) {
+      return mainPage.userInCardStatus[0]
+    } else {
+      return {
+        status: user.status,
+        lastAction: user.lastAction
+      }
+    }
+  }, [user.id, mainPage.userInCardStatus])
 
   return (
     <div className={style.wrapper}>
       {!isShowInfo &&
       <div className={style.width}>
-        <div className={style.card_title}>
-          <div className={style.name_and_age}>
-            {
-              user.status === 'ONLINE' ?  //todo status
-                <div className={style.online}/> :
-                <div className={style.offline}/>
-            }
-            <div className={style.name}>
-              {user.firstName}
-            </div>
-            <div className={style.age}>
-              {user.yearsOld}
-            </div>
-          </div>
-          {
-            user.status === 'ONLINE' &&
-            <Text italic className={style.last_action}>
-              {`Был(а) в сети ${moment(user.lastAction).format('ll')} в ${moment(user.lastAction).format('LT')}`}
-            </Text>
-          }
-        </div>
-        <div className={style.icon_info_container} onClick={changeShowInfo}>
-          <InfoCircleTwoTone twoToneColor="rgb(75, 79, 206)" style={{fontSize: '2rem'}}/>
-        </div>
         <span>
           {!user.card.photos[0]?.content &&
           <Avatar shape="square" size={400} icon={<UserOutlined/>}
@@ -131,6 +131,45 @@ const UserCard = ({
           </div>
           }
         </span>
+        <div className={style.card_title}>
+          <div className={style.name_and_age}>
+            {
+              status.status === 'ONLINE' ?
+                <div className={style.online}/> :
+                <div className={style.offline}/>
+            }
+            <div className={style.name}>
+              {user.firstName}
+            </div>
+            <div className={style.age}>
+              {user.yearsOld}
+            </div>
+            {/*{*/}
+            {/*  status.status === 'OFFLINE' &&*/}
+            {/*  // <Text italic className={style.last_action}>*/}
+            {/*    <div className={style.last_action}>*/}
+            {/*      /!*<br/>*!/*/}
+            {/*      /!*<br/>*!/*/}
+            {/*      vdvxdv*/}
+            {/*    /!*{`Был(а) в сети ${moment(status.lastAction).format('ll')} в ${moment(status.lastAction).format('LT')}`}*!/*/}
+            {/*    </div>*/}
+            {/*  // </Text>*/}
+            {/*}*/}
+          </div>
+          {
+            status.status === 'OFFLINE' &&
+
+            <Text italic className={style.last_action}>
+              {/*<div className={style.last_action}>*/}
+              {/*  vdvxdv*/}
+              {`Был(а) в сети ${moment(status.lastAction).format('ll')} в ${moment(status.lastAction).format('LT')}`}
+              {/*</div>*/}
+            </Text>
+          }
+        </div>
+        <div className={style.icon_info_container} onClick={changeShowInfo}>
+          <InfoCircleTwoTone twoToneColor="rgb(75, 79, 206)" style={{fontSize: '2rem'}}/>
+        </div>
       </div>
       }
       {
@@ -204,16 +243,14 @@ const UserCard = ({
               <CloseCircleTwoTone style={{fontSize: '3rem'}} onClick={onClickDisLikeUser}/>
             </div>
           }
-          {/*{mainPage.currentUser?.match &&*/}
-          {/*<div className={cc(style.match_text, isShowInfo && style.text_color)}>*/}
-          {/*  матч!*/}
-          {/*</div>}*/}
         </div>
         }
         {isCurrentUser &&
         <div className={style.like_container}>
           <div className={style.like_content}>
             <MinusCircleTwoTone twoToneColor="#FF0000" style={{fontSize: '2rem'}} onClick={onClickTakeLikeUser}/>
+            <StopTwoTone twoToneColor="#FF0000" style={{fontSize: '2rem'}} onClick={onClickBlockUser}/>
+            <AlertTwoTone twoToneColor="#FF0000" style={{fontSize: '2rem'}} onClick={onClickFakeUser}/>
           </div>
         </div>
         }

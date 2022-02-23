@@ -69,3 +69,7 @@ export const setUserFiInLastNotification = (user: IUserData) => ({
 export const setIsShowFalseForNotifications = () => ({
   type: constants.SET_IS_SHOW_FALSE_FOR_NOTIFICATION,
 });
+
+export const closeOpenChatRoom = () => ({
+  type: constants.CLOSE_OPEN_CHAT_ROOM,
+});

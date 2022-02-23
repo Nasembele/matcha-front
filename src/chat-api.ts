@@ -25,7 +25,7 @@ const cleanUp = () => {
 function createChanel(dateForChannel: any) {
   cleanUp();
   wsChanel?.close();
-  wsChanel = new WebSocket(`ws://localhost:8080/${dateForChannel.userId}/${dateForChannel.chatToken}/${dateForChannel.chatFingerprint}`);
+  wsChanel = new WebSocket(`ws://localhost:8080/${dateForChannel?.userId}/${dateForChannel?.chatToken}/${dateForChannel?.chatFingerprint}`);
   wsChanel.addEventListener('close', closeHandler);
   wsChanel.addEventListener('message', messageHandler);
 }

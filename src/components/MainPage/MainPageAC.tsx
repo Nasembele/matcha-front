@@ -1,5 +1,5 @@
 import * as constants from "./MainPage.consts";
-import {IUserData, IUserFilter} from "../../types";
+import {IStatus, IUserData, IUserFilter} from "../../types";
 
 export const setUserAccountAC = (userAccountData: IUserData) => ({
     type: constants.SET_USER_ACCOUNT,
@@ -178,3 +178,9 @@ export const addUserFromVisitsHistoryToUsersList = (user: IUserData) => ({
     type: constants.ADD_USER_TO_USERS_LIST_FROM_VISITS_HISTORY,
     payload: user
 });
+
+export const setUserStatus = (status: IStatus) => ({
+    type: constants.SET_USER_STATUS,
+    payload: status
+});
+

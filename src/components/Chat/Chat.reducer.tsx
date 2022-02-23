@@ -123,7 +123,14 @@ export default function ChatReducer(state: IChat = initialChatState, action: IAc
         ...state,
         actionNotifications: setIsShowFalseInLastNotification(state.actionNotifications)
       }
-    default:
+    case constants.CLOSE_OPEN_CHAT_ROOM:
+      return {
+        ...state,
+        isOpenChatRoom: false,
+        userInChat: undefined,
+        openChatId: undefined
+      }
+      default:
       return state;
   }
 }

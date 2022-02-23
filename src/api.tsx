@@ -5,7 +5,7 @@ import {
   setLikeUserAC, setMatchCurrentUserAC,
   setUserAccountAC,
   setUserDataAC, setUserFiltersAC,
-  setUsersAC, setValidNewEmailAC,
+  setUsersAC, setUserStatus, setValidNewEmailAC,
   setValidPrevEmailAC
 } from "./components/MainPage/MainPageAC";
 import {IAuthData, IChat, IPhotos, IRegData, IState, IUserCard, IUserData, IUserFilter} from "./types";
@@ -21,6 +21,7 @@ import {setServerErrorAC} from "./components/ErrorWrapper/ErrorWrapperAC";
 import {prepareDateToSendServer} from "./helpers";
 import {ChangeEvent} from "react";
 import {
+  closeOpenChatRoom,
   setChatTokenAC,
   setIsOpenChatRoom,
   setUserInChatAC,
@@ -465,6 +466,11 @@ export const likeUserPutQuery = (userId: number, action: string) => (dispatch: a
         dispatch(getUserMatch('LIKE', setUserLikesAC));
       }
 
+      if (action === 'BLOCK') {
+        dispatch(getUserMatch('MATCH', setUserMatchesAC));
+        dispatch(closeOpenChatRoom());
+      }
+
       if (response.data === 'MATCH') {
         dispatch(setMatchCurrentUserAC());
         dispatch(getUserMatch('MATCH', setUserMatchesAC));
@@ -687,7 +693,7 @@ export const getUserByIdWithAction = (userId: number, actionAfterSuccess: Functi
 export const getUserStatus = (userId: number) => (dispatch: any, getState: any) => {
   usersAPI.getUserStatus(userId)
     .then((response: any) => { //валидация?
-      // dispatch(actionAfterSuccess(response.data)); //todo
+      dispatch(setUserStatus(response.data));
     })
     .catch(() => {
       dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
