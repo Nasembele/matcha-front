@@ -60,6 +60,14 @@ export default function LoginReducer(state: ILogin = initialState, action: IActi
                     lastName: action.payload
                 }
             };
+        case constants.SET_REG_USERNAME:
+            return {
+                ...state,
+                regData: {
+                    ...state.regData,
+                    userName: action.payload
+                }
+            };
         case constants.SET_REG_MIDDLE_NAME:
             return {
                 ...state,

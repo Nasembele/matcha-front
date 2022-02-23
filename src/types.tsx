@@ -58,6 +58,7 @@ export interface IRegData {
     firstName: string,
     lastName: string,
     middleName: string,
+    userName: string,
     birthday: string,
     gender: 'male' | 'female' | null,
     sexualPreference: 'getero' | 'gay' | 'bisexual' | 'lesbi' | null,

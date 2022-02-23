@@ -144,26 +144,11 @@ const UserCard = ({
             <div className={style.age}>
               {user.yearsOld}
             </div>
-            {/*{*/}
-            {/*  status.status === 'OFFLINE' &&*/}
-            {/*  // <Text italic className={style.last_action}>*/}
-            {/*    <div className={style.last_action}>*/}
-            {/*      /!*<br/>*!/*/}
-            {/*      /!*<br/>*!/*/}
-            {/*      vdvxdv*/}
-            {/*    /!*{`Был(а) в сети ${moment(status.lastAction).format('ll')} в ${moment(status.lastAction).format('LT')}`}*!/*/}
-            {/*    </div>*/}
-            {/*  // </Text>*/}
-            {/*}*/}
           </div>
           {
             status.status === 'OFFLINE' &&
-
             <Text italic className={style.last_action}>
-              {/*<div className={style.last_action}>*/}
-              {/*  vdvxdv*/}
               {`Был(а) в сети ${moment(status.lastAction).format('ll')} в ${moment(status.lastAction).format('LT')}`}
-              {/*</div>*/}
             </Text>
           }
         </div>
@@ -227,7 +212,7 @@ const UserCard = ({
       }
       {isShowButton &&
       <>
-        {!isCurrentUser &&
+        {!isCurrentUser && mainPage.account.card.photos.length !== 0 &&
         <div className={style.like_container}>
           {mainPage.currentUser?.match &&
           <div className={cc(style.match_text, isShowInfo && style.text_color)}>

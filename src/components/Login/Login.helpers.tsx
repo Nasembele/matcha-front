@@ -2,6 +2,7 @@ export const initialRegData = {
     firstName: '',
     lastName: '',
     middleName: '',
+    userName: '',
     birthday: '',
     gender: null,
     sexualPreference: null,

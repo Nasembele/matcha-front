@@ -16,7 +16,7 @@ import {
     changeRegLastNameAC,
     changeRegMiddleNameAC,
     changeRegPasswordAC,
-    changeRegSexualPreferenceAC,
+    changeRegSexualPreferenceAC, changeRegUsernameAC,
     setIsRegUserAC, setIsValidEmailResetUserAC,
     setIsValidLinkResetUserAC,
     setIsValidPassResetUserAC
@@ -87,6 +87,10 @@ const Login = () => {
 
     const changeRegLastName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
         dispatch(changeRegLastNameAC(value));
+    }
+
+    const changeRegUsername = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+        dispatch(changeRegUsernameAC(value));
     }
 
     const changeRegMiddleName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
@@ -227,6 +231,8 @@ const Login = () => {
                         <Input type={'text'} onBlur={changeRegLastName} className={style.input_margin}
                                placeholder={'фамилия'}/>
 
+                            <Input type={'text'} onBlur={changeRegUsername} className={style.input_margin}
+                                   placeholder={'username'}/>
                         {/*<div className={style.form_header}>Дата рождения</div>*/}
                         {/*<Input type={'date'} onBlur={changeRegBirthday} className={style.form_input}/>*/}
                         <DatePicker onChange={changeRegBirthday} placeholder={'дата рождения'} className={cc(style.whole_wide, style.input_margin)}

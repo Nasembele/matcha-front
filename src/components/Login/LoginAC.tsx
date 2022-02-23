@@ -42,6 +42,11 @@ export const changeRegLastNameAC = (lastName: string) => ({
     payload: lastName
 });
 
+export const changeRegUsernameAC = (username: string) => ({
+    type: constants.SET_REG_USERNAME,
+    payload: username
+});
+
 export const changeRegMiddleNameAC = (middleName: string) => ({
     type: constants.SET_REG_MIDDLE_NAME,
     payload: middleName
