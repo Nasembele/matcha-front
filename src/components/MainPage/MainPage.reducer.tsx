@@ -355,6 +355,8 @@ export default function MainPageReducer(state: IMainPage = initialState, action:
         ...state,
         userInCardStatus: action.payload
       };
+    case constants.CLEAR_MAIN_PAGE:
+      return initialState;
     default:
       return state;
   }

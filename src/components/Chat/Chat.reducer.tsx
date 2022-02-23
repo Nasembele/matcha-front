@@ -130,6 +130,8 @@ export default function ChatReducer(state: IChat = initialChatState, action: IAc
         userInChat: undefined,
         openChatId: undefined
       }
+    case constants.CLEAR_CHAT_PAGE:
+      return initialChatState
       default:
       return state;
   }

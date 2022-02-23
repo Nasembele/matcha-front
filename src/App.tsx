@@ -24,7 +24,7 @@ function App() {
 
     <div className='app-wrapper'>
       {/*<Navbar/>*/}
-      <ErrorWrapper/>
+      {/*<ErrorWrapper/>*/}
       <div className='app-wrapper-content'>
         {/*<Route path='/login' render={() => <Error/>}/>*/}
         {/*<Route path='/resetpasschange' render={() => <ResetPassword/>}/>*/}

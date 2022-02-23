@@ -184,3 +184,7 @@ export const setUserStatus = (status: IStatus) => ({
     payload: status
 });
 
+export const clearMainPage = () => ({
+    type: constants.CLEAR_MAIN_PAGE
+});
+

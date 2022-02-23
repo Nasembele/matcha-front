@@ -107,3 +107,7 @@ export const setIdResetUserAC = (id: number) => ({
     type: constants.SET_ID_RESET_USER,
     payload: id
 });
+
+export const clearLoginPage = () => ({
+    type: constants.CLEAR_LOGIN_PAGE
+});

@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  clearMainPage,
   deleteNotLikeUserAC,
   setChangePassAC, setConfirmNewEmailAC, setIsValidLinkAC,
   setLikeUserAC, setMatchCurrentUserAC,
@@ -11,7 +12,7 @@ import {
 import {IAuthData, IChat, IPhotos, IRegData, IState, IUserCard, IUserData, IUserFilter} from "./types";
 import {Dispatch} from "redux";
 import {
-  changeLoginAC, changePasswordAC,
+  changeLoginAC, changePasswordAC, clearLoginPage,
   setIsAuthUserAC,
   setIsAuthUserDataAC,
   setIsRegUserAC,
@@ -21,6 +22,7 @@ import {setServerErrorAC} from "./components/ErrorWrapper/ErrorWrapperAC";
 import {prepareDateToSendServer} from "./helpers";
 import {ChangeEvent} from "react";
 import {
+  clearChatPage,
   closeOpenChatRoom,
   setChatTokenAC,
   setIsOpenChatRoom,
@@ -361,6 +363,10 @@ export const logoutGetQuery = () => (dispatch: Dispatch) => {
       dispatch(changeLoginAC(''));
       dispatch(changePasswordAC(''));
       dispatch(setIsAuthUserAC(false)); //TODO почистить в редаксе логин и пароль
+
+      dispatch(clearMainPage());
+      dispatch(clearChatPage());
+      dispatch(clearLoginPage());
       sessionStorage.clear();
     })
     .catch(() => {

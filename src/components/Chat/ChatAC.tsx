@@ -73,3 +73,7 @@ export const setIsShowFalseForNotifications = () => ({
 export const closeOpenChatRoom = () => ({
   type: constants.CLOSE_OPEN_CHAT_ROOM,
 });
+
+export const clearChatPage = () => ({
+  type: constants.CLEAR_CHAT_PAGE
+});
