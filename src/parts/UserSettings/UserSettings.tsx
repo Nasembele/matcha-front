@@ -43,6 +43,7 @@ import Title from "antd/es/typography/Title";
 import cc from "classnames";
 import {changeRegBirthdayAC} from "../../components/Login/LoginAC";
 import moment from 'moment';
+import {parseDate} from "../../helpers";
 
 const {TextArea} = Input;
 const {Option} = Select;
@@ -153,7 +154,7 @@ const UserSettings = ({}: Props) => {
 
   const deletePhoto = (number: number) => (e: any) => {
     dispatch(changePhotoPostQuery(number, 'delete'));
-    dispatch(authGetUserQuery());
+    // dispatch(authGetUserQuery());
   };
 
   const changeFirstAccName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
@@ -230,7 +231,7 @@ const UserSettings = ({}: Props) => {
               <img height={'200px'}
                    src={`data:${userAccount.card.photos[photoIndex].format};base64,${userAccount.card.photos[photoIndex].content}`}
                    alt='фото'/>
-              {photoIndex === userAccount.card.photos.length - 2 &&
+              {photoIndex === userAccount.card.photos.length - 1 &&
               <div className={style.image_bucket}>
                 <DeleteOutlined onClick={deletePhoto(photoIndex)}/>
               </div>
@@ -353,7 +354,8 @@ const UserSettings = ({}: Props) => {
 
           <DatePicker onChange={changeAccBirthday}
                       placeholder={'дата рождения'}
-                      value={moment(userAccount.birthday)}
+                      value={moment(parseDate(mainPage.account.birthday))}
+                      // value={userAccount.birthday}
                       className={cc(style.whole_wide, style.elem)}
                       allowClear={false}/>
           <div>

@@ -238,6 +238,39 @@ export const authGetUserQuery = () => (dispatch: any, getState: any) => {
     });
 }
 
+export const rerunGetUserQuery = () => (dispatch: any, getState: any) => {
+  usersAPI.authGetUser()
+    // fetch('http://localhost:8080/getauthuser', {
+    //     method: 'GET',
+    //     body: JSON.stringify({})
+    // })
+    .then((res: any) => {
+      // debugger;
+
+      if (res.data === 'Error JWT') { //поправить на новый лад?
+        // debugger;
+        dispatch(setIsAuthUserAC(false));
+        // добавить ошибку error jwt
+      } else {
+
+
+
+        // dispatch(setIsAuthUserAC(true));
+        // dispatch(setIsAuthUserDataAC(res.data));
+        dispatch(setUserDataAC(res.data));
+        // dispatch(setUserFiltersAC(res.data.filter));
+        // dispatch(getUserMatch('MATCH', setUserMatchesAC));
+        // dispatch(getChatToken());
+      }
+      // dispatch(setIsAuthAC(true));
+    })
+    .catch(() => {
+      console.log('error');
+      dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
+      // dispatch(setIsAuthUserAC(true));//todo потом убрать
+    });
+}
+
 export const signInPostQuery = (isAuthData: IAuthData) => (dispatch: any, getState: any) => {
   usersAPI.signIn(isAuthData)
     .then((res: any) => {
@@ -403,7 +436,7 @@ export const saveChangeAccPostQuery = (newCard: IUserCard) => (dispatch: Dispatc
     });
 }
 
-export const changePhotoPostQuery = (number: number, action: 'save' | 'delete') => (dispatch: Dispatch, getState: any) => {
+export const changePhotoPostQuery = (number: number, action: 'save' | 'delete') => (dispatch: any, getState: any) => {
   const photoObj = getState().mainPage.account?.card?.photos[number];
   if (action) {
     photoObj.action = action;
@@ -411,6 +444,8 @@ export const changePhotoPostQuery = (number: number, action: 'save' | 'delete') 
   usersAPI.changePhoto([photoObj])
     .then((res: any) => {
       // dispatch(setUserAccountAC(response));
+      dispatch(rerunGetUserQuery());
+
     }) //валидация на успешный ответ
     .catch(() => {
       dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
