@@ -136,7 +136,8 @@ export interface IMessage {
     id: number,
     status: string,
     toId: number,
-    type: string
+    type: string,
+    typeInfo?: string
 }
 
 export interface ICurrentUserMessages {

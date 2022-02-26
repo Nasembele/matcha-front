@@ -60,19 +60,39 @@ const Message = ({
             <div className={style.message}>
               <DeleteOutlined className={style.delete_message} onClick={onClickDeleteMessage}
                               data-message-id={message.id}/>
+
               <div className={style.user_message}>
-                {message.content}
+                {message.type === 'TEXT' &&
+                  message.content}
+
+                {message.type === 'IMAGE' &&
+                <img height={'200px'}
+                     src={`data:${message.typeInfo};base64,${message.content}`}
+                     alt='фото'/>}
               </div>
+
             </div>
             :
             <div className={style.user_message}>
-              {message.content}
+              {message.type === 'TEXT' &&
+              message.content}
+
+              {message.type === 'IMAGE' &&
+              <img height={'200px'}
+                   src={`data:${message.typeInfo};base64,${message.content}`}
+                   alt='фото'/>}
             </div>
           }
         </div> :
         <div className={style.my_message}>
           <div className={style.my_message_content}>
-            {message.content}
+            {message.type === 'TEXT' &&
+            message.content}
+
+            {message.type === 'IMAGE' &&
+            <img height={'200px'}
+                 src={`data:${message.typeInfo};base64,${message.content}`}
+                 alt='фото'/>}
           </div>
           {isShowBucket &&
           <DeleteOutlined className={style.delete_my_message} onClick={onClickDeleteMessage}
@@ -83,6 +103,5 @@ const Message = ({
     </div>
   )
 };
-
 
 export default Message;

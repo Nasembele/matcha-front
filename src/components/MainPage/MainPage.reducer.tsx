@@ -162,7 +162,6 @@ export default function MainPageReducer(state: IMainPage = initialState, action:
                   ...el,
                   // displayContent: `data:${el.data.format};base64,${action.payload?.photo}`,
                   // data: {
-                  ...el,
                   content: action.payload?.photo
                   // },
                 }

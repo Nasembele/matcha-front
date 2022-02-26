@@ -14,18 +14,19 @@ import {
   sendMessage
 } from "../../../socket";
 import UserCard from "../../../parts/UserCard/UserCard";
-import {Button, Input} from "antd";
+import {Button, Input, Upload} from "antd";
 import {
   BackwardOutlined,
   CloseCircleOutlined,
   DeleteOutlined, DownCircleOutlined,
-  FastForwardOutlined, MessageOutlined,
+  FastForwardOutlined, MessageOutlined, PlusOutlined,
   StepBackwardOutlined,
-  UpCircleOutlined
+  UpCircleOutlined, UploadOutlined
 } from "@ant-design/icons";
 import Message from "../../../parts/Message/Message";
 import {MatchSideBar} from "../MatchSideBar/MatchSideBar";
 import {sendNewMessage, startMessagesListening} from "../Chat.reducer";
+import {actionDataForPhoto, getBase64} from "../../../helpers";
 
 type IProps = {
   closeWindow: VoidFunction,
@@ -98,6 +99,33 @@ export const ChatRoom = ({
     dispatch(sendNewMessage(newMessage));
     dispatch(sendNewMessage(getFirstMessage));
     setMessage('');
+  }
+
+  const sendPhoto = (e: any) => {
+    if (e.file?.status === 'done' &&
+      (e.file?.type === 'image/jpeg' || e.file?.type === 'image/png' || e.file?.type === 'image/jpg')) {
+      getBase64(e.file.originFileObj).then(
+        res => {
+
+          const newMessage = {
+            type: 'CHAT',
+            transportMessage: {
+              chatId: chat.openChatId,
+              message: {
+                chatId: chat.openChatId,
+                fromId: fromUserId,
+                toId: chat.toUserId,
+                type: "IMAGE",
+                typeInfo: e.file.type,
+                content: res
+              }
+            }
+          };
+          dispatch(sendNewMessage(newMessage));
+          dispatch(sendNewMessage(getFirstMessage));
+        }
+      );
+    }
   }
 
   const onClickGetPreviousMessages = () => {
@@ -218,8 +246,18 @@ export const ChatRoom = ({
         </div>
 
         <Input.Group compact className={style.message_input_container}>
-          <Input style={{width: 'calc(100% - 115px)'}} onChange={(e) => setMessage(e.currentTarget.value)}
+          <Input style={{width: 'calc(100% - 135px)'}} onChange={(e) => setMessage(e.currentTarget.value)}
                  value={message}/>
+          <Upload
+            // name="avatar"
+            // listType="picture-card"
+            // className="avatar-uploader"
+            showUploadList={false}
+            action={actionDataForPhoto}
+            onChange={sendPhoto}
+          >
+            <Button icon={<UploadOutlined />}/>
+          </Upload>
           <Button type="primary" className={style.submit_button} onClick={onClickSendMessage}>
             Отправить
           </Button>

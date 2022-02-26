@@ -43,25 +43,10 @@ import Title from "antd/es/typography/Title";
 import cc from "classnames";
 import {changeRegBirthdayAC} from "../../components/Login/LoginAC";
 import moment from 'moment';
-import {parseDate} from "../../helpers";
+import {actionDataForPhoto, getBase64, parseDate} from "../../helpers";
 
 const {TextArea} = Input;
 const {Option} = Select;
-
-const getBase64 = (file: File) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      let encoded = reader.result!.toString().replace(/^data:(.*,)?/, '');
-      if ((encoded.length % 4) > 0) {
-        encoded += '='.repeat(4 - (encoded.length % 4));
-      }
-      resolve(encoded);
-    };
-    reader.onerror = error => reject(error);
-  });
-}
 
 type Props = {}
 
@@ -142,14 +127,16 @@ const UserSettings = ({}: Props) => {
   };
 
   const changePhoto = (number: number) => (e: any) => {
-    dispatch(setPhotoParam(number, e.file.name, e.file.type));
-    getBase64(e.file.originFileObj).then(
-      res => {
-        dispatch(setPhotoContent(res, number));
-        dispatch(changePhotoPostQuery(number, 'save'));
-        // dispatch(authGetUserQuery()); TODO открыть когда заработает запрос
-      }
-    );
+    if (e.file?.status === 'done' &&
+      (e.file?.type === 'image/jpeg' || e.file?.type === 'image/png' || e.file?.type === 'image/jpg')) {
+      dispatch(setPhotoParam(number, e.file.name, e.file.type));
+      getBase64(e.file.originFileObj).then(
+        res => {
+          dispatch(setPhotoContent(res, number));
+          dispatch(changePhotoPostQuery(number, 'save'));
+        }
+      );
+    }
   }
 
   const deletePhoto = (number: number) => (e: any) => {
@@ -244,7 +231,7 @@ const UserSettings = ({}: Props) => {
                 listType="picture-card"
                 className="avatar-uploader"
                 showUploadList={false}
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                action={actionDataForPhoto}
                 onChange={changePhoto(photoIndex)}
               >
                 <div>

@@ -139,7 +139,7 @@ export const setPhotoParamHelp = (photos: IPhotos[] | undefined, payload: { numb
       format: payload.format,
       // name: payload.name,
       action: 'save',
-      main: payload?.number === 0,
+      main: false,
       number: String(payload?.number + 1)
 
     }
