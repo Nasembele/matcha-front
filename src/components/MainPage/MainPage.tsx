@@ -65,7 +65,8 @@ const MainPage = () => {
       }
       dispatch(startMessagesListening(dateForChannel));
     }
-  }, [dispatch]);
+    // eslint-disable-next-line
+  }, [dispatch, sessionStorage.chatFingerprint]);
 
   const notificationContainer = document.getElementById("not-cont");
 
