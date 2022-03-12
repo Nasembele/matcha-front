@@ -26,7 +26,7 @@ import {
 import Message from "../../../parts/Message/Message";
 import {MatchSideBar} from "../MatchSideBar/MatchSideBar";
 import {sendNewMessage, startMessagesListening} from "../Chat.reducer";
-import {actionDataForPhoto, getBase64} from "../../../helpers";
+import {actionDataForPhoto, forbiddenForText, getBase64, russianLetter} from "../../../helpers";
 
 type IProps = {
   closeWindow: VoidFunction,
@@ -194,6 +194,12 @@ export const ChatRoom = ({
     dispatch(sendNewMessage(getFirstMessage));
   }, [chat.openChatId]);
 
+  const setNewMessage = ({target: {value}}: any) => {
+    if (value === '' || (value.match(russianLetter) && !value.match(forbiddenForText))) {
+      setMessage(value)
+    }
+  }
+
   return (
     <div className={style.container}>
       {isShowMatchSideBarMobile && !isShowUserCardMobile &&
@@ -246,7 +252,7 @@ export const ChatRoom = ({
         </div>
 
         <Input.Group compact className={style.message_input_container}>
-          <Input style={{width: 'calc(100% - 135px)'}} onChange={(e) => setMessage(e.currentTarget.value)}
+          <Input style={{width: 'calc(100% - 135px)'}} onChange={setNewMessage}
                  value={message}/>
           <Upload
             // name="avatar"
@@ -256,7 +262,7 @@ export const ChatRoom = ({
             action={actionDataForPhoto}
             onChange={sendPhoto}
           >
-            <Button icon={<UploadOutlined />}/>
+            <Button icon={<UploadOutlined/>}/>
           </Upload>
           <Button type="primary" className={style.submit_button} onClick={onClickSendMessage}>
             Отправить
