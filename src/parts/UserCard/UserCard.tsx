@@ -200,7 +200,7 @@ const UserCard = ({
           <div className={style.tags_container}>
             {
               user.card.tags?.map((el: string) => {
-                return <Tag color="magenta" style={{marginTop: '5px'}}>
+                return <Tag color="magenta" style={{marginTop: '5px'}} key={el}>
                   {`#${el}`}
                 </Tag>
               })

@@ -89,7 +89,7 @@ export const MatchSideBar = ({
           <div className={style.pair_users}>
             {chat.matches?.map((el: IMatches) => {
               return !el.chatId &&
-                <div className={style.pair_user} onClick={showChatRoom(el)}>
+                <div className={style.pair_user} onClick={showChatRoom(el)} key={el.id}>
                   {el.icon?.content ?
                     <img height='100px'
                          width='75px'
@@ -109,7 +109,7 @@ export const MatchSideBar = ({
             {
               chat.matches.map((el: IMatches) => {
                 return el.chatId &&
-                  <div className={style.message_pair} onClick={showChatRoom(el)}>
+                  <div className={style.message_pair} onClick={showChatRoom(el)} key={el.id}>
                     {el.icon?.content ?
                       <img height='50px'
                            width={'40px'}
@@ -117,11 +117,11 @@ export const MatchSideBar = ({
                            alt='фото'/> :
                       <Avatar shape="square" size={40} icon={<UserOutlined/>}
                               style={{backgroundColor: '#fde3cf', height: '50px'}}/>}
-                    <div className={style.text_container}>
-                      <div className={style.name}>
-                        {el.firstName}
+                      <div className={style.text_container}>
+                        <div className={style.name}>
+                          {el.firstName}
+                        </div>
                       </div>
-                    </div>
                   </div>
               })
             }

@@ -41,14 +41,12 @@ import {
 import {Input} from 'antd';
 import Title from "antd/es/typography/Title";
 import cc from "classnames";
-import moment from 'moment';
 import {
   actionDataForPhoto,
   englishLetter,
   forbiddenForLocation,
   forbiddenForText,
   getBase64,
-  parseDate,
   russianLetter
 } from "../../helpers";
 
@@ -345,8 +343,7 @@ const UserSettings = () => {
                  value={userAccount.lastName}
                  onBlur={saveChangedFIO}/>
           <DatePicker onChange={changeAccBirthday}
-                      placeholder={'дата рождения'}
-                      value={moment(parseDate(mainPage.account.birthday))}
+                      placeholder={mainPage.account.birthday}
                       className={cc(style.whole_wide, style.elem)}
                       allowClear={false}/>
           <div>

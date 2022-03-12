@@ -26,7 +26,6 @@ import {
 } from "./LoginAC";
 import {changeAccPassPostQuery, signInPostQuery, updateRegDataPostQuery} from "../../api";
 import LoginWrapper from "../../parts/LoginWrapper/LoginWrapper";
-import {Option} from "antd/es/mentions";
 import cc from "classnames";
 import {
   forbiddenForAuthPassword,
@@ -36,7 +35,6 @@ import {
   russianLetter
 } from "../../helpers";
 import {Typography} from 'antd';
-
 const {Text} = Typography;
 
 const Login = () => {
@@ -272,16 +270,16 @@ const Login = () => {
                           allowClear={false}/>
               <Select onChange={changeRegGender} placeholder={'пол'}
                       className={cc(style.whole_wide, style.input_margin)}>
-                <Option value={'male'}>{'M'}</Option>
-                <Option value={'female'}>{'Ж'}</Option>
+                <Select.Option value={'male'}>{'M'}</Select.Option>
+                <Select.Option value={'female'}>{'Ж'}</Select.Option>
               </Select>
                <Select onChange={changeRegSexualPreference}
                        placeholder={'сексуальные предпочтения'}
                        className={cc(style.whole_wide, style.input_margin)}>
-                 <Option value={'getero'}>{'гетеро'}</Option>
-                 <Option value={'bisexual'}>{'би'}</Option>
-                 {login.regData?.gender === 'male' && <Option value={'gay'}>{'гей'}</Option>}
-                 {login.regData?.gender === 'female' && <Option value={'lesbi'}>{'лесби'}</Option>}
+                 <Select.Option value={'getero'}>{'гетеро'}</Select.Option>
+                 <Select.Option value={'bisexual'}>{'би'}</Select.Option>
+                 {login.regData?.gender === 'male' && <Select.Option value={'gay'}>{'гей'}</Select.Option>}
+                 {login.regData?.gender === 'female' && <Select.Option value={'lesbi'}>{'лесби'}</Select.Option>}
                </Select>
               <Input type={'text'} onChange={changeRegEmail} className={style.input_margin}
                      placeholder={'email'} value={login.regData.email}/>

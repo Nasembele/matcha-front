@@ -48,7 +48,7 @@ const History = ({
       <div className={style.message_pairs}>
         {
           chat.likes.map((el: IMatches) => {
-            return <div className={style.message_pair} onClick={showUserInLikesHistory(el)}>
+            return <div className={style.message_pair} onClick={showUserInLikesHistory(el)} key={el.id}>
               {el.icon?.content ?
                 <img height='50px'
                      width={'40px'}
@@ -71,7 +71,7 @@ const History = ({
       <div className={style.message_pairs}>
         {
           chat.visits.map((el: IMatches) => {
-            return <div className={style.message_pair} onClick={showUserInVisitsHistory(el)}>
+            return <div className={style.message_pair} onClick={showUserInVisitsHistory(el)} key={el.id}>
               {el.icon?.content ?
                 <img height='50px'
                      width={'40px'}
