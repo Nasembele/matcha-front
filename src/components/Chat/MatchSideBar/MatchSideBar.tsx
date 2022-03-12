@@ -8,7 +8,7 @@ import {
   setUserMatchesAC
 } from "../ChatAC";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "antd/dist/antd.css";
+import "antd/dist/antd.min.css";
 import {HistoryOutlined, LogoutOutlined, UserOutlined} from "@ant-design/icons";
 import {Avatar, Button} from "antd";
 import Title from "antd/es/typography/Title";
