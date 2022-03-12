@@ -25,7 +25,13 @@ import {changeAccPassPostQuery, recoveryPasswordPostQuery, signInPostQuery, upda
 import LoginWrapper from "../../parts/LoginWrapper/LoginWrapper";
 import {Option} from "antd/es/mentions";
 import cc from "classnames";
-import {forbiddenForAuthPassword, regexForEmail, regexForPassword} from "../../helpers";
+import {
+  forbiddenForAuthPassword,
+  forbiddenForText,
+  regexForEmail,
+  regexForPassword,
+  russianLetter
+} from "../../helpers";
 import {Typography} from 'antd';
 
 const {Text} = Typography;
@@ -77,6 +83,8 @@ const Login = () => {
 
   const onChangeChosenIndex = (number: number) => () => {
     setChosenIndex(number);
+    dispatch(setIsRegUserAC(false));
+    dispatch(setIsValidEmailResetUserAC(null));
   }
 
   const changeChosenIndex = (value: number) => () => {
@@ -93,19 +101,27 @@ const Login = () => {
   }
 
   const changeFirstRegName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeRegFirstNameAC(value));
+    if (value === '' || (value.match(russianLetter) && !value.match(forbiddenForText))) {
+      dispatch(changeRegFirstNameAC(value));
+    }
   }
 
   const changeRegLastName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeRegLastNameAC(value));
+    if (value === '' || (value.match(russianLetter) && !value.match(forbiddenForText))) {
+      dispatch(changeRegLastNameAC(value));
+    }
   }
 
   const changeRegUsername = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeRegUsernameAC(value));
+    if (value === '' || value.match(regexForEmail)) {
+      dispatch(changeRegUsernameAC(value));
+    }
   }
 
   const changeRegMiddleName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeRegMiddleNameAC(value));
+    if (value === '' || (value.match(russianLetter) && !value.match(forbiddenForText))) {
+      dispatch(changeRegMiddleNameAC(value));
+    }
   }
 
   // const changeRegBirthday = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
@@ -117,7 +133,12 @@ const Login = () => {
   }
 
   const changeRegEmail = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeRegEmailAC(value));
+    // dispatch(changeRegEmailAC(value)); //todo
+
+    if (value === '' || value.match(regexForEmail)) {
+      dispatch(changeRegEmailAC(value));
+
+    }
   }
 
   const changeRegLogin = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
@@ -146,7 +167,7 @@ const Login = () => {
 
   const validateSubmitRegButton = () => {
     if (password !== login.regData.password || !password.match(regexForPassword) || password.match(forbiddenForAuthPassword)
-    || !login.regData.firstName || !login.regData.lastName || !login.regData.middleName || !login.regData.userName
+      || !login.regData.firstName || !login.regData.lastName || !login.regData.middleName || !login.regData.userName
       || !login.regData.birthday || !login.regData.gender || !login.regData.sexualPreference || !login.regData.email
       || !login.regData.password) {
       return true
@@ -269,20 +290,20 @@ const Login = () => {
                     <div className={style.content}>
                         <div className={style.body}>
                         {/*<div className={style.form_header}>Имя</div>*/}
-                          <Input type={'text'} onBlur={changeFirstRegName} className={style.input_margin}
-                                 placeholder={'имя'}/>
+                          <Input type={'text'} onChange={changeFirstRegName} className={style.input_margin}
+                                 placeholder={'имя'} value={login.regData.firstName}/>
 
                           {/*<div className={style.form_header}>Отчество</div>*/}
-                          <Input type={'text'} onBlur={changeRegMiddleName} className={style.input_margin}
-                                 placeholder={'отчество'}/>
+                          <Input type={'text'} onChange={changeRegMiddleName} className={style.input_margin}
+                                 placeholder={'отчество'} value={login.regData.middleName}/>
 
 
                           {/*<div className={style.form_header}>Фамилия</div>*/}
-                          <Input type={'text'} onBlur={changeRegLastName} className={style.input_margin}
-                                 placeholder={'фамилия'}/>
+                          <Input type={'text'} onChange={changeRegLastName} className={style.input_margin}
+                                 placeholder={'фамилия'} value={login.regData.lastName}/>
 
-                            <Input type={'text'} onBlur={changeRegUsername} className={style.input_margin}
-                                   placeholder={'username'}/>
+                            <Input type={'text'} onChange={changeRegUsername} className={style.input_margin}
+                                   placeholder={'username'} value={login.regData.userName}/>
                           {/*<div className={style.form_header}>Дата рождения</div>*/}
                           {/*<Input type={'date'} onBlur={changeRegBirthday} className={style.form_input}/>*/}
                           <DatePicker onChange={changeRegBirthday} placeholder={'дата рождения'}
@@ -308,8 +329,8 @@ const Login = () => {
                             {login.regData?.gender === 'female' && <Option value={'lesbi'}>{'лесби'}</Option>}
                         </Select>
                           {/*<div className={style.form_header}>email</div>*/}
-                          <Input type={'text'} onBlur={changeRegEmail} className={style.input_margin}
-                                 placeholder={'email'}/>
+                          <Input type={'text'} onChange={changeRegEmail} className={style.input_margin}
+                                 placeholder={'email'} value={login.regData.email}/>
 
                           {/*<div className={style.form_header}>Пароль</div>*/}
                           <Input.Password type={'password'} onChange={changeValidatePassword}
@@ -336,14 +357,15 @@ const Login = () => {
                                 Зарегистрироваться
                             </Button>
                         {login.regData?.isRegUser &&
-                        <div>
-                          <div className={style.reset_password}>
-                            На указанный адрес отправлено письмо для подтверждения регистрации
+                        <div className={style.reset_password}>
+                          На указанный адрес отправлено письмо для подтверждения регистрации
+                        </div>
+                        }
+                        <div className={style.enter}>
+                            <Text style={{color: 'dimgrey', fontWeight: 700}} onClick={onChangeChosenIndex(0)}>
+                              Войти
+                            </Text>
                           </div>
-                          {/*<Button type={'primary'}  className={cc(style.submit_button, style.whole_wide)} onClick={changeChosenIndex(0)}>*/}
-                          {/*  Войти*/}
-                          {/*</Button>*/}
-                        </div>}
                         </div>
                     </div>
                 </span>}
