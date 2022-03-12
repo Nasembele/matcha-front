@@ -43,7 +43,14 @@ import Title from "antd/es/typography/Title";
 import cc from "classnames";
 import {changeRegBirthdayAC} from "../../components/Login/LoginAC";
 import moment from 'moment';
-import {actionDataForPhoto, getBase64, parseDate} from "../../helpers";
+import {
+  actionDataForPhoto,
+  englishLetter, forbiddenForLocation,
+  forbiddenForText,
+  getBase64,
+  parseDate,
+  russianLetter
+} from "../../helpers";
 
 const {TextArea} = Input;
 const {Option} = Select;
@@ -97,21 +104,30 @@ const UserSettings = ({}: Props) => {
 
   const changePhotoIndex = (number: number) => () => {
     setPhotoIndex(prevState => prevState + number);
-  }
-  const changeEducation = (education: any) => {
-    dispatch(changeEducationAC(education.target.value));
   };
 
-  const changeWorkPlace = (workPlace: any) => {
-    dispatch(changeWorkPlaceAC(workPlace.target.value));
+  const changeEducation = ({target: {value}}: ChangeEvent<HTMLTextAreaElement>) => {
+    if (value === '' || (value.match(russianLetter) && !value.match(forbiddenForText))) {
+      dispatch(changeEducationAC(value));
+    }
   };
 
-  const changePosition = (position: any) => {
-    dispatch(changePositionAC(position.target.value));
+  const changeWorkPlace = ({target: {value}}: ChangeEvent<HTMLTextAreaElement>) => {
+    if (value === '' || (value.match(russianLetter) && !value.match(forbiddenForText))) {
+      dispatch(changeWorkPlaceAC(value));
+    }
   };
 
-  const changeBiography = (biography: any) => {
-    dispatch(changeBiographyAC(biography.target.value));
+  const changePosition = ({target: {value}}: ChangeEvent<HTMLTextAreaElement>) => {
+    if (value === '' || (value.match(russianLetter) && !value.match(forbiddenForText))) {
+      dispatch(changePositionAC(value));
+    }
+  };
+
+  const changeBiography = ({target: {value}}: ChangeEvent<HTMLTextAreaElement>) => {
+    if (value === '' || (value.match(russianLetter) && !value.match(forbiddenForText))) {
+      dispatch(changeBiographyAC(value));
+    }
   };
 
   const onClickSaveChangesAcc = () => {
@@ -143,18 +159,36 @@ const UserSettings = ({}: Props) => {
     dispatch(changePhotoPostQuery(number, 'delete'));
     // dispatch(authGetUserQuery());
   };
+  //
+  // const changeFirstAccName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+  //   dispatch(changeAccFirstNameAC(value));
+  // }
 
   const changeFirstAccName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeAccFirstNameAC(value));
-  }
+    if (value === '' || (value.match(russianLetter) && !value.match(forbiddenForText))) {
+      dispatch(changeAccFirstNameAC(value));
+    }
+  };
+
+  // const changeAccLastName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+  //   dispatch(changeAccLastNameAC(value));
+  // }
 
   const changeAccLastName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeAccLastNameAC(value));
-  }
+    if (value === '' || (value.match(russianLetter) && !value.match(forbiddenForText))) {
+      dispatch(changeAccLastNameAC(value));
+    }
+  };
 
   const changeAccMiddleName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeAccMiddleNameAC(value));
-  }
+    if (value === '' || (value.match(russianLetter) && !value.match(forbiddenForText))) {
+      dispatch(changeAccMiddleNameAC(value));
+    }
+  };
+
+  // const changeAccMiddleName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+  //   dispatch(changeAccMiddleNameAC(value));
+  // }
 
   const saveChangedFIO = () => {
     const newFio = `${mainPage.account.lastName} ${mainPage.account.firstName} ${mainPage.account.middleName}`;
@@ -193,8 +227,10 @@ const UserSettings = ({}: Props) => {
     dispatch(setFilterCommonTagsAC(value));
   }
 
-  const setFilterLocation = (e: any) => {
-    dispatch(setFilterLocationAC(e.currentTarget.value));
+  const setFilterLocation = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+    if (value === '' || (value.match(englishLetter) && !value.match(forbiddenForLocation))) {
+      dispatch(setFilterLocationAC(value));
+    }
   }
 
   const getUsersByFilters = () => {

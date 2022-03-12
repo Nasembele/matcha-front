@@ -9,6 +9,8 @@ export const regexForEmail = new RegExp(/^[А-Яа-яёЁ()0-9A-Za-z@\.-]+$/);
 export const forbiddenForAuthPassword = new RegExp(/[А-Яа-яёЁ()'"<>=+]/u);
 // export const russianLetter = new RegExp(/^[A-Яа-я-() ]/g);
 export const russianLetter = new RegExp(/[А-Яа-яёЁ()-]/u);
+export const englishLetter = new RegExp(/[A-Za-z]/);
+export const forbiddenForLocation = new RegExp(/^[$%@#/^&*!?.0-9А-Яа-яёЁ()'"<>=+]$/u);
 export const forbiddenForText = new RegExp(/[0-9A-Za-z@'"<>=+?\/]/u);
 
 
