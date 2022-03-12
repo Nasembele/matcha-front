@@ -166,10 +166,11 @@ const Login = () => {
   }
 
   const validateSubmitRegButton = () => {
-    if (password !== login.regData.password || !password.match(regexForPassword) || password.match(forbiddenForAuthPassword)
+    if ((password !== login.regData.password || !password.match(regexForPassword) || password.match(forbiddenForAuthPassword)
       || !login.regData.firstName || !login.regData.lastName || !login.regData.middleName || !login.regData.userName
       || !login.regData.birthday || !login.regData.gender || !login.regData.sexualPreference || !login.regData.email
-      || !login.regData.password) {
+      || !login.regData.password
+    || !login.regData.email.match(/[@]/ )     || !login.regData.email.match(/[.]/ ))) {
       return true
     }
     return false
