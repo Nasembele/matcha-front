@@ -64,7 +64,7 @@ export interface IRegData {
     sexualPreference: 'getero' | 'gay' | 'bisexual' | 'lesbi' | null,
     email: string,
     password: string,
-    isRegUser: boolean,
+    isRegUser: boolean | null,
 }
 
 export interface IAuthData {
@@ -73,7 +73,7 @@ export interface IAuthData {
 }
 
 export interface ILogin {
-    isAuth: boolean,
+    isAuth: null | boolean,
     authData: IAuthData,
     regData: IRegData,
     // userData: IUserData,

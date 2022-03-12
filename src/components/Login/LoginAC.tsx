@@ -11,7 +11,7 @@ export const changePasswordAC = (password: string) => ({
     payload: password
 });
 
-export const setIsAuthUserAC = (isAuth: boolean) => ({
+export const setIsAuthUserAC = (isAuth: boolean | null) => ({
     type: constants.SET_IS_AUTH_USER,
     payload: isAuth
 });
@@ -83,7 +83,7 @@ export const changeRegPasswordAC = (password: string) => ({
     payload: password
 });
 
-export const setIsRegUserAC = (isRegUser: boolean) => ({
+export const setIsRegUserAC = (isRegUser: boolean | null) => ({
     type: constants.SET_IS_REG_USER,
     payload: isRegUser
 });

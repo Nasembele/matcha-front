@@ -16,7 +16,7 @@ import {
   changeRegLastNameAC,
   changeRegMiddleNameAC,
   changeRegPasswordAC,
-  changeRegSexualPreferenceAC, changeRegUsernameAC,
+  changeRegSexualPreferenceAC, changeRegUsernameAC, setIsAuthUserAC,
   setIsRegUserAC, setIsValidEmailResetUserAC,
   setIsValidLinkResetUserAC,
   setIsValidPassResetUserAC
@@ -85,6 +85,8 @@ const Login = () => {
     setChosenIndex(number);
     dispatch(setIsRegUserAC(false));
     dispatch(setIsValidEmailResetUserAC(null));
+    dispatch(setIsAuthUserAC(null));
+    dispatch(setIsRegUserAC(null));
   }
 
   const changeChosenIndex = (value: number) => () => {
@@ -249,6 +251,13 @@ const Login = () => {
                 Регистрация
               </Button>
             </div>
+
+            {
+              login.isAuth === false &&
+              <div className={style.reset_password}>
+                Неверный логин/пароль
+              </div>
+            }
           </div>
 
         </div>}
@@ -360,6 +369,11 @@ const Login = () => {
                         {login.regData?.isRegUser &&
                         <div className={style.reset_password}>
                           На указанный адрес отправлено письмо для подтверждения регистрации
+                        </div>
+                        }
+                        {login.regData?.isRegUser === false &&
+                        <div className={style.reset_password}>
+                          Email уже используется
                         </div>
                         }
                         <div className={style.enter}>

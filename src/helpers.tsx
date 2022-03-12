@@ -4,11 +4,11 @@ export const actionDataForPhoto = 'data:jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/
 
 export const regexForPassword = new RegExp(/(?=.*[0-9])(?=.*[!;$%&])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!;$%&]{8,}/g);
 // export const regexForLogin = new RegExp(/^[0-9A-Za-z@\.-]+$/);
-export const regexForEmail = new RegExp(/^[А-Яа-я()0-9A-Za-z@\.-]+$/);
+export const regexForEmail = new RegExp(/^[А-Яа-яёЁ()0-9A-Za-z@\.-]+$/);
 
-export const forbiddenForAuthPassword = new RegExp(/[А-Яа-я()'"<>=+]/u);
+export const forbiddenForAuthPassword = new RegExp(/[А-Яа-яёЁ()'"<>=+]/u);
 // export const russianLetter = new RegExp(/^[A-Яа-я-() ]/g);
-export const russianLetter = new RegExp(/[А-Яа-я()-]/u);
+export const russianLetter = new RegExp(/[А-Яа-яёЁ()-]/u);
 export const forbiddenForText = new RegExp(/[0-9A-Za-z@'"<>=+?\/]/u);
 
 

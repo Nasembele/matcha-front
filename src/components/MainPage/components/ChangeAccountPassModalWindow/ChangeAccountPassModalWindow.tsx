@@ -4,12 +4,14 @@ import style from "../../../Login/Login.module.css";
 import {IState} from "../../../../types";
 import {setNewEmailAC} from "../../MainPageAC";
 import {confirmNewEmail, getUsersPostQuery, saveNewEmail, saveNewPassword, validateLink} from "../../../../api";
-import {changeRegPasswordAC, changeResetPasswordAC} from "../../../Login/LoginAC";
+import {changeRegPasswordAC, changeResetPasswordAC, setIsRegUserAC} from "../../../Login/LoginAC";
 import LoginWrapper from "../../../../parts/LoginWrapper/LoginWrapper";
 import {Button, Input} from "antd";
 import cc from "classnames";
 import {Typography} from 'antd';
 import {forbiddenForAuthPassword, regexForPassword} from "../../../../helpers";
+import App from "../../../../App";
+import {Redirect} from "react-router-dom";
 
 const {Text} = Typography;
 
@@ -30,6 +32,7 @@ const ChangeAccountPassModalWindow = () => {
   const [isSecondPassword, setSecondPassword] = useState('');
   const [isNotValidPassword, setIsNotValidPassword] = useState(false);
 
+  const [isRedirect, setIsRedirect] = useState(false);
 
   useEffect(() => {
     const currentURL = window.location;
@@ -132,6 +135,12 @@ const ChangeAccountPassModalWindow = () => {
     }
   };
 
+  const redirectFunction = () => {
+    setIsRedirect(true);
+  }
+
+  if (isRedirect) return <Redirect to={'/login'}/>;
+
   return (
     <LoginWrapper>
 
@@ -189,11 +198,10 @@ const ChangeAccountPassModalWindow = () => {
         }
 
         <div className={style.enter}>
-          <Text style={{color: 'dimgrey', fontWeight: 700}} >
+          <Text style={{color: 'dimgrey', fontWeight: 700}} onClick={redirectFunction}>
             Войти
           </Text>
         </div>
-
       </div>
       {/*</body>*/}
     </LoginWrapper>

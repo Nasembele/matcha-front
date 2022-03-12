@@ -8,7 +8,7 @@ export const initialRegData = {
     sexualPreference: null,
     email: '',
     password: '',
-    isRegUser: false,
+    isRegUser: null,
 }
 
 // export const initialUserData = {
@@ -41,7 +41,7 @@ export const initialResetData = {
 }
 
 export const initialState = {
-    isAuth: false,
+    isAuth: null,
     authData: {
         login: '',
         password: ''

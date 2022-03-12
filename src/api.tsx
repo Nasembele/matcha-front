@@ -218,7 +218,7 @@ export const authGetUserQuery = () => (dispatch: any, getState: any) => {
 
       if (res.data === 'Error JWT') { //поправить на новый лад?
         // debugger;
-        dispatch(setIsAuthUserAC(false));
+        dispatch(setIsAuthUserAC(null));
         // добавить ошибку error jwt
       } else {
 
@@ -251,7 +251,7 @@ export const rerunGetUserQuery = () => (dispatch: any, getState: any) => {
 
       if (res.data === 'Error JWT') { //поправить на новый лад?
         // debugger;
-        dispatch(setIsAuthUserAC(false));
+        dispatch(setIsAuthUserAC(null));
         // добавить ошибку error jwt
       } else {
 
@@ -296,6 +296,8 @@ export const signInPostQuery = (isAuthData: IAuthData) => (dispatch: any, getSta
         dispatch(setIsAuthUserAC(true));
         dispatch(getUserMatch('MATCH', setUserMatchesAC));
         dispatch(getChatToken());
+      } else {
+        dispatch(setIsAuthUserAC(false));
       }
       // dispatch(setIsAuthUserDataAC(res));
       // dispatch(setIsAuthUserAC(true));
@@ -346,6 +348,8 @@ export const updateRegDataPostQuery = (regData: IRegData) => (dispatch: Dispatch
     .then((res: any) => {
       if (res.data === 'SUCCESS') { //поправить на новый лад?
         dispatch(setIsRegUserAC(true));
+      } else {
+        dispatch(setIsRegUserAC(false));
       }
     })
     .catch(() => {
@@ -362,7 +366,7 @@ export const logoutGetQuery = () => (dispatch: Dispatch) => {
       // }
       dispatch(changeLoginAC(''));
       dispatch(changePasswordAC(''));
-      dispatch(setIsAuthUserAC(false)); //TODO почистить в редаксе логин и пароль
+      dispatch(setIsAuthUserAC(null)); //TODO почистить в редаксе логин и пароль
 
       dispatch(clearMainPage());
       dispatch(clearChatPage());
