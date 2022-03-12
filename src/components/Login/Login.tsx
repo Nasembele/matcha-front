@@ -25,8 +25,10 @@ import {changeAccPassPostQuery, recoveryPasswordPostQuery, signInPostQuery, upda
 import LoginWrapper from "../../parts/LoginWrapper/LoginWrapper";
 import {Option} from "antd/es/mentions";
 import cc from "classnames";
+import {forbiddenForAuthPassword, regexForEmail, regexForPassword} from "../../helpers";
+import {Typography} from 'antd';
 
-const regex = new RegExp(/(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g);
+const {Text} = Typography;
 
 const Login = () => {
 
@@ -45,15 +47,21 @@ const Login = () => {
 
 
   const changeLogin = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeLoginAC(value));
+    if (value === '' || value.match(regexForEmail)) {
+      dispatch(changeLoginAC(value));
+    }
   };
 
   const changePassword = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-    dispatch(changePasswordAC(value));
+    if (value === '' || !value.match(forbiddenForAuthPassword)) {
+      dispatch(changePasswordAC(value));
+    }
   };
 
   const changeEmail = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeEmailAC(value));
+    if (value === '' || value.match(regexForEmail)) {
+      dispatch(changeEmailAC(value));
+    }
   };
 
   const signInButton = () => {
@@ -67,9 +75,9 @@ const Login = () => {
 
   };
 
-  // const changeChosenIndex = () => {
-  //   //  setChosenIndex(1);
-  // }
+  const onChangeChosenIndex = (number: number) => () => {
+    setChosenIndex(number);
+  }
 
   const changeChosenIndex = (value: number) => () => {
     if (chosenIndex === 1) {
@@ -117,13 +125,14 @@ const Login = () => {
   }
 
   const changeRegPassword = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+    setPassword(value);
     setIsNotMatchPassword(false);
-    if (password === value) {
-      dispatch(changeRegPasswordAC(value));
+    if (login.regData.password === value) { //todo
+      // dispatch(changeRegPasswordAC(value));
     } else {
       setIsNotMatchPassword(true);
     }
-    if (password.match(regex)) {
+    if (login.regData.password.match(regexForPassword) && !login.regData.password.match(forbiddenForAuthPassword)) {
       setIsNotValidPassword(false);
     } else {
       setIsNotValidPassword(true);
@@ -136,7 +145,10 @@ const Login = () => {
   }
 
   const validateSubmitRegButton = () => {
-    if (password !== login.regData.password || !password.match(regex)) {
+    if (password !== login.regData.password || !password.match(regexForPassword) || password.match(forbiddenForAuthPassword)
+    || !login.regData.firstName || !login.regData.lastName || !login.regData.middleName || !login.regData.userName
+      || !login.regData.birthday || !login.regData.gender || !login.regData.sexualPreference || !login.regData.email
+      || !login.regData.password) {
       return true
     }
     return false
@@ -151,13 +163,28 @@ const Login = () => {
   };
 
   const onChangeSetPassword = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-    setPassword(value);
+    // setPassword(value);
+    dispatch(changeRegPasswordAC(value));
+
+
+    setIsNotMatchPassword(false);
+    if (password === value) {
+      // dispatch(changeRegPasswordAC(value));
+    } else {
+      setIsNotMatchPassword(true);
+    }
+    if (password.match(regexForPassword) && !password.match(forbiddenForAuthPassword)) {
+      setIsNotValidPassword(false);
+    } else {
+      setIsNotValidPassword(true);
+    }
   }
 
   const changeValidatePassword = () => {
     setIsNotMatchPassword(false);
   }
 
+  const validateSignInButton = Boolean(login.authData.login && login.authData.password);
 
   return (
     <LoginWrapper>
@@ -170,14 +197,19 @@ const Login = () => {
             {/*<div className={style.form_header}>email или username</div>*/}
             <Input type={'text'} onChange={changeLogin}
                    placeholder={'email или username'}
-                   size="large" prefix={<UserOutlined/>}/>
+                   size="large" prefix={<UserOutlined/>}
+                   value={login.authData.login}
+            />
             {/*<div className={style.form_header}>Пароль</div>*/}
             <Input.Password type={'password'} onChange={changePassword} className={style.bottom_margin}
-                            placeholder={'пароль'} size="large"/>
+                            placeholder={'пароль'} size="large"
+                            value={login.authData.password}
+            />
 
             <div className={style.buttons_container}>
               <div className={style.button_container}>
-                <Button type={'primary'} size={'large'} className={style.submit_button} onClick={signInButton}>
+                <Button type={'primary'} size={'large'} className={style.submit_button} onClick={signInButton}
+                        disabled={!validateSignInButton}>
                   Войти
                 </Button>
                 <Button size={'large'} className={style.negative_button} onClick={changeChosenIndex(1)}>
@@ -202,27 +234,33 @@ const Login = () => {
                     <p className={style.title}>Восстановление пароля</p>
                     <div className={style.content}>
                         {/*<div className={style.form_header}>Введите email</div>*/}
-                      <Input placeholder={'email'} type={'text'} onBlur={changeEmail} className={style.form_input}/>
+                      <Input placeholder={'email'} type={'text'} onChange={changeEmail} className={style.form_input}
+                             value={login.resetData.email}
+                      />
                         <div>
                             <Button type={'primary'} size={'large'} block className={style.reg_button}
-                                    onClick={recoveryPassword}>
+                                    onClick={recoveryPassword}
+                                    disabled={!Boolean(login.resetData.email)}
+                            >
                                 Отправить
                             </Button>
                           {login.resetData.isValidEmail === false &&
                           <div>
-                            <p className={style.reset_password}>Неправильный email</p>
+                            <p className={style.user_attention}>Неправильный email</p>
                           </div>
                           }
                           {login.resetData.isValidEmail === true &&
                           <div>
-                            <p className={style.reset_password}>
+                            <p className={style.user_attention}>
                               На указанный адрес отправлено письмо для восстановления пароля
                             </p>
-                            {/*<button type={'button'} className={style.submit_button} onClick={changeChosenIndex(0)}>*/}
-                            {/*  Войти*/}
-                            {/*</button>*/}
                           </div>
                           }
+                          <div className={style.enter}>
+                          <Text style={{color: 'dimgrey', fontWeight: 700}} onClick={onChangeChosenIndex(0)}>
+                            Войти
+                          </Text>
+                          </div>
                         </div>
                     </div>
                 </span>}
@@ -285,8 +323,8 @@ const Login = () => {
                           <div className={style.reset_password}>Пароли не совпадают</div>}
                           {isNotValidPassword &&
                           <div className={style.reset_password}>
-                            Пароль должен иметь длину не менее 8 символов, содержать заглавную букву, цифры и
-                            один или несколько спецсимволов: !, ;, $, %, &
+                            {'Пароль должен иметь длину не менее 8 символов, содержать латинские буквы, в том числе заглавную,' +
+                            'цифры и один или несколько спецсимволов: !, ;, $, %, & и не содержать (, ), \', ", <, >, =, +'}
                           </div>}
 
                         </div>

@@ -4,10 +4,14 @@ import style from "../../../Login/Login.module.css";
 import {IState} from "../../../../types";
 import {setNewEmailAC} from "../../MainPageAC";
 import {confirmNewEmail, getUsersPostQuery, saveNewEmail, saveNewPassword, validateLink} from "../../../../api";
-import {changeResetPasswordAC} from "../../../Login/LoginAC";
+import {changeRegPasswordAC, changeResetPasswordAC} from "../../../Login/LoginAC";
 import LoginWrapper from "../../../../parts/LoginWrapper/LoginWrapper";
 import {Button, Input} from "antd";
 import cc from "classnames";
+import {Typography} from 'antd';
+import {forbiddenForAuthPassword, regexForPassword} from "../../../../helpers";
+
+const {Text} = Typography;
 
 const ChangeAccountPassModalWindow = () => {
 
@@ -24,6 +28,7 @@ const ChangeAccountPassModalWindow = () => {
   //
    const [isNewPassword, setNewPassword] = useState('');
   const [isSecondPassword, setSecondPassword] = useState('');
+  const [isNotValidPassword, setIsNotValidPassword] = useState(false);
 
 
   useEffect(() => {
@@ -64,13 +69,22 @@ const ChangeAccountPassModalWindow = () => {
   //
   //
   const changePassword = (e: React.FormEvent<HTMLInputElement>) => {
-    setIsNotMatchPassword(false);
+    // setIsNotMatchPassword(false);
 
     setNewPassword(e.currentTarget.value);
+    // if (e.currentTarget.value === isSecondPassword) {
+    //   setIsNotMatchPassword(false);
+    //
+    // } else {
+    //   setIsNotMatchPassword(true);
+    // }
   }
   //
   const onClickChangePassword = () => {
 
+    if (isNewPassword.match(regexForPassword) && !isNewPassword.match(forbiddenForAuthPassword)) {
+      setIsNotValidPassword(false);
+    }
     if (isNewPassword === isSecondPassword) {
       setIsNotMatchPassword(false);
 
@@ -84,6 +98,13 @@ const ChangeAccountPassModalWindow = () => {
 
   }
 
+  const validateSubmitRegButton = () => {
+    if (isNotMatchPassword || isNewPassword !== isSecondPassword || !isNewPassword.match(regexForPassword) || isNewPassword.match(forbiddenForAuthPassword)) {
+      return true
+    }
+    return false
+  }
+
   const mainPage = useSelector((state: IState) => state.mainPage);
 
   const [isNotMatchPassword, setIsNotMatchPassword] = useState(false);
@@ -95,7 +116,20 @@ const ChangeAccountPassModalWindow = () => {
 
   const changeResetPassword = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
     // dispatch(changeResetPasswordAC(value));
-    setSecondPassword(value);
+    setIsNotMatchPassword(false);
+
+    // setSecondPassword(value);
+
+    if (isNewPassword === value) {
+      setSecondPassword(value);
+    } else {
+      setIsNotMatchPassword(true);
+    }
+    if (isNewPassword.match(regexForPassword) && !isNewPassword.match(forbiddenForAuthPassword)) {
+      setIsNotValidPassword(false);
+    } else {
+      setIsNotValidPassword(true);
+    }
   };
 
   return (
@@ -119,11 +153,19 @@ const ChangeAccountPassModalWindow = () => {
           <Input.Password type={'password'} onChange={changeValidatePassword} onBlur={changeResetPassword}
                           placeholder={'повторите пароль'} className={style.input_margin}/>
 
-          <Button type={'primary'} className={cc(style.reg_button, style.whole_wide)} onClick={onClickChangePassword}>
+          <Button type={'primary'} className={cc(style.reg_button, style.whole_wide)} onClick={onClickChangePassword}
+                  disabled={validateSubmitRegButton()}>
             Сохранить
           </Button>
           {isNotMatchPassword &&
           <p className={style.reset_password}>Пароли не совпадают</p>}
+
+          {isNotValidPassword &&
+          <div className={style.reset_password}>
+            {'Пароль должен иметь длину не менее 8 символов, содержать латинские буквы, в том числе заглавную,' +
+            'цифры и один или несколько спецсимволов: !, ;, $, %, & и не содержать (, ), \', ", <, >, =, +'}
+          </div>}
+
           {/*TODO проверка на разные пароли не работает*/}
         </div>
           }
@@ -132,7 +174,7 @@ const ChangeAccountPassModalWindow = () => {
         {mainPage.changeAccountSetting.isValidEmailPassLink === false &&
         <div className={style.content}>
           <div className={style.form_header}>
-            Невалидная ссылка
+            Неверная ссылка
           </div>
         </div>
         }
@@ -145,6 +187,12 @@ const ChangeAccountPassModalWindow = () => {
           mainPage.changeAccountSetting.isChangePass === false && //TODO проверка на валидацию ссылки
           <div className={style.form_header}>Не удалось изменить пароль</div>
         }
+
+        <div className={style.enter}>
+          <Text style={{color: 'dimgrey', fontWeight: 700}} >
+            Войти
+          </Text>
+        </div>
 
       </div>
       {/*</body>*/}

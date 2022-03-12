@@ -277,7 +277,7 @@ export const signInPostQuery = (isAuthData: IAuthData) => (dispatch: any, getSta
   usersAPI.signIn(isAuthData)
     .then((res: any) => {
       // debugger;
-      if (res.data !== 'INVALID LOGIN OR PASSWORD') { //поправить на новый лад?
+      if (res.data !== 'INVALID LOGIN OR PASSWORD' && res.data !== 'WRONG') { //поправить на новый лад?
         // добавить ошибку error jwt
         // dispatch(setIsAuthUserDataAC(res.data));
 
@@ -554,14 +554,13 @@ export const changeAccPassPostQuery = (userEmail?: string) => (dispatch: Dispatc
   const email = getState().mainPage.account.email;
   const emailReq = email ? email : userEmail;
   const data = {"email": emailReq};
-
   usersAPI.changePass(data)
     .then((response: any) => { //валидация?
-      // if (response === 'SUCCESS') {
-      //   dispatch(setValidPrevEmailAC(true));
-      // } else {
-      //   dispatch(setValidPrevEmailAC(false));
-      // }
+      if (response.data === 'SUCCESS') {
+        dispatch(setIsValidEmailResetUserAC(true));
+      } else {
+        dispatch(setIsValidEmailResetUserAC(false));
+      }
     })
     .catch(() => {
       dispatch(setServerErrorAC(true)); //ошибка общая на всю приложуху
