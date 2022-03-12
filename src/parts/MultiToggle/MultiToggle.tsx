@@ -2,12 +2,10 @@ import React from 'react';
 
 type Props = {
   tabTitles: Array<string>,
-  chosenIdx: number,
   onChangeChosenElement: (idx: number) => void,
 }
 
 const MultiToggle = ({
-                       chosenIdx,
                        tabTitles,
                        onChangeChosenElement,
                      }: Props) => {
@@ -32,6 +30,5 @@ const MultiToggle = ({
     </div>
   )
 };
-
 
 export default MultiToggle;

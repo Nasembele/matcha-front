@@ -1,9 +1,5 @@
 import {SubscriberType} from "./types";
 
-// const userIdChat = sessionStorage.getItem('userId');
-// const chatToken = sessionStorage.getItem('chatToken');
-// const chatFingerprint = sessionStorage.getItem('chatFingerprint');
-
 let subscribers = [] as SubscriberType[];
 
 let wsChanel: WebSocket | null = null;
@@ -48,12 +44,7 @@ export const chatAPI = {
   unsubscribe(callback: SubscriberType) {
     subscribers = subscribers.filter(s => s !== callback)
   },
-  // sendMessage(message: string) {
-  //   wsChanel?.send(message)
-  //
-  // }
   sendMessage(message: string) {
-    // debugger;
     if (wsChanel?.readyState === 1) {
       wsChanel?.send(message)
     } else {

@@ -3,27 +3,16 @@
     background-color: #f52758;
 }
 
-/*.body {*/
-/*    !*background-image: url('./images/slide.jpg');*!*/
-/*    !*height: calc(100vh - 90px);*!*/
-/*    !*background-size: cover;*!*/
-/*}*/
-
 .whole_form {
-    /*float: right !important;*/
     width: 100%;
     min-width: 280px;
     max-width: 450px;
-    /*margin-top: 50%;*/
-    /*background-color: white;*/
-    /*margin-top: 0.5vh;*/
-    /*margin-right: 17vw;*/
     margin: auto;
 }
 
 ::-webkit-scrollbar {
-    width: 0; /* ширина для вертикального скролла */
-    height: 0; /* высота для горизонтального скролла */
+    width: 0;
+    height: 0;
 }
 
 .title {
@@ -43,20 +32,13 @@
     text-align: center;
 }
 
-/*.form_input {*/
-/*    width: 100%;*/
-/*}*/
-
 .bottom_margin {
     margin-top: 25px;
-    /*margin-bottom: 15px;*/
 }
 
 .content {
     padding: 0 30px;
 }
-
-/*small*/
 
 @media (max-height: 740px) {
     .body {
@@ -65,7 +47,6 @@
     }
 }
 
-/*big*/
 @media (min-height: 740px) {
     .body {
         max-height: 70vh;
@@ -73,38 +54,16 @@
     }
 }
 
-
 .submit_button {
-    /*color: #ffffff;*/
-    /*display: inline-block;*/
     background: #f52758 !important;
-    /*border-radius: 5px;*/
-    /*font-size: 19px;*/
-    /*line-height: 22px;*/
-    /*padding: 10px 18px 14px 20px;*/
-    /*font-weight: bold;*/
     border: 1px solid #f52758 !important;
-    /*border: 1px solid #ffffff;*/
-    /*margin-top: 20px;*/
-    /*width: 30%;*/
 }
 
 .negative_button {
     color: #f52758 !important;
-    /*display: inline-block;*/
     background: #ffffff !important;
-    /*border-radius: 5px;*/
-    /*font-size: 19px;*/
-    /*line-height: 22px;*/
-    /*padding: 10px 18px 14px 20px;*/
-    /*font-weight: bold;*/
     border: 1px solid #f52758 !important;
-    /*margin-top: 20px;*/
-    /*margin-left: 10px;*/
-    /*width: 65%;*/
 }
-
-/*small*/
 
 @media (max-height: 330px) {
     .buttons_container {
@@ -126,17 +85,9 @@
 }
 
 .reg_button {
-    /*color: #ffffff;*/
-    /*display: inline-block;*/
     background: rgb(53, 138, 217) !important;
-    /*border-radius: 5px;*/
-    /*font-size: 19px;*/
-    /*line-height: 22px;*/
-    /*padding: 10px 18px 14px 20px;*/
-    /*font-weight: bold;*/
     border: 1px solid rgb(53, 138, 217);
     margin-top: 20px;
-    /*width: 100%;*/
 }
 
 .reset_password {
@@ -171,7 +122,6 @@
     padding: 10px 18px 14px 20px;
     font-weight: bold;
     border: 1px solid #f52758;
-    /*margin-top: 25px;*/
     margin-left: 33%;
 }
 

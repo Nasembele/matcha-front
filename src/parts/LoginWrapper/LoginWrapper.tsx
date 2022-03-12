@@ -1,10 +1,8 @@
-import React, {Children, ReactNode} from 'react';
+import React, {ReactNode} from 'react';
 import style from './LoginWrapper.module.css';
-import cc from "classnames";
 
 type Props = {
   children?: ReactNode,
-
 }
 
 const LoginWrapper = ({
@@ -13,13 +11,10 @@ const LoginWrapper = ({
 
 
   return (
-    // <div className={style.wrapper}>
-      <div className={style.wrapper}>
-        {children}
-      </div>
-    // </div>
+    <div className={style.wrapper}>
+      {children}
+    </div>
   )
 };
-
 
 export default LoginWrapper;

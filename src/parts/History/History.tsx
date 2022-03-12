@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
 import style from './History.module.css';
 import Title from "antd/es/typography/Title";
-import {createChat, getUserByIdWithAction, getUserMatch} from "../../api";
-import {setIsOpenChatRoom, setUserLikesAC, setUserVisitsAC} from "../../components/Chat/ChatAC";
+import {getUserByIdWithAction, getUserMatch} from "../../api";
+import {setUserLikesAC, setUserVisitsAC} from "../../components/Chat/ChatAC";
 import {useDispatch, useSelector} from "react-redux";
 import {IMatches, IState} from "../../types";
 import {Avatar} from "antd";
@@ -15,7 +15,6 @@ import {
 
 type Props = {
   changeChosenIndex: Function
-
 }
 
 const History = ({
@@ -39,7 +38,7 @@ const History = ({
   useEffect(() => {
     dispatch(getUserMatch('LIKE', setUserLikesAC));
     dispatch(getUserMatch('VISIT', setUserVisitsAC));
-  }, [])
+  }, [dispatch])
 
   return (
     <div className={style.wrapper}>
@@ -66,11 +65,9 @@ const History = ({
           })
         }
       </div>
-
       <Title level={5} className={cc(style.title, style.margin)}>
         История визитов
       </Title>
-
       <div className={style.message_pairs}>
         {
           chat.visits.map((el: IMatches) => {
@@ -91,7 +88,6 @@ const History = ({
           })
         }
       </div>
-
     </div>
   )
 };

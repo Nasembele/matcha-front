@@ -16,36 +16,36 @@ import {
   changeTagsAC,
   changeWorkPlaceAC,
   setEndFilterAgeAC,
-  setFilterCommonTagsAC, setFilterLocationAC,
+  setFilterCommonTagsAC,
+  setFilterLocationAC,
   setFilterRatingAC,
   setPhotoContent,
   setPhotoParam,
   setStartFilterAgeAC
 } from "../../components/MainPage/MainPageAC";
 import {
-  authGetUserQuery,
-  changeAccEmailPostQuery, changeAccPassPostQuery,
+  changeAccEmailPostQuery,
+  changeAccPassPostQuery,
   changePhotoPostQuery,
-  saveChangeAccPostQuery, setUserFilterPutQuery,
+  saveChangeAccPostQuery,
+  setUserFilterPutQuery,
   updateAccountSettings
 } from "../../api";
-import {Avatar, Button, DatePicker, InputNumber, Select, Upload} from "antd";
+import {Button, DatePicker, InputNumber, Select, Upload} from "antd";
 import {
   DeleteOutlined,
   LeftOutlined,
-  LoadingOutlined,
   PlusOutlined,
-  RightOutlined,
-  UserOutlined
+  RightOutlined
 } from "@ant-design/icons";
 import {Input} from 'antd';
 import Title from "antd/es/typography/Title";
 import cc from "classnames";
-import {changeRegBirthdayAC} from "../../components/Login/LoginAC";
 import moment from 'moment';
 import {
   actionDataForPhoto,
-  englishLetter, forbiddenForLocation,
+  englishLetter,
+  forbiddenForLocation,
   forbiddenForText,
   getBase64,
   parseDate,
@@ -55,9 +55,7 @@ import {
 const {TextArea} = Input;
 const {Option} = Select;
 
-type Props = {}
-
-const UserSettings = ({}: Props) => {
+const UserSettings = () => {
 
   const dispatch = useDispatch();
 
@@ -65,7 +63,6 @@ const UserSettings = ({}: Props) => {
   const userAccount = mainPage.account;
 
   const [photoIndex, setPhotoIndex] = useState(0);
-
   const [isShowChangeEmail, setIsShowChangeEmail] = useState(false);
   const [isShowChangePass, setIsShowChangePass] = useState(false);
 
@@ -100,7 +97,6 @@ const UserSettings = ({}: Props) => {
     onBlur: () => onClickSaveChangesAcc(),
     placeholder: 'Интересы',
   };
-
 
   const changePhotoIndex = (number: number) => () => {
     setPhotoIndex(prevState => prevState + number);
@@ -157,22 +153,13 @@ const UserSettings = ({}: Props) => {
 
   const deletePhoto = (number: number) => (e: any) => {
     dispatch(changePhotoPostQuery(number, 'delete'));
-    // dispatch(authGetUserQuery());
   };
-  //
-  // const changeFirstAccName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-  //   dispatch(changeAccFirstNameAC(value));
-  // }
 
   const changeFirstAccName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
     if (value === '' || (value.match(russianLetter) && !value.match(forbiddenForText))) {
       dispatch(changeAccFirstNameAC(value));
     }
   };
-
-  // const changeAccLastName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-  //   dispatch(changeAccLastNameAC(value));
-  // }
 
   const changeAccLastName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
     if (value === '' || (value.match(russianLetter) && !value.match(forbiddenForText))) {
@@ -185,10 +172,6 @@ const UserSettings = ({}: Props) => {
       dispatch(changeAccMiddleNameAC(value));
     }
   };
-
-  // const changeAccMiddleName = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
-  //   dispatch(changeAccMiddleNameAC(value));
-  // }
 
   const saveChangedFIO = () => {
     const newFio = `${mainPage.account.lastName} ${mainPage.account.firstName} ${mainPage.account.middleName}`;
@@ -216,13 +199,13 @@ const UserSettings = ({}: Props) => {
     }
     if (parameter === 'end') {
       dispatch(setEndFilterAgeAC(value));
-
     }
   }
 
   const setFilterRating = (value: number) => {
     dispatch(setFilterRatingAC(value));
   }
+
   const setFilterCommonTags = (value: number) => {
     dispatch(setFilterCommonTagsAC(value));
   }
@@ -288,7 +271,6 @@ const UserSettings = ({}: Props) => {
         </div>
         <Select
           placeholder="Пол"
-          // optionFilterProp="children"
           onChange={changeGender}
           size={'small'}
           defaultValue={userAccount.card.gender}
@@ -298,10 +280,8 @@ const UserSettings = ({}: Props) => {
           <Option value="male">М</Option>
           <Option value="female">Ж</Option>
         </Select>
-
         <Select
           placeholder="Предпочтения"
-          // optionFilterProp="children"
           onChange={changeSexualPreference}
           size={'small'}
           style={{width: '90px', marginLeft: '10px'}}
@@ -316,7 +296,6 @@ const UserSettings = ({}: Props) => {
           <Option value={'lesbi'}
                   selected={userAccount.card.sexualPreference === 'lesbi'}>{'лесби'}</Option>}
         </Select>
-
         <TextArea
           onChange={changeEducation}
           onBlur={onClickSaveChangesAcc}
@@ -325,7 +304,6 @@ const UserSettings = ({}: Props) => {
           value={userAccount?.card?.education}
           className={style.elem}
         />
-
         <TextArea
           onChange={changePosition}
           onBlur={onClickSaveChangesAcc}
@@ -334,7 +312,6 @@ const UserSettings = ({}: Props) => {
           value={userAccount?.card?.position}
           className={style.elem}
         />
-
         <TextArea
           onChange={changeWorkPlace}
           onBlur={onClickSaveChangesAcc}
@@ -343,7 +320,6 @@ const UserSettings = ({}: Props) => {
           value={userAccount?.card?.workPlace}
           className={style.elem}
         />
-
         <TextArea
           onChange={changeBiography}
           onBlur={onClickSaveChangesAcc}
@@ -352,33 +328,25 @@ const UserSettings = ({}: Props) => {
           value={userAccount?.card?.biography}
           className={style.elem}
         />
-
         <Select {...selectProps} className={style.elem}/>
       </div>
       <div>
-
         <Title level={5} className={style.title}>
           Настройки аккаунта
         </Title>
-
         <div className={style.content}>
-
           <Input type={'text'} onChange={changeFirstAccName}
                  value={userAccount.firstName}
                  onBlur={saveChangedFIO}/>
-
           <Input type={'text'} onChange={changeAccMiddleName} className={style.elem}
                  value={userAccount.middleName}
                  onBlur={saveChangedFIO}/>
-
           <Input type={'text'} onChange={changeAccLastName} className={style.elem}
                  value={userAccount.lastName}
                  onBlur={saveChangedFIO}/>
-
           <DatePicker onChange={changeAccBirthday}
                       placeholder={'дата рождения'}
                       value={moment(parseDate(mainPage.account.birthday))}
-                      // value={userAccount.birthday}
                       className={cc(style.whole_wide, style.elem)}
                       allowClear={false}/>
           <div>
@@ -392,7 +360,6 @@ const UserSettings = ({}: Props) => {
             </div>
             }
           </div>
-
           <Button className={cc(style.elem, style.change_button)} size={'small'}
                   onClick={changeAccPass}>
             Поменять пароль
@@ -402,16 +369,12 @@ const UserSettings = ({}: Props) => {
             Перейдите по ссылке из почты
           </div>
           }
-
-
         </div>
       </div>
-
       <div>
         <Title level={5} className={style.title}>
           Настройки поиска
         </Title>
-
         <div>
           <div>
             Возраст
@@ -419,7 +382,7 @@ const UserSettings = ({}: Props) => {
           <div>
             <InputNumber size="small" min={0} max={150} defaultValue={18}
                          value={mainPage.userFilters.ageBy} onChange={setFilterAge("start")}
-                          onBlur={getUsersByFilters}/>
+                         onBlur={getUsersByFilters}/>
             {' - '}
             <InputNumber size="small" min={0} max={150} defaultValue={90}
                          value={mainPage.userFilters.ageTo} onChange={setFilterAge("end")}
@@ -433,7 +396,6 @@ const UserSettings = ({}: Props) => {
                          value={mainPage.userFilters.rating} onChange={setFilterRating}
                          onBlur={getUsersByFilters}/>
           </div>
-
           <div className={style.elem}>
             Количество общих интересов
           </div>
@@ -442,7 +404,6 @@ const UserSettings = ({}: Props) => {
                          value={mainPage.userFilters.commonTagsCount} onChange={setFilterCommonTags}
                          onBlur={getUsersByFilters}/>
           </div>
-
           <div className={style.elem}>
             Месторасположение
           </div>
@@ -451,14 +412,10 @@ const UserSettings = ({}: Props) => {
                    value={mainPage.userFilters.location} onChange={setFilterLocation}
                    onBlur={getUsersByFilters}/>
           </div>
-
         </div>
-
       </div>
-
     </div>
   )
 };
-
 
 export default UserSettings;

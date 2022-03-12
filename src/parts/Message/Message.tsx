@@ -1,19 +1,9 @@
-import React, {Children, ReactNode, useState} from 'react';
+import React, {useState} from 'react';
 import style from './Message.module.css';
 import cc from "classnames";
-import {IMessage, IPhotos, IState, IUserData} from "../../types";
-import {
-  CloseCircleTwoTone, DeleteOutlined,
-  DownCircleTwoTone,
-  HeartTwoTone,
-  InfoCircleTwoTone,
-  LeftOutlined, MinusCircleTwoTone, RadiusBottomrightOutlined, RightCircleTwoTone,
-  RightOutlined, UserOutlined
-} from "@ant-design/icons";
-import {Avatar, Tag} from "antd";
-import {likeUserPutQuery, setVisitUserPutQuery} from "../../api";
-import {useDispatch, useSelector} from "react-redux";
-import {deleteNotLikeUserAC} from "../../components/MainPage/MainPageAC";
+import {IMessage, IPhotos} from "../../types";
+import {DeleteOutlined} from "@ant-design/icons";
+import {Avatar} from "antd";
 
 type IProps = {
   message: IMessage,
@@ -30,8 +20,6 @@ const Message = ({
                    userFirstName,
                    onClickDeleteMessage
                  }: IProps) => {
-
-  const dispatch = useDispatch();
 
   const [isShowBucket, setIsShowBucket] = useState(false);
 
@@ -60,23 +48,19 @@ const Message = ({
             <div className={style.message}>
               <DeleteOutlined className={style.delete_message} onClick={onClickDeleteMessage}
                               data-message-id={message.id}/>
-
               <div className={style.user_message}>
                 {message.type === 'TEXT' &&
-                  message.content}
-
+                message.content}
                 {message.type === 'IMAGE' &&
                 <img height={'200px'}
                      src={`data:${message.typeInfo};base64,${message.content}`}
                      alt='фото'/>}
               </div>
-
             </div>
             :
             <div className={style.user_message}>
               {message.type === 'TEXT' &&
               message.content}
-
               {message.type === 'IMAGE' &&
               <img height={'200px'}
                    src={`data:${message.typeInfo};base64,${message.content}`}
@@ -88,7 +72,6 @@ const Message = ({
           <div className={style.my_message_content}>
             {message.type === 'TEXT' &&
             message.content}
-
             {message.type === 'IMAGE' &&
             <img height={'200px'}
                  src={`data:${message.typeInfo};base64,${message.content}`}

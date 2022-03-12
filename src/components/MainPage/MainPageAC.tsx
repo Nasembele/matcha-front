@@ -6,11 +6,6 @@ export const setUserAccountAC = (userAccountData: IUserData) => ({
     payload: userAccountData
 });
 
-// export const changeOrientAC = (orient: any) => ({
-//     type: constants.SET_USER_ORIENT,
-//     payload: orient
-// });
-
 export const changeEducationAC = (education: string) => ({
     type: constants.SET_USER_EDUCATION,
     payload: education

@@ -2,7 +2,6 @@ import {initialState} from "./Login.helpers";
 import * as constants from './Login.consts';
 import {IAction, ILogin} from "../../types";
 import {prepareDateToSendServer} from "../../helpers";
-import {CLEAR_LOGIN_PAGE} from "./Login.consts";
 
 export default function LoginReducer(state: ILogin = initialState, action: IAction) {
     switch (action.type) {
@@ -32,11 +31,6 @@ export default function LoginReducer(state: ILogin = initialState, action: IActi
                 ...state,
                 userData: action.payload
             };
-        // case constants.SET_USER_EMAIL:
-        //     return {
-        //         ...state,
-        //         email: action.payload
-        //     };
         case constants.SET_USER_RESET_PASSWORD:
             return {
                 ...state,
@@ -161,7 +155,6 @@ export default function LoginReducer(state: ILogin = initialState, action: IActi
             return {
                 ...state,
                 regData: {
-                    // ...state.regData,
                     login: action.payload
                 }
             };

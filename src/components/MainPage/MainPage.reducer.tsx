@@ -1,14 +1,11 @@
 import {
-  getArrayWithNewEl,
   giveNextUsers,
   initialState,
   setLikeUser,
   setPhotoParamHelp
 } from "./MainPage.helpers";
 import * as constants from "./MainPage.consts";
-import {setLikeUserAC, setPhotoParam} from "./MainPageAC";
-import {IAction, IMainPage, IPhotos, IUserData} from "../../types";
-import {SET_ACC_BIRTHDAY, SET_FILTER_COMMON_TAGS, SET_FILTER_RATING, SET_VALID_NEW_EMAIL} from "./MainPage.consts";
+import {IAction, IMainPage, IPhotos} from "../../types";
 import {addNewElemInArray} from "../../helpers";
 
 export default function MainPageReducer(state: IMainPage = initialState, action: IAction) {
@@ -77,7 +74,6 @@ export default function MainPageReducer(state: IMainPage = initialState, action:
           ...state.account,
           card: {
             ...state.account.card,
-            // tags: getArrayWithNewEl(state.account.card.tags, action.payload)
             tags: action.payload
           }
         }
@@ -155,15 +151,11 @@ export default function MainPageReducer(state: IMainPage = initialState, action:
           ...state.account,
           card: {
             ...state.account.card,
-            // photos: setPhotoContentToArray(state.account.card.photos, action.payload)
             photos: state.account.card.photos?.map((el: IPhotos, index: number) => {
               if (index === action.payload?.number) {
                 return {
                   ...el,
-                  // displayContent: `data:${el.data.format};base64,${action.payload?.photo}`,
-                  // data: {
                   content: action.payload?.photo
-                  // },
                 }
               } else {
                 return el
@@ -179,22 +171,7 @@ export default function MainPageReducer(state: IMainPage = initialState, action:
           ...state.account,
           card: {
             ...state.account.card,
-            // photos:
             photos: setPhotoParamHelp(state.account.card.photos, action.payload)
-            //   state.account.card.photos.map((el: IPhotos, index: number) => {
-            //     if (index === action.payload?.number) {
-            //         return {
-            //             ...el,
-            //             data: {
-            //                 ...el.data,
-            //                 name: action.payload?.name,
-            //                 format: action.payload?.format
-            //             },
-            //         }
-            //     } else {
-            //         return el
-            //     }
-            // })
           }
         }
       };

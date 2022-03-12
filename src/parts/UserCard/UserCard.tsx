@@ -1,18 +1,22 @@
-import React, {Children, ReactNode, useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import style from './UserCard.module.css';
 import cc from "classnames";
-import {IPhotos, IState, IUserData} from "../../types";
+import {IState, IUserData} from "../../types";
 import {
   AlertTwoTone,
   CloseCircleTwoTone,
   DownCircleTwoTone,
   HeartTwoTone,
   InfoCircleTwoTone,
-  LeftOutlined, MinusCircleTwoTone, RadiusBottomrightOutlined, RightCircleTwoTone,
-  RightOutlined, StopOutlined, StopTwoTone, UserOutlined
+  LeftOutlined,
+  MinusCircleTwoTone,
+  RightCircleTwoTone,
+  RightOutlined,
+  StopTwoTone,
+  UserOutlined
 } from "@ant-design/icons";
 import {Avatar, Tag} from "antd";
-import {getUsersPostQuery, getUserStatus, likeUserPutQuery, setVisitUserPutQuery} from "../../api";
+import {getUserStatus, likeUserPutQuery, setVisitUserPutQuery} from "../../api";
 import {useDispatch, useSelector} from "react-redux";
 import {deleteNotLikeUserAC} from "../../components/MainPage/MainPageAC";
 import {setAction} from "../../components/Chat/Chat.reducer";
@@ -63,7 +67,6 @@ const UserCard = ({
 
   const onClickDisLikeUser = () => {
     dispatch(likeUserPutQuery(user.id, 'DISLIKE'));
-    // dispatch(deleteNotLikeUserAC());
   };
 
   const onClickNotLikeUser = () => {
@@ -91,10 +94,9 @@ const UserCard = ({
 
   useEffect(() => {
     dispatch(getUserStatus(user.id));
-  }, [user.id]);
+  }, [user.id, dispatch]);
 
   const status = useMemo(() => {
-    // debugger;
     if (mainPage.userInCardStatus && mainPage.userInCardStatus[0].status) {
       return mainPage.userInCardStatus[0]
     } else {
@@ -103,7 +105,7 @@ const UserCard = ({
         lastAction: user.lastAction
       }
     }
-  }, [user.id, mainPage.userInCardStatus])
+  }, [user, mainPage.userInCardStatus])
 
   return (
     <div className={style.wrapper}>
@@ -117,7 +119,6 @@ const UserCard = ({
           <div className={style.left_arrow} onClick={changePhotoIndex(-1)}>
             <LeftOutlined style={{fontSize: '30px', color: 'white'}}/>
           </div>
-
           }
           {user.card.photos[photoIndex]?.content &&
           <img width={'100%'}

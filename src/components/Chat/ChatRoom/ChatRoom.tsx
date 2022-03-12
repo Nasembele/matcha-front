@@ -1,31 +1,20 @@
 import {useDispatch, useSelector} from "react-redux";
-import {IMessage, IPhotos, IState, IUserData} from "../../../types";
+import {IMessage, IState} from "../../../types";
 import React, {useEffect, useState} from "react";
-import {
-  setFirstPackMessagesAC, setUserMatchesAC,
-} from "../ChatAC";
-import {getUserById, getUserMatch} from "../../../api";
+import {getUserById} from "../../../api";
 import style from './ChatRoom.module.css';
-import {
-  deleteAllMessages,
-  deleteMessage,
-  getActualMessages,
-  getPreviousMessages,
-  sendMessage
-} from "../../../socket";
 import UserCard from "../../../parts/UserCard/UserCard";
 import {Button, Input, Upload} from "antd";
 import {
   BackwardOutlined,
   CloseCircleOutlined,
-  DeleteOutlined, DownCircleOutlined,
-  FastForwardOutlined, MessageOutlined, PlusOutlined,
-  StepBackwardOutlined,
-  UpCircleOutlined, UploadOutlined
+  DeleteOutlined,
+  FastForwardOutlined,
+  UploadOutlined
 } from "@ant-design/icons";
 import Message from "../../../parts/Message/Message";
 import {MatchSideBar} from "../MatchSideBar/MatchSideBar";
-import {sendNewMessage, startMessagesListening} from "../Chat.reducer";
+import {sendNewMessage} from "../Chat.reducer";
 import {actionDataForPhoto, forbiddenForText, getBase64, russianLetter} from "../../../helpers";
 
 type IProps = {
@@ -49,36 +38,12 @@ export const ChatRoom = ({
   const fromUserId = useSelector((state: IState) => state.mainPage.account.id);
 
   const [message, setMessage] = useState('');
-  // const [isShowUserCardMobile, setIsShowUserCardMobile] = useState(false);
-  // const [isShowMatchSideBarMobile, setIsShowMatchSideBarMobile] = useState(false);
-
-  const firstMessagePackByChatId = ['d'];//chat.firstPackMessages.find(el => el.messages.chatId === chat.openChatId)?.messages.messageAnswer;
-
-  const getFirstMessage = {
-    type: 'CHAT',
-    transportMessage: {
-      chatId: chat.openChatId,
-      getMessageRq: {
-        type: "GET_FIRST_PACK"
-      }
-    }
-  };
 
   useEffect(() => {
     if (chat.toUserId) {
       dispatch(getUserById(chat.toUserId));
     }
-  }, [chat.toUserId]);
-
-  // const changeShowUserCardMobile = () => {
-  //   setIsShowUserCardMobile(prevState => !prevState);
-  //   setIsShowMatchSideBarMobile(false);
-  // }
-  //
-  // const changeShowMatchSideBarMobile = () => {
-  //   setIsShowMatchSideBarMobile(prevState => !prevState);
-  //   setIsShowUserCardMobile(false);
-  // }
+  }, [dispatch, chat.toUserId]);
 
   const onClickSendMessage = () => {
     if (!message) return;
@@ -95,7 +60,15 @@ export const ChatRoom = ({
         }
       }
     };
-    // sendMessage(chat.openChatId, fromUserId, chat.toUserId, message, firstMessagePackByChatId); //todo
+    const getFirstMessage = {
+      type: 'CHAT',
+      transportMessage: {
+        chatId: chat.openChatId,
+        getMessageRq: {
+          type: "GET_FIRST_PACK"
+        }
+      }
+    };
     dispatch(sendNewMessage(newMessage));
     dispatch(sendNewMessage(getFirstMessage));
     setMessage('');
@@ -106,7 +79,6 @@ export const ChatRoom = ({
       (e.file?.type === 'image/jpeg' || e.file?.type === 'image/png' || e.file?.type === 'image/jpg')) {
       getBase64(e.file.originFileObj).then(
         res => {
-
           const newMessage = {
             type: 'CHAT',
             transportMessage: {
@@ -118,6 +90,15 @@ export const ChatRoom = ({
                 type: "IMAGE",
                 typeInfo: e.file.type,
                 content: res
+              }
+            }
+          };
+          const getFirstMessage = {
+            type: 'CHAT',
+            transportMessage: {
+              chatId: chat.openChatId,
+              getMessageRq: {
+                type: "GET_FIRST_PACK"
               }
             }
           };
@@ -153,7 +134,15 @@ export const ChatRoom = ({
         }
       }
     };
-
+    const getFirstMessage = {
+      type: 'CHAT',
+      transportMessage: {
+        chatId: chat.openChatId,
+        getMessageRq: {
+          type: "GET_FIRST_PACK"
+        }
+      }
+    };
     dispatch(sendNewMessage(deleteMessage));
     dispatch(sendNewMessage(getFirstMessage));
   }
@@ -168,37 +157,52 @@ export const ChatRoom = ({
         }
       }
     };
-
+    const getFirstMessage = {
+      type: 'CHAT',
+      transportMessage: {
+        chatId: chat.openChatId,
+        getMessageRq: {
+          type: "GET_FIRST_PACK"
+        }
+      }
+    };
     dispatch(sendNewMessage(deleteMessage));
     dispatch(sendNewMessage(getFirstMessage));
   }
 
   const getLastMessageCallBack = () => {
+    const getFirstMessage = {
+      type: 'CHAT',
+      transportMessage: {
+        chatId: chat.openChatId,
+        getMessageRq: {
+          type: "GET_FIRST_PACK"
+        }
+      }
+    };
     dispatch(sendNewMessage(getFirstMessage));
   }
 
-  // const currentPack = chat.firstPackMessages.find((el) => el.messages.chatId === chat.openChatId)?.messages.messageAnswer; todo
   const disableButtonGetNewMessage = !Boolean(chat.currentUserMessages?.oldestMessagesId);
-
-  // const actionAfterTaeLike = () => {
-  //   closeWindow();
-  //   dispatch(getUserMatch('MATCH', setUserMatchesAC));
-  // }
-
-  // const closeAnotherWindowMobile = () => {
-  //   setIsShowMatchSideBarMobile(false);
-  //   setIsShowUserCardMobile(false);
-  // }
-
-  useEffect(() => { //todo
-    dispatch(sendNewMessage(getFirstMessage));
-  }, [chat.openChatId]);
 
   const setNewMessage = ({target: {value}}: any) => {
     if (value === '' || (value.match(russianLetter) && !value.match(forbiddenForText))) {
       setMessage(value)
     }
   }
+
+  useEffect(() => {
+    const getFirstMessage = {
+      type: 'CHAT',
+      transportMessage: {
+        chatId: chat.openChatId,
+        getMessageRq: {
+          type: "GET_FIRST_PACK"
+        }
+      }
+    };
+    dispatch(sendNewMessage(getFirstMessage));
+  }, [dispatch, chat.openChatId]);
 
   return (
     <div className={style.container}>
@@ -207,7 +211,6 @@ export const ChatRoom = ({
         <MatchSideBar closeAnotherWindowMobile={closeAnotherWindowMobile}/>
       </div>
       }
-
       {isShowUserCardMobile && !isShowMatchSideBarMobile &&
       <div className={style.card_container_mobile}>
         <div className={style.card_wrapper}>
@@ -217,7 +220,6 @@ export const ChatRoom = ({
       }
       {!isShowUserCardMobile && !isShowMatchSideBarMobile &&
       <div className={style.chat_wrapper}>
-
         <div className={style.chat_header}>
           {
             disableButtonGetNewMessage ?
@@ -225,18 +227,12 @@ export const ChatRoom = ({
               <BackwardOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '29px'}}
                                 onClick={onClickGetPreviousMessages}/>
           }
-
           <FastForwardOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '30px'}}
                                onClick={getLastMessageCallBack}/>
-
           <DeleteOutlined style={{color: 'rgb(232,96,144)', fontSize: '30px'}} onClick={onClickDeleteAllMessages}/>
           <CloseCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}} onClick={closeWindow}/>
         </div>
-
-
         <div className={style.message_container}>
-
-
           {
             chat.currentUserMessages?.messages?.map((el: IMessage) =>
               <Message key={el.id}
@@ -247,17 +243,11 @@ export const ChatRoom = ({
                        userPhoto={chat.userInChat?.card.photos[0]}/>
             )
           }
-
-
         </div>
-
         <Input.Group compact className={style.message_input_container}>
           <Input style={{width: 'calc(100% - 135px)'}} onChange={setNewMessage}
                  value={message}/>
           <Upload
-            // name="avatar"
-            // listType="picture-card"
-            // className="avatar-uploader"
             showUploadList={false}
             action={actionDataForPhoto}
             onChange={sendPhoto}
@@ -268,18 +258,8 @@ export const ChatRoom = ({
             Отправить
           </Button>
         </Input.Group>
-
       </div>
       }
-      {/*<div className={style.mobile_footer}>*/}
-      {/*  <MessageOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '30px'}} onClick={changeShowMatchSideBarMobile}/>*/}
-      {/*  {isShowUserCardMobile ?*/}
-      {/*    <DownCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}} onClick={changeShowUserCardMobile}/>*/}
-      {/*    :*/}
-      {/*    <UpCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}} onClick={changeShowUserCardMobile}/>*/}
-      {/*  }*/}
-      {/*</div>*/}
-
       <div className={style.card_container}>
         {chat.userInChat &&
         <div className={style.card_wrapper}>

@@ -1,24 +1,8 @@
 .match_side_bar {
-    /*background-color: #fffdfd;*/
     height: 100%;
     width: 100%;
-    /*background-color: rgba(255, 240, 252, 0.27);*/
-    /*background-color: rgba(222, 222, 248, 0.2);*/
-    /*min-width: 300px;*/
-    /*max-width: 27vw;*/
-    /*display: none;*/
 }
 
-
-/*.menu {*/
-/*    height: 75px;*/
-/*    background: linear-gradient(135deg, rgb(179, 181, 238) 7%, rgb(242, 208, 231) 99%);*/
-/*    padding: 25px 15px;*/
-/*    display: flex;*/
-/*    justify-content: space-between;*/
-/*}*/
-
-/*big*/
 @media (min-width: 950px) {
     .menu {
         height: 75px;
@@ -29,37 +13,22 @@
     }
 }
 
-/*small*/
 @media (max-width: 950px) {
     .menu {
         display: none;
     }
 }
 
-
 .notification {
     position: absolute;
     height: 30px;
 }
-
-/*.submit_button_upload {*/
-/*    !*background: #f52758 !important;*!*/
-/*    !*border: 1px solid #f52758 !important;*!*/
-/*float: right;*/
-/*    border: 1px solid #f52758 !important;*/
-/*    margin-right: 10px;*/
-/*    position: absolute;*/
-/*    bottom: 60px;*/
-/*    right: 0;*/
-
-/*}*/
 
 .user_settings {
     height: calc(100% - 75px);
     overflow-y: scroll;
 }
 
-/*big*/
 @media (min-width: 950px) {
     .sidebar_content {
         padding: 15px;
@@ -69,29 +38,19 @@
     }
 
     .submit_button_upload {
-        /*background: #f52758 !important;*/
-        /*border: 1px solid #f52758 !important;*/
         float: right;
         border: 1px solid #f52758 !important;
         margin-right: 10px;
-        /*position: absolute;*/
-        /*bottom: 60px;*/
-        /*right: 0;*/
-
     }
 }
 
-/*small*/
 @media (max-width: 950px) {
     .sidebar_content {
         padding: 15px;
         width: 100%;
-        /*max-width: 27vw;*/
     }
 
     .submit_button_upload {
-        /*background: #f52758 !important;*/
-        /*border: 1px solid #f52758 !important;*/
         float: right;
         border: 1px solid #f52758 !important;
         margin-right: 10px;
@@ -112,18 +71,11 @@
     width: 75px;
 }
 
-/*.pair_users {*/
-/*    display: flex;*/
-/*    overflow-x: scroll;*/
-/*    margin-bottom: 20px;*/
-/*}*/
-
 .message_pair {
     display: flex;
     margin-bottom: 5px;
 }
 
-/*big*/
 @media (min-height: 600px) {
     .message_pairs {
         max-height: 47vh;
@@ -137,7 +89,6 @@
     }
 }
 
-/*small*/
 @media (max-height: 600px) {
     .message_pairs {
         max-height: calc(47vh - 75px);
@@ -152,7 +103,6 @@
     }
 }
 
-
 .name {
     font-weight: bold;
     margin: auto 0;
@@ -164,6 +114,5 @@
 }
 
 .title {
-    /*text-align: center;*/
     color: rgb(91, 91, 144) !important;
 }

@@ -6,6 +6,7 @@ import style from "../../../Login/Login.module.css";
 import LoginWrapper from "../../../../parts/LoginWrapper/LoginWrapper";
 import {Redirect} from "react-router-dom";
 import {Typography} from 'antd';
+
 const {Text} = Typography;
 
 const ConfirmLinkWindow = () => {
@@ -18,10 +19,7 @@ const ConfirmLinkWindow = () => {
 
   useEffect(() => {
     dispatch(validateLink(currentURL.href));
-
-    // console.log(currentURL.href);
-
-  }, [currentURL]);
+  }, [dispatch, currentURL]);
 
   const isValidEmailPassLink = useSelector((state: IState) => state.mainPage?.changeAccountSetting?.isValidEmailPassLink);
 
@@ -33,10 +31,6 @@ const ConfirmLinkWindow = () => {
 
   return (
     <LoginWrapper>
-    {/*<div>*/}
-      {/*<header className={style.header}>*/}
-      {/*  Матча*/}
-      {/*</header>*/}
       <div className={style.whole_form}>
         <p className={style.title}>
           Подтверждение регистрации
@@ -58,8 +52,7 @@ const ConfirmLinkWindow = () => {
             Войти
           </Text>
         </div>
-      {/*</body>*/}
-    </div>
+      </div>
     </LoginWrapper>
   )
 }

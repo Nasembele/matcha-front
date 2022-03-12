@@ -2,7 +2,7 @@ import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
 import style from './MainPage.module.css';
 import {
-  getUserById, getUserByIdWithAction,
+  getUserByIdWithAction,
   getUsersPostQuery,
   logoutGetQuery,
 } from "../../api";
@@ -10,12 +10,10 @@ import {IState} from "../../types";
 import {MatchSideBar} from "../Chat/MatchSideBar/MatchSideBar";
 import {ChatRoom} from "../Chat/ChatRoom/ChatRoom";
 import {
-  setFirstPackMessagesAC,
-  setIsOpenChatRoom, setIsShowFalseForNotifications,
-  setNotificationAboutNewMessageAC,
-  setNotificationAboutNewVisitAC, setUserFiInLastNotification
+  setIsOpenChatRoom,
+  setIsShowFalseForNotifications,
+  setUserFiInLastNotification
 } from "../Chat/ChatAC";
-import {getFirstMessages} from "../../socket";
 import UserCard from "../../parts/UserCard/UserCard";
 import {
   DownCircleOutlined,
@@ -26,14 +24,10 @@ import {
   UserOutlined
 } from "@ant-design/icons";
 import UserSettings from "../../parts/UserSettings/UserSettings";
-import cc from "classnames";
 import {sendNewMessage, startMessagesListening} from "../Chat/Chat.reducer";
 import {notification} from "antd";
 import {getDescriptionByAction, getNotificationTitleByAction} from "../../helpers";
 import History from "../../parts/History/History";
-
-// export const socket = new WebSocket(`ws://localhost:8080/pul`);
-// export const socket = new WebSocket(`ws://localhost:8080/${userIdChat}/${chatToken}/${chatFingerprint}`);
 
 const MainPage = () => {
 
@@ -43,12 +37,9 @@ const MainPage = () => {
   const chat = useSelector((state: IState) => state.chat);
 
   const [chosenIndex, setChosenIndex] = useState(0);
-  const [userIndex] = useState(0); //возможно просто задать 0?
-
+  const [userIndex] = useState(0);
   const [isShowUserCardMobile, setIsShowUserCardMobile] = useState(false);
   const [isShowMatchSideBarMobile, setIsShowMatchSideBarMobile] = useState(false);
-
-  const [isShowUserSettings, setIsShowUserSettings] = useState(false);
 
   const countUsers = mainPage.users.length;
 
@@ -56,7 +47,7 @@ const MainPage = () => {
     if (chosenIndex === 0 && countUsers === 0) {
       dispatch(getUsersPostQuery());
     }
-  }, [chosenIndex, countUsers]);
+  }, [dispatch, chosenIndex, countUsers]);
 
   useEffect(() => {
     if (chat.isOpenChatRoom) {
@@ -64,22 +55,6 @@ const MainPage = () => {
       closeAnotherWindowMobile();
     }
   }, [chat.isOpenChatRoom, chat.toUserId, chat.userInChat]);
-
-  // useEffect(() => {
-  //   const setFirstPackMessagesCallBack = (parseEvent: any) => dispatch(setFirstPackMessagesAC(parseEvent));
-  //   const setNotificationAboutNewMessageCallBack = (hasNewMessage: boolean, chatId: number, senderId: number, messageId: number) =>
-  //     dispatch(setNotificationAboutNewMessageAC(hasNewMessage, chatId, senderId, messageId));
-  //   const setNotificationAboutNewVisitCallBack = (hasNewVisit: boolean, fromUsr: number, toUsr: number, action: string) =>
-  //     dispatch(setNotificationAboutNewVisitAC(hasNewVisit, fromUsr, toUsr, action));
-  //
-  //   // chat.matches.map((el: IMatches) => {
-  //   // if (el.chatId) {
-  //   // return
-  //   getFirstMessages(undefined, setFirstPackMessagesCallBack, setNotificationAboutNewMessageCallBack, setNotificationAboutNewVisitCallBack);
-  //   // }
-  //   // return ''
-  //   // })
-  // }, []);
 
   useEffect(() => {
     if (sessionStorage.chatFingerprint) {
@@ -90,46 +65,39 @@ const MainPage = () => {
       }
       dispatch(startMessagesListening(dateForChannel));
     }
-  }, [sessionStorage.length]);
-
-  const getFirstMessage = {
-    type: 'CHAT',
-    transportMessage: {
-      chatId: chat.openChatId,
-      getMessageRq: {
-        type: "GET_FIRST_PACK"
-      }
-    }
-  };
+  }, [dispatch]);
 
   const notificationContainer = document.getElementById("not-cont");
 
-  const secondAction = () => {
-    chat.actionNotifications?.map((el) => {
-      if (el?.isPrepareForShow && el?.isCanShow) {
-        const title = getNotificationTitleByAction(el.action);
-        const args = {
-          message: title,
-          description: getDescriptionByAction(el.action, el.fromUsrFI, title),
-          duration: 0,
-          getContainer: () => notificationContainer!,
-          className: style.notification
-        };
-        notification.open(args);
-
-        dispatch(setIsShowFalseForNotifications());
-      }
-    })
-  }
-
-  // if (width > 450) {
-  //   notification.open(args);
-  // } else {
-  //   notification.open(args);
-  // }
-
   useEffect(() => {
-    chat.actionNotifications?.map((el) => {
+    const getFirstMessage = {
+      type: 'CHAT',
+      transportMessage: {
+        chatId: chat.openChatId,
+        getMessageRq: {
+          type: "GET_FIRST_PACK"
+        }
+      }
+    };
+
+    const secondAction = () => {
+      chat.actionNotifications?.forEach((el) => {
+        if (el?.isPrepareForShow && el?.isCanShow) {
+          const title = getNotificationTitleByAction(el.action);
+          const args = {
+            message: title,
+            description: getDescriptionByAction(el.action, el.fromUsrFI, title),
+            duration: 0,
+            getContainer: () => notificationContainer!,
+            className: style.notification
+          };
+          notification.open(args);
+          dispatch(setIsShowFalseForNotifications());
+        }
+      })
+    }
+
+    chat.actionNotifications?.forEach((el) => {
       if (el?.isPrepareForShow === false) {
         if (el.chatId === chat.openChatId) {
           dispatch(sendNewMessage(getFirstMessage));
@@ -137,7 +105,7 @@ const MainPage = () => {
         dispatch(getUserByIdWithAction(el.fromUsr, setUserFiInLastNotification, secondAction));
       }
     })
-  }, [chat.actionNotifications]);
+  }, [dispatch, chat.actionNotifications, chat.openChatId, notificationContainer]);
 
   const closeCard = () => {
     setChosenIndex(0);
@@ -152,7 +120,6 @@ const MainPage = () => {
     setChosenIndex(3);
     setIsShowUserCardMobile(prevState => !prevState);
     setIsShowMatchSideBarMobile(false);
-    setIsShowUserSettings(false);
   }
 
   const changeShowMatchSideBarMobile = () => {
@@ -160,7 +127,6 @@ const MainPage = () => {
     setChosenIndex(2);
     setIsShowMatchSideBarMobile(prevState => !prevState);
     setIsShowUserCardMobile(false);
-    setIsShowUserSettings(false);
   }
 
   const closeAnotherWindowMobile = () => {
@@ -178,7 +144,6 @@ const MainPage = () => {
     } else {
       setChosenIndex(1);
     }
-    setIsShowUserSettings(prevState => !prevState);
     closeAnotherWindowMobile();
   }
 
@@ -208,19 +173,15 @@ const MainPage = () => {
         <History changeChosenIndex={changeChosenIndex}/>
       </div>
       }
-
       <div className={style.mobile_footer}>
-
         {(!isShowMatchSideBarMobile && !chat.isOpenChatRoom) ?
           <UserOutlined style={{fontSize: '30px'}} onClick={changeShowUserSettings}/>
           :
           <div/>
         }
-
         {(!isShowMatchSideBarMobile && !chat.isOpenChatRoom) &&
         <HistoryOutlined style={{fontSize: '30px', color: 'green'}} onClick={changeShowHistory}/>
         }
-
         {!isShowMatchSideBarMobile ?
           <MessageOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '30px'}}
                            onClick={changeShowMatchSideBarMobile}/> :
@@ -236,10 +197,8 @@ const MainPage = () => {
           }
         </>
         }
-
         <LogoutOutlined style={{color: 'rgb(232, 96, 144)', fontSize: '30px'}} onClick={onClickLogout}/>
       </div>
-
       <div className={style.side_bar_container}>
         <MatchSideBar closeAnotherWindowMobile={closeAnotherWindowMobile} changeChosenIndex={changeChosenIndex}/>
       </div>

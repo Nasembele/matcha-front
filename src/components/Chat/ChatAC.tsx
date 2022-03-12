@@ -1,4 +1,4 @@
-import {IChatMessage, IMatches, IMessage, IUserData} from "../../types";
+import {IMatches, IMessage, IUserData} from "../../types";
 import * as constants from "./Chat.consts";
 
 export const setUserMatchesAC = (matches: IMatches) => ({

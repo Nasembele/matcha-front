@@ -21,7 +21,6 @@ export const setIsAuthUserDataAC = (isAuthUserData: IUserData) => ({
     payload: isAuthUserData
 });
 
-
 export const changeEmailAC = (email: string) => ({
     type: constants.SET_USER_RESET_EMAIL,
     payload: email
@@ -67,17 +66,11 @@ export const changeRegSexualPreferenceAC = (sexualPreference: string) => ({
     payload: sexualPreference
 });
 
-
 export const changeRegEmailAC = (email: string) => ({
     type: constants.SET_REG_EMAIL,
     payload: email
 });
 
-// export const changeRegLoginAC = (login) => ({
-//     type: constants.SET_REG_LOGIN,
-//     payload: login
-// });
-//
 export const changeRegPasswordAC = (password: string) => ({
     type: constants.SET_REG_PASSWORD,
     payload: password

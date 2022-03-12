@@ -1,4 +1,4 @@
-import {IPhotos, IUserCard, IUserData} from "../../types";
+import {IPhotos, IUserData} from "../../types";
 
 export const initialUserData = {
   id: 0,
@@ -21,21 +21,16 @@ export const initialUserData = {
       {
         content: '',
         format: '',
-        // name: '',
         action: 'save' as 'save',
         number: '1',
         main: false
-
       },
       {
         content: '',
         format: '',
-        // name: '',
-        action:'save' as 'save',
+        action: 'save' as 'save',
         number: '2',
         main: false
-
-
       },
       {
         content: '',
@@ -44,8 +39,6 @@ export const initialUserData = {
         action: 'save' as 'save',
         number: '3',
         main: false
-
-
       },
       {
         content: '',
@@ -54,8 +47,6 @@ export const initialUserData = {
         action: 'save' as 'save',
         number: '4',
         main: false
-
-
       },
       {
         content: '',
@@ -64,8 +55,6 @@ export const initialUserData = {
         action: 'save' as 'save',
         number: '5',
         main: false
-
-
       }
     ]
   },
@@ -85,14 +74,9 @@ export const initialState = {
   account: initialUserData,
   changeAccountSetting: {
     newEmail: '',
-    isValidPrevEmail: true, //null
-    isValidNewEmail: null, //null
-    // linkData: {
-    //   id: null,
-    //   token: '',
-    //   linkId: null
-    // }
-    isConfirmNewEmail: null, //null
+    isValidPrevEmail: true,
+    isValidNewEmail: null,
+    isConfirmNewEmail: null,
     isValidEmailPassLink: null,
     isChangePass: null
   },
@@ -134,14 +118,11 @@ export const giveNextUsers = (likeUsers: IUserData[]) => {
 export const setPhotoParamHelp = (photos: IPhotos[] | undefined, payload: { number: number, name: string, format: string }) => {
   photos?.push(
     {
-
       content: '',
       format: payload.format,
-      // name: payload.name,
       action: 'save',
       main: false,
       number: String(payload?.number + 1)
-
     }
   );
   return photos;

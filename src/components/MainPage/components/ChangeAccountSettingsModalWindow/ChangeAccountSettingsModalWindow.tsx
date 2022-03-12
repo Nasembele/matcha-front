@@ -10,6 +10,7 @@ import cc from "classnames";
 import {regexForEmail} from "../../../../helpers";
 import {Typography} from 'antd';
 import {Redirect} from "react-router-dom";
+
 const {Text} = Typography;
 
 const ChangeAccountSettingsModalWindow = () => {
@@ -18,30 +19,21 @@ const ChangeAccountSettingsModalWindow = () => {
 
   const [isShowChangeEmailInput, setShowChangeEmailInput] = useState(false);
   const [isShowChangeEmailConfirm, setShowChangeEmailConfirm] = useState(false);
-
   const [isRedirect, setIsRedirect] = useState(false);
-
   const [isId, setId] = useState('');
   const [isLinkId, setLinkId] = useState('');
   const [isToken, setToken] = useState('');
-  const [isNewEmail, setNewEmail] = useState('');
-
 
   useEffect(() => {
 
     const currentURL = window.location;
-
     dispatch(validateLink(currentURL.href));
-
-
     const arrURL = currentURL.search?.split('&');
     const act = arrURL[0]?.slice(1);
-
 
     const id = arrURL[1]?.slice(3);
     const token = arrURL[2]?.slice(6);
     const linkId = arrURL[3]?.slice(7);
-
 
     setId(id);
     setLinkId(linkId);
@@ -53,14 +45,10 @@ const ChangeAccountSettingsModalWindow = () => {
 
     if (act === 'act=confirmNewEmail') {
       const newEmail = arrURL[4].slice(6);
-      setNewEmail(newEmail);
-
       dispatch(confirmNewEmail(id, linkId, token, newEmail));
       setShowChangeEmailConfirm(true);
     }
-
-  }, []);
-
+  }, [dispatch]);
 
   const changeValidatePassword = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
     if (value === '' || value.match(regexForEmail)) {
@@ -74,11 +62,6 @@ const ChangeAccountSettingsModalWindow = () => {
 
   const mainPage = useSelector((state: IState) => state.mainPage);
 
-  console.log('LOLOLLOLOLO');
-
-  console.log(isShowChangeEmailConfirm);
-  console.log(mainPage.changeAccountSetting.isConfirmNewEmail);
-
   const redirectFunction = () => {
     setIsRedirect(true);
   }
@@ -87,10 +70,6 @@ const ChangeAccountSettingsModalWindow = () => {
 
   return (
     <LoginWrapper>
-
-      {/*{isAuth && <Redirect to={'/main'}/>}*/}
-      {/*<header className={style.header}>Матча</header>*/}
-      {/*<body className={style.body}>*/}
       <div className={style.whole_form}>
         <p className={style.title}>Смена почты</p>
         {mainPage.changeAccountSetting.isValidPrevEmail === false &&
@@ -98,47 +77,43 @@ const ChangeAccountSettingsModalWindow = () => {
           <div className={style.form_header}>Невалидная ссылка</div>
         </div>
         }
-        {isShowChangeEmailInput
-        // && mainPage.changeAccountSetting.isValidEmailPassLink
-        && mainPage.changeAccountSetting.isValidEmailPassLink === true &&
+        {isShowChangeEmailInput &&
+        mainPage.changeAccountSetting.isValidEmailPassLink === true &&
         <div className={style.content}>
-          {/*<div className={style.form_header}>Введите новый email</div>*/}
           <Input placeholder={'новый email'} type={'email'} onChange={changeValidatePassword}
                  value={mainPage.changeAccountSetting.newEmail}/>
           <Button type={'primary'} className={cc(style.reg_button, style.whole_wide)} onClick={onClickResetPassword}
-          disabled={Boolean(!mainPage.changeAccountSetting.newEmail || !mainPage.changeAccountSetting.newEmail.match(/[@]/)
-            || !mainPage.changeAccountSetting.newEmail.match(/[.]/))}
+                  disabled={Boolean(!mainPage.changeAccountSetting.newEmail || !mainPage.changeAccountSetting.newEmail.match(/[@]/)
+                    || !mainPage.changeAccountSetting.newEmail.match(/[.]/))}
           >
             Сохранить
           </Button>
-
-
-          { mainPage.changeAccountSetting.isValidNewEmail === false &&
-          <div className={style.content}>
-            <div className={style.form_header}>
-              Невалидная почта, введите другую
+          {
+            mainPage.changeAccountSetting.isValidNewEmail === false &&
+            <div className={style.content}>
+              <div className={style.form_header}>
+                Невалидная почта, введите другую
+              </div>
             </div>
-          </div>
           }
-
-          { mainPage.changeAccountSetting.isValidNewEmail === true &&
-          <div className={style.content}>
-            <div className={style.form_header}>
-              Для подтверждения почты перейдите по ссылке из письма
+          {
+            mainPage.changeAccountSetting.isValidNewEmail === true &&
+            <div className={style.content}>
+              <div className={style.form_header}>
+                Для подтверждения почты перейдите по ссылке из письма
+              </div>
             </div>
-          </div>
           }
         </div>
         }
-
-        {mainPage.changeAccountSetting.isValidEmailPassLink === false &&
-        <div className={style.content}>
-          <div className={style.form_header}>
-            Невалидная ссылка
+        {
+          mainPage.changeAccountSetting.isValidEmailPassLink === false &&
+          <div className={style.content}>
+            <div className={style.form_header}>
+              Невалидная ссылка
+            </div>
           </div>
-        </div>
         }
-
         {isShowChangeEmailInput && mainPage.changeAccountSetting.isValidPrevEmail === false &&
         <div className={style.content}>
           <div className={style.form_header}>
@@ -146,33 +121,26 @@ const ChangeAccountSettingsModalWindow = () => {
           </div>
         </div>
         }
-
         {
           isShowChangeEmailConfirm && mainPage.changeAccountSetting.isConfirmNewEmail === false &&
           <div className={style.content}>
             <div className={style.form_header}>Новая почта не подтверждена</div>
           </div>
-
         }
-
         {
           isShowChangeEmailConfirm && mainPage.changeAccountSetting.isConfirmNewEmail &&
           <div className={style.content}>
             <div className={style.form_header}>Новая почта подтверждена</div>
           </div>
-
         }
-
         <div className={style.enter}>
           <Text style={{color: 'dimgrey', fontWeight: 700}} onClick={redirectFunction}>
             Войти
           </Text>
         </div>
       </div>
-      {/*</body>*/}
-      </LoginWrapper>
-
-      )
+    </LoginWrapper>
+  )
 }
 
 export default ChangeAccountSettingsModalWindow;
