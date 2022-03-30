@@ -234,13 +234,18 @@ export const ChatRoom = ({
         </div>
         <div className={style.message_container}>
           {
-            chat.currentUserMessages?.messages?.map((el: IMessage) =>
-              <Message key={el.id}
-                       message={el}
-                       fromUserId={fromUserId}
-                       userFirstName={chat.userInChat?.firstName}
-                       onClickDeleteMessage={onClickDeleteMessage}
-                       userPhoto={chat.userInChat?.card.photos[0]}/>
+            chat.currentUserMessages?.messages?.map((el: IMessage) => {
+              let photo = chat.userInChat?.card.photos?.find(el => Number(el.number) === 6);
+              if (!photo) {
+                photo = chat.userInChat?.card.photos[0]
+              }
+              return <Message key={el.id}
+                              message={el}
+                              fromUserId={fromUserId}
+                              userFirstName={chat.userInChat?.firstName}
+                              onClickDeleteMessage={onClickDeleteMessage}
+                              userPhoto={photo}/>
+              }
             )
           }
         </div>

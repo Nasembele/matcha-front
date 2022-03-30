@@ -91,12 +91,12 @@ export const MatchSideBar = ({
               return !el.chatId &&
                 <div className={style.pair_user} onClick={showChatRoom(el)} key={el.id}>
                   {el.icon?.content ?
-                    <img height='100px'
-                         width='75px'
+                    <img height='60px'
+                         width='60px'
                          src={`data:${el.icon?.format};base64,${el.icon?.content}`}
                          alt='фото'/> :
-                    <Avatar shape="square" size={75} icon={<UserOutlined/>}
-                            style={{backgroundColor: '#fde3cf', height: '100px'}}/>
+                    <Avatar shape="square" size={50} icon={<UserOutlined/>}
+                            style={{backgroundColor: '#fde3cf', height: '60px', width: '60px'}}/>
                   }
                   <div className={style.pair_name}>
                     {el.firstName}
@@ -111,12 +111,12 @@ export const MatchSideBar = ({
                 return el.chatId &&
                   <div className={style.message_pair} onClick={showChatRoom(el)} key={el.id}>
                     {el.icon?.content ?
-                      <img height='50px'
-                           width={'40px'}
+                      <img height='60px'
+                           width={'60px'}
                            src={`data:${el.icon?.format};base64,${el.icon?.content}`}
                            alt='фото'/> :
-                      <Avatar shape="square" size={40} icon={<UserOutlined/>}
-                              style={{backgroundColor: '#fde3cf', height: '50px'}}/>}
+                      <Avatar shape="square" size={50} icon={<UserOutlined/>}
+                              style={{backgroundColor: '#fde3cf', height: '60px', width: '60px'}}/>}
                       <div className={style.text_container}>
                         <div className={style.name}>
                           {el.firstName}

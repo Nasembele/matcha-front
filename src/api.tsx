@@ -12,7 +12,7 @@ import {
   setUserStatus,
   setValidNewEmailAC,
 } from "./components/MainPage/MainPageAC";
-import {IAuthData, IRegData, IUserCard, IUserFilter} from "./types";
+import {IAuthData, IPhotos, IRegData, IUserCard, IUserFilter} from "./types";
 import {Dispatch} from "redux";
 import {
   changeLoginAC,
@@ -254,8 +254,8 @@ export const saveChangeAccPostQuery = (newCard: IUserCard) => () => {
 }
 
 export const changePhotoPostQuery = (number: number, action: 'save' | 'delete') => (dispatch: any, getState: any) => {
-  const photoObj = getState().mainPage.account?.card?.photos[number];
-  if (action) {
+  const photoObj = getState().mainPage.account?.card?.photos.find((el: IPhotos) => Number(el.number) === number + 1);
+  if (action && photoObj) {
     photoObj.action = action;
   }
   usersAPI.changePhoto([photoObj])

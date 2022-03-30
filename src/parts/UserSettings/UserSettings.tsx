@@ -64,6 +64,9 @@ const UserSettings = () => {
   const [isShowChangeEmail, setIsShowChangeEmail] = useState(false);
   const [isShowChangePass, setIsShowChangePass] = useState(false);
 
+  let userPhotos = [...userAccount.card.photos];
+  userPhotos?.length > 1 && userPhotos.pop();
+
   const options: any = [];
 
   for (let i = 0; i < 44; i++) {
@@ -225,18 +228,18 @@ const UserSettings = () => {
           {`${userAccount.lastName} ${userAccount.firstName} ${userAccount.middleName}`}
         </div>
         <div className={style.user_photos}>
-          {userAccount.card.photos[photoIndex - 1]?.content &&
+          {userPhotos[photoIndex - 1]?.content &&
           <div className={style.left_arrow} onClick={changePhotoIndex(-1)}>
             <LeftOutlined style={{fontSize: '1.2rem'}}/>
           </div>
           }
-          {userAccount.card.photos[photoIndex]?.content ?
+          {userPhotos[photoIndex]?.content ?
             <div className={style.image}>
               <img height={'200px'}
-                   src={`data:${userAccount.card.photos[photoIndex].format};base64,${userAccount.card.photos[photoIndex].content}`}
+                   src={`data:${userPhotos[photoIndex].format};base64,${userPhotos[photoIndex].content}`}
                    alt='фото'/>
-              {photoIndex === userAccount.card.photos.length - 1 &&
-              <div className={style.image_bucket}>
+              {photoIndex === userPhotos.length - 1 &&
+               <div className={style.image_bucket}>
                 <DeleteOutlined onClick={deletePhoto(photoIndex)}/>
               </div>
               }
@@ -258,7 +261,7 @@ const UserSettings = () => {
               </Upload>
             </div>
           }
-          {userAccount.card.photos[photoIndex]?.content && photoIndex !== 4 &&
+          {userPhotos[photoIndex]?.content && photoIndex !== 4 &&
           <div className={style.right_arrow} onClick={changePhotoIndex(1)}>
             <RightOutlined style={{fontSize: '1.2rem'}}/>
           </div>

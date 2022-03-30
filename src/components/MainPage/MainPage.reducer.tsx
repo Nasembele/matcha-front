@@ -151,8 +151,8 @@ export default function MainPageReducer(state: IMainPage = initialState, action:
           ...state.account,
           card: {
             ...state.account.card,
-            photos: state.account.card.photos?.map((el: IPhotos, index: number) => {
-              if (index === action.payload?.number) {
+            photos: state.account.card.photos?.map((el: IPhotos) => {
+              if (Number(el.number) === action.payload?.number + 1) {
                 return {
                   ...el,
                   content: action.payload?.photo

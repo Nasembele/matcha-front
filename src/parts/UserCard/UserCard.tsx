@@ -107,26 +107,29 @@ const UserCard = ({
     }
   }, [user, mainPage.userInCardStatus])
 
+  let userPhotos = [...user.card.photos];
+  userPhotos?.length > 1 && userPhotos.pop();
+
   return (
     <div className={style.wrapper}>
       {!isShowInfo &&
       <div className={style.width}>
         <span>
-          {!user.card.photos[0]?.content &&
+          {!userPhotos[0]?.content &&
           <Avatar shape="square" size={400} icon={<UserOutlined/>}
                   style={{backgroundColor: '#fde3cf', height: '600px', width: '100%'}}/>}
-          {user.card.photos[photoIndex - 1]?.content &&
+          {userPhotos[photoIndex - 1]?.content &&
           <div className={style.left_arrow} onClick={changePhotoIndex(-1)}>
             <LeftOutlined style={{fontSize: '30px', color: 'white'}}/>
           </div>
           }
-          {user.card.photos[photoIndex]?.content &&
+          {userPhotos[photoIndex]?.content &&
           <img width={'100%'}
                height={'600px'}
-               src={`data:${user.card.photos[photoIndex].format};base64,${user.card.photos[photoIndex].content}`}
+               src={`data:${userPhotos[photoIndex].format};base64,${userPhotos[photoIndex].content}`}
                alt='фото'/>
           }
-          {user.card.photos[photoIndex + 1]?.content &&
+          {userPhotos[photoIndex + 1]?.content &&
           <div className={style.right_arrow} onClick={changePhotoIndex(1)}>
             <RightOutlined style={{fontSize: '30px', color: 'white'}}/>
           </div>
