@@ -2,7 +2,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {IMatches, IState} from "../../../types";
 import style from './MatchSideBar.module.css';
 import React, {useState} from "react";
-import {createChat, getUserMatch, logoutGetQuery} from "../../../api";
+import {getUserMatch, logoutGetQuery} from "../../../api";
 import {
   setIsOpenChatRoom,
   setUserMatchesAC,
@@ -50,15 +50,17 @@ export const MatchSideBar = ({
     dispatch(getUserMatch('MATCH', setUserMessagesAC, lastId));
   };
 
-  const showChatRoom = (el: any) => () => {
+  const showChatRoom = (el: any, hasChatId: boolean) => () => {
     if (closeAnotherWindowMobile) {
       closeAnotherWindowMobile();
+    }
+    if (!hasChatId) {
+      dispatch(setIsOpenChatRoom(true, -1, el.userId));
     }
     if (el.chatId) {
       dispatch(setIsOpenChatRoom(true, el.chatId, el.userId));
       return;
     }
-    dispatch(createChat(el.userId));
   }
 
   const onClickLogout = () => {
@@ -112,7 +114,7 @@ export const MatchSideBar = ({
             <div className={style.message_pairs}>
               {chat.pairs?.map((el: IMatches) => {
                 return !el.chatId &&
-                  <div className={style.message_pair} onClick={showChatRoom(el)} key={el.id}>
+                  <div className={style.message_pair} onClick={showChatRoom(el, false)} key={el.id}>
                     {el.icon?.content ?
                       <img height='60px'
                            width='60px'
@@ -139,7 +141,7 @@ export const MatchSideBar = ({
               {
                 chat.messages?.map((el: IMatches) => {
                   return el.chatId &&
-                    <div className={style.message_pair} onClick={showChatRoom(el)} key={el.id}>
+                    <div className={style.message_pair} onClick={showChatRoom(el, true)} key={el.id}>
                       {el.icon?.content ?
                         <img height='60px'
                              width={'60px'}

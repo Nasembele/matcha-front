@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from "react-redux";
 import {IMessage, IState} from "../../../types";
 import React, {useEffect, useState} from "react";
-import {getUserById} from "../../../api";
+import {createChat, getUserById} from "../../../api";
 import style from './ChatRoom.module.css';
 import UserCard from "../../../parts/UserCard/UserCard";
 import {Button, Input, Upload} from "antd";
@@ -16,6 +16,7 @@ import Message from "../../../parts/Message/Message";
 import {MatchSideBar} from "../MatchSideBar/MatchSideBar";
 import {sendNewMessage} from "../Chat.reducer";
 import {actionDataForPhoto, forbiddenForText, getBase64, russianLetter} from "../../../helpers";
+import cc from "classnames";
 
 type IProps = {
   closeWindow: VoidFunction,
@@ -204,6 +205,10 @@ export const ChatRoom = ({
     dispatch(sendNewMessage(getFirstMessage));
   }, [dispatch, chat.openChatId]);
 
+  const onClickCreateChannel = () => {
+    dispatch(createChat(chat.toUserId));
+  }
+
   return (
     <div className={style.container}>
       {isShowMatchSideBarMobile && !isShowUserCardMobile &&
@@ -220,49 +225,61 @@ export const ChatRoom = ({
       }
       {!isShowUserCardMobile && !isShowMatchSideBarMobile &&
       <div className={style.chat_wrapper}>
-        <div className={style.chat_header}>
-          {
-            disableButtonGetNewMessage ?
-              <BackwardOutlined style={{color: 'grey', fontSize: '29px'}}/> :
-              <BackwardOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '29px'}}
-                                onClick={onClickGetPreviousMessages}/>
-          }
+        <div className={cc(chat.openChatId === -1 && style.chat_one_button_header, style.chat_header)}>
+          {chat.openChatId !== -1 &&
+          <>
+            {
+              disableButtonGetNewMessage ?
+                <BackwardOutlined style={{color: 'grey', fontSize: '29px'}}/> :
+                <BackwardOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '29px'}}
+                                  onClick={onClickGetPreviousMessages}/>
+            }
+          </>}
+          {chat.openChatId !== -1 &&
           <FastForwardOutlined style={{color: 'rgb(24, 144, 255)', fontSize: '30px'}}
-                               onClick={getLastMessageCallBack}/>
-          <DeleteOutlined style={{color: 'rgb(232,96,144)', fontSize: '30px'}} onClick={onClickDeleteAllMessages}/>
+                               onClick={getLastMessageCallBack}/>}
+          {chat.openChatId !== -1 &&
+          <DeleteOutlined style={{color: 'rgb(232,96,144)', fontSize: '30px'}} onClick={onClickDeleteAllMessages}/>}
           <CloseCircleOutlined style={{color: 'rgb(96, 101, 232)', fontSize: '30px'}} onClick={closeWindow}/>
         </div>
-        <div className={style.message_container}>
-          {
+        <div className={cc(style.message_container, chat.openChatId === -1 && style.flex)}>
+          {chat.openChatId === -1 ?
+            <div className={style.chat_one_button_footer}>
+              <Button type="primary" className={style.submit_button} onClick={onClickCreateChannel}>
+                Открыть чат
+              </Button>
+            </div> :
             chat.currentUserMessages?.messages?.map((el: IMessage) => {
-              let photo = chat.userInChat?.card.photos?.find(el => Number(el.number) === 6);
-              if (!photo) {
-                photo = chat.userInChat?.card.photos[0]
-              }
-              return <Message key={el.id}
-                              message={el}
-                              fromUserId={fromUserId}
-                              userFirstName={chat.userInChat?.firstName}
-                              onClickDeleteMessage={onClickDeleteMessage}
-                              userPhoto={photo}/>
+                let photo = chat.userInChat?.card.photos?.find(el => Number(el.number) === 6);
+                if (!photo) {
+                  photo = chat.userInChat?.card.photos[0]
+                }
+                return <Message key={el.id}
+                                message={el}
+                                fromUserId={fromUserId}
+                                userFirstName={chat.userInChat?.firstName}
+                                onClickDeleteMessage={onClickDeleteMessage}
+                                userPhoto={photo}/>
               }
             )
           }
         </div>
-        <Input.Group compact className={style.message_input_container}>
-          <Input style={{width: 'calc(100% - 135px)'}} onChange={setNewMessage}
-                 value={message}/>
-          <Upload
-            showUploadList={false}
-            action={actionDataForPhoto}
-            onChange={sendPhoto}
-          >
-            <Button icon={<UploadOutlined/>}/>
-          </Upload>
-          <Button type="primary" className={style.submit_button} onClick={onClickSendMessage}>
-            Отправить
-          </Button>
-        </Input.Group>
+        {chat.openChatId !== -1 &&
+          <Input.Group compact className={style.message_input_container}>
+            <Input style={{width: 'calc(100% - 135px)'}} onChange={setNewMessage}
+                   value={message}/>
+            <Upload
+              showUploadList={false}
+              action={actionDataForPhoto}
+              onChange={sendPhoto}
+            >
+              <Button icon={<UploadOutlined/>}/>
+            </Upload>
+            <Button type="primary" className={style.submit_button} onClick={onClickSendMessage}>
+              Отправить
+            </Button>
+          </Input.Group>
+        }
       </div>
       }
       <div className={style.card_container}>

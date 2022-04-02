@@ -48,6 +48,10 @@ export default function ChatReducer(state: IChat = initialChatState, action: IAc
     case constants.SET_IS_OPEN_CHAT_ROOM:
       return {
         ...state,
+        currentUserMessages: {
+          ...state.currentUserMessages,
+          messages: []
+        },
         isOpenChatRoom: action.payload.isOpenChatRoom,
         openChatId: action.payload.chatId ? action.payload.chatId : 0,
         toUserId: action.payload.toUserId ? action.payload.toUserId : 0

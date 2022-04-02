@@ -71,6 +71,17 @@
     width: 100%;
 }
 
+.chat_one_button_header {
+    display: flex !important;
+    justify-content: flex-end !important;
+}
+
+.chat_one_button_footer {
+    display: flex !important;
+    justify-content: center !important;
+    margin: auto;
+}
+
 .chat_header {
     height: 50px;
     border-bottom: 1px solid rgba(128, 128, 128, 0.4);
@@ -85,6 +96,10 @@
     height: calc(100vh - 160px);
     padding: 10px 15px;
     overflow-y: scroll;
+}
+
+.flex {
+    display: flex;
 }
 
 .submit_button {

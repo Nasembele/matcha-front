@@ -58,7 +58,6 @@ const UserCard = ({
 
   const changeShowInfo = () => {
     setIsShowInfo(prevState => !prevState);
-    onClickVisitUser();
   };
 
   const onClickLikeUser = () => {
