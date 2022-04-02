@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import style from './History.module.css';
 import Title from "antd/es/typography/Title";
 import {getUserByIdWithAction, getUserMatch} from "../../api";
@@ -13,6 +13,7 @@ import {
   addUserFromVisitsHistoryToUsersList,
   setHasAddedUserInHistory,
 } from "../../components/MainPage/MainPageAC";
+import {usePageableScroll} from "../../helpers";
 
 type Props = {
   changeChosenIndex: Function
@@ -25,6 +26,9 @@ const History = ({
   const dispatch = useDispatch();
 
   const chat = useSelector((state: IState) => state.chat);
+
+  const likesContainer = useRef<HTMLDivElement>(null);
+  const visitsContainer = useRef<HTMLDivElement>(null);
 
   const showUserInLikesHistory = (el: IMatches) => () => {
     changeChosenIndex(0);
@@ -43,12 +47,41 @@ const History = ({
     dispatch(getUserMatch('VISIT', setUserVisitsAC));
   }, [dispatch])
 
+  const getNewLikes = () => {
+    const numberLastId = chat.likes?.length - 1;
+    const lastId = chat.likes[numberLastId]?.id;
+
+    dispatch(getUserMatch('LIKE', setUserLikesAC, lastId));
+  };
+
+  const getNewVisits = () => {
+    const numberLastId = chat.visits?.length - 1;
+    const lastId = chat.visits[numberLastId]?.id;
+
+    dispatch(getUserMatch('VISIT', setUserVisitsAC, lastId));
+  };
+
+  const onScrollLikes = usePageableScroll(
+    likesContainer,
+    () => getNewLikes(),
+    [likesContainer, chat.likes]
+  );
+
+  const onScrollVisits = usePageableScroll(
+    visitsContainer,
+    () => getNewVisits(),
+    [visitsContainer, chat.visits]
+  );
+
   return (
     <div className={style.wrapper}>
       <Title level={5} className={style.title}>
         История лайков
       </Title>
-      <div className={style.message_pairs}>
+      <div className={style.message_pairs}
+           onScroll={onScrollLikes}
+           ref={likesContainer}
+      >
         {
           chat.likes.map((el: IMatches) => {
             return <div className={style.message_pair} onClick={showUserInLikesHistory(el)} key={el.id}>
@@ -71,7 +104,10 @@ const History = ({
       <Title level={5} className={cc(style.title, style.margin)}>
         История визитов
       </Title>
-      <div className={style.message_pairs}>
+      <div className={style.message_pairs}
+           onScroll={onScrollVisits}
+           ref={visitsContainer}
+      >
         {
           chat.visits.map((el: IMatches) => {
             return <div className={style.message_pair} onClick={showUserInVisitsHistory(el)} key={el.id}>

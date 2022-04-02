@@ -19,14 +19,14 @@
 
 @media (min-height: 600px) {
     .message_pairs {
-        max-height: 40%;
+        max-height: 35vh;
         overflow-y: scroll;
     }
 }
 
 @media (max-height: 600px) {
     .message_pairs {
-        max-height: calc(40% - 75px);
+        max-height: calc(35vh - 75px);
         overflow-y: scroll;
     }
 }

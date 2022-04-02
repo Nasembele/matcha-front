@@ -28,22 +28,22 @@ export default function ChatReducer(state: IChat = initialChatState, action: IAc
     case constants.SET_USER_MATCHES:
       return {
         ...state,
-        pairs: action.payload
+        pairs: [...state.pairs, ...action.payload]
       };
     case constants.SET_USER_MESSAGES:
       return {
         ...state,
-        messages: action.payload
+        messages: [...state.messages, ...action.payload]
       };
     case constants.SET_USER_LIKES:
       return {
         ...state,
-        likes: action.payload
+        likes: [...state.likes, ...action.payload]
       };
     case constants.SET_USER_VISITS:
       return {
         ...state,
-        visits: action.payload
+        visits: [...state.visits, ...action.payload]
       };
     case constants.SET_IS_OPEN_CHAT_ROOM:
       return {

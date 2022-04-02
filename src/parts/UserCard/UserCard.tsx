@@ -16,10 +16,9 @@ import {
   UserOutlined
 } from "@ant-design/icons";
 import {Avatar, Tag} from "antd";
-import {getUserStatus, likeUserPutQuery, setVisitUserPutQuery} from "../../api";
+import {getUserStatus, likeUserPutQuery} from "../../api";
 import {useDispatch, useSelector} from "react-redux";
 import {deleteNotLikeUserAC, setHasAddedUserInHistory} from "../../components/MainPage/MainPageAC";
-import {setAction} from "../../components/Chat/Chat.reducer";
 import {Typography} from 'antd';
 import moment from "moment";
 
@@ -50,11 +49,6 @@ const UserCard = ({
   const changePhotoIndex = (number: number) => () => {
     setPhotoIndex(prevState => prevState + number);
   }
-
-  const onClickVisitUser = () => {
-    dispatch(setVisitUserPutQuery(user.id));
-    dispatch(setAction('VISIT', mainPage.account.id, user.id));
-  };
 
   const changeShowInfo = () => {
     setIsShowInfo(prevState => !prevState);
