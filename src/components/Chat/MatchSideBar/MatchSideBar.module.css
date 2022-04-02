@@ -78,26 +78,24 @@
 
 @media (min-height: 600px) {
     .message_pairs {
-        max-height: 47vh;
+        max-height: 35vh;
         overflow-y: scroll;
     }
 
     .pair_users {
         display: flex;
-        overflow-x: scroll;
         margin-bottom: 20px;
     }
 }
 
 @media (max-height: 600px) {
     .message_pairs {
-        max-height: calc(47vh - 75px);
+        max-height: calc(35vh - 75px);
         overflow-y: scroll;
     }
 
     .pair_users {
         display: flex;
-        overflow: scroll;
         margin-bottom: 20px;
         height: 60px;
     }
@@ -115,4 +113,8 @@
 
 .title {
     color: rgb(91, 91, 144) !important;
+}
+
+.messages_container {
+    margin-top: 25px;
 }

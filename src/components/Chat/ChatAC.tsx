@@ -6,6 +6,11 @@ export const setUserMatchesAC = (matches: IMatches) => ({
   payload: matches
 });
 
+export const setUserMessagesAC = (matches: IMatches) => ({
+  type: constants.SET_USER_MESSAGES,
+  payload: matches
+});
+
 export const setUserLikesAC = (likes: IMatches) => ({
   type: constants.SET_USER_LIKES,
   payload: likes

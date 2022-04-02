@@ -5,7 +5,8 @@ import React, {useState} from "react";
 import {createChat, getUserMatch, logoutGetQuery} from "../../../api";
 import {
   setIsOpenChatRoom,
-  setUserMatchesAC
+  setUserMatchesAC,
+  setUserMessagesAC
 } from "../ChatAC";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "antd/dist/antd.min.css";
@@ -35,11 +36,18 @@ export const MatchSideBar = ({
   const [isShowUserSettings, setIsShowUserSettings] = useState(false);
   const [isShowHistory, setIsShowHistory] = useState(false);
 
-  const getNewMatches = () => {
-    const numberLastId = chat.matches.length - 1;
-    const lastId = chat.matches[numberLastId]?.id;
+  const getNewPairs = () => {
+    const numberLastId = chat.pairs.length - 1;
+    const lastId = chat.pairs[numberLastId]?.id;
 
     dispatch(getUserMatch('MATCH', setUserMatchesAC, lastId));
+  };
+
+  const getNewMessages = () => {
+    const numberLastId = chat.messages.length - 1;
+    const lastId = chat.messages[numberLastId]?.id;
+
+    dispatch(getUserMatch('MATCH', setUserMessagesAC, lastId));
   };
 
   const showChatRoom = (el: any) => () => {
@@ -99,51 +107,60 @@ export const MatchSideBar = ({
       {!isShowUserSettings && !isShowHistory &&
       <div>
         <div className={style.sidebar_content}>
-          <Title level={5} className={style.title}>Пары</Title>
-          <div className={style.pair_users}>
-            {chat.matches?.map((el: IMatches) => {
-              return !el.chatId &&
-                <div className={style.pair_user} onClick={showChatRoom(el)} key={el.id}>
-                  {el.icon?.content ?
-                    <img height='60px'
-                         width='60px'
-                         src={`data:${el.icon?.format};base64,${el.icon?.content}`}
-                         alt='фото'/> :
-                    <Avatar shape="square" size={50} icon={<UserOutlined/>}
-                            style={{backgroundColor: '#fde3cf', height: '60px', width: '60px'}}/>
-                  }
-                  <div className={style.pair_name}>
-                    {el.firstName}
-                  </div>
-                </div>
-            })}
-          </div>
-          <Title level={5} className={style.title}>Сообщения</Title>
-          <div className={style.message_pairs}>
-            {
-              chat.matches.map((el: IMatches) => {
-                return el.chatId &&
+          <div>
+            <Title level={5} className={style.title}>Пары</Title>
+            <div className={style.message_pairs}>
+              {chat.pairs?.map((el: IMatches) => {
+                return !el.chatId &&
                   <div className={style.message_pair} onClick={showChatRoom(el)} key={el.id}>
                     {el.icon?.content ?
                       <img height='60px'
-                           width={'60px'}
+                           width='60px'
                            src={`data:${el.icon?.format};base64,${el.icon?.content}`}
                            alt='фото'/> :
                       <Avatar shape="square" size={50} icon={<UserOutlined/>}
-                              style={{backgroundColor: '#fde3cf', height: '60px', width: '60px'}}/>}
+                              style={{backgroundColor: '#fde3cf', height: '60px', width: '60px'}}/>
+                    }
+                    <div className={style.text_container}>
+                      <div className={style.name}>
+                        {el.firstName}
+                      </div>
+                    </div>
+                  </div>
+              })}
+            </div>
+            <Button onClick={getNewPairs} className={style.submit_button_upload}>
+              Посмотреть ещё
+            </Button>
+          </div>
+          <div className={style.messages_container}>
+            <Title level={5} className={style.title}>Сообщения</Title>
+            <div className={style.message_pairs}>
+              {
+                chat.messages?.map((el: IMatches) => {
+                  return el.chatId &&
+                    <div className={style.message_pair} onClick={showChatRoom(el)} key={el.id}>
+                      {el.icon?.content ?
+                        <img height='60px'
+                             width={'60px'}
+                             src={`data:${el.icon?.format};base64,${el.icon?.content}`}
+                             alt='фото'/> :
+                        <Avatar shape="square" size={50} icon={<UserOutlined/>}
+                                style={{backgroundColor: '#fde3cf', height: '60px', width: '60px'}}/>}
                       <div className={style.text_container}>
                         <div className={style.name}>
                           {el.firstName}
                         </div>
                       </div>
-                  </div>
-              })
-            }
+                    </div>
+                })
+              }
+            </div>
+            <Button onClick={getNewMessages} className={style.submit_button_upload}>
+              Посмотреть ещё
+            </Button>
           </div>
         </div>
-        <Button onClick={getNewMatches} className={style.submit_button_upload}>
-          Посмотреть ещё
-        </Button>
       </div>
       }
     </div>

@@ -31,7 +31,8 @@ import {
   setIsOpenChatRoom,
   setUserInChatAC,
   setUserLikesAC,
-  setUserMatchesAC
+  setUserMatchesAC,
+  setUserMessagesAC
 } from "./components/Chat/ChatAC";
 import {setAction} from "./components/Chat/Chat.reducer";
 
@@ -128,6 +129,7 @@ export const authGetUserQuery = () => (dispatch: any) => {
         dispatch(setUserDataAC(res.data));
         dispatch(setUserFiltersAC(res.data.filter));
         dispatch(getUserMatch('MATCH', setUserMatchesAC));
+        dispatch(getUserMatch('MATCH', setUserMessagesAC));
         dispatch(getChatToken());
       }
     })
@@ -156,6 +158,7 @@ export const signInPostQuery = (isAuthData: IAuthData) => (dispatch: any, getSta
         dispatch(setUserFiltersAC(res.data.filter));
         dispatch(setIsAuthUserAC(true));
         dispatch(getUserMatch('MATCH', setUserMatchesAC));
+        dispatch(getUserMatch('MATCH', setUserMessagesAC));
         dispatch(getChatToken());
       } else {
         dispatch(setIsAuthUserAC(false));
@@ -299,11 +302,13 @@ export const likeUserPutQuery = (userId: number, action: string) => (dispatch: a
       }
       if (action === 'BLOCK') {
         dispatch(getUserMatch('MATCH', setUserMatchesAC));
+        dispatch(getUserMatch('MATCH', setUserMessagesAC));
         dispatch(closeOpenChatRoom());
       }
       if (response.data === 'MATCH') {
         dispatch(setMatchCurrentUserAC());
         dispatch(getUserMatch('MATCH', setUserMatchesAC));
+        dispatch(getUserMatch('MATCH', setUserMessagesAC));
         dispatch(setAction('MATCH', myId, userId));
       } else {
         dispatch(deleteNotLikeUserAC());
@@ -313,6 +318,7 @@ export const likeUserPutQuery = (userId: number, action: string) => (dispatch: a
       }
       if (action === 'TAKE_LIKE') {
         dispatch(getUserMatch('MATCH', setUserMatchesAC));
+        dispatch(getUserMatch('MATCH', setUserMessagesAC));
       }
       dispatch(setAction(action, myId, userId));
     })
@@ -448,6 +454,7 @@ export const createChat = (toUser: number) => (dispatch: any) => {
     .then((response: any) => {
       dispatch(setIsOpenChatRoom(true, response.data, toUser));
       dispatch(getUserMatch('MATCH', setUserMatchesAC));
+      dispatch(getUserMatch('MATCH', setUserMessagesAC));
     })
     .catch(() => {
     });

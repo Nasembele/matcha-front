@@ -16,7 +16,8 @@ export const initialChatState: IChat = {
   isOpenChatRoom: false,
   openChatId: 0,
   toUserId: 0,
-  matches: [],
+  pairs: [],
+  messages: [],
   likes: [],
   visits: [],
   actionNotifications: []
@@ -27,7 +28,12 @@ export default function ChatReducer(state: IChat = initialChatState, action: IAc
     case constants.SET_USER_MATCHES:
       return {
         ...state,
-        matches: action.payload
+        pairs: action.payload
+      };
+    case constants.SET_USER_MESSAGES:
+      return {
+        ...state,
+        messages: action.payload
       };
     case constants.SET_USER_LIKES:
       return {
