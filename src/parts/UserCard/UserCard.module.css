@@ -5,7 +5,7 @@
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .width {
@@ -36,6 +36,7 @@
 .name_and_age {
     display: flex;
     z-index: 1;
+    width: 100%;
 }
 
 .info_card_title {
@@ -48,7 +49,6 @@
 .info_card {
     background-color: white;
     width: 100%;
-    /*height: 100%;*/
     height: 600px;
     padding: 15px 20px;
 }
@@ -58,12 +58,23 @@
     color: white;
     font-weight: bold;
     z-index: 1;
+    width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .second_name {
     font-size: 2.5rem;
     color: black;
     font-weight: bold;
+}
+
+.name_width {
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .rating {
@@ -73,14 +84,15 @@
 .age {
     font-size: 2.5rem;
     color: white;
-    margin-left: 15px;
+    margin-left: 10px;
     z-index: 1;
 }
 
 .second_age {
     font-size: 2.5rem;
     color: black;
-    margin-left: 15px;
+    margin-left: 10px;
+    margin-right: 4px;
 }
 
 .rating_container {
@@ -94,9 +106,7 @@
 }
 
 .icon_info_container {
-    /*margin: auto;*/
     width: 40px;
-    /*margin-top: 15px*/
     position: absolute;
     top: 15px;
     right: 10px;
@@ -130,8 +140,7 @@
 
 .like_container {
     position: relative;
-    /*top: 510px;*/
-   bottom: 70px;
+    bottom: 70px;
     width: 100%;
     -webkit-user-select: none;
     -moz-user-select: none;

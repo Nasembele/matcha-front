@@ -143,7 +143,7 @@ const UserCard = ({
                 <div className={style.online}/> :
                 <div className={style.offline}/>
             }
-            <div className={style.name}>
+            <div className={style.name} title={user.firstName}>
               {user.firstName}
             </div>
             <div className={style.age}>
@@ -167,7 +167,7 @@ const UserCard = ({
         <div className={style.info_card}>
           <div className={style.info_card_title}>
             <div className={style.name_and_age}>
-              <div className={style.second_name}>
+              <div className={cc(style.second_name, style.name_width)} title={user.firstName}>
                 {user.firstName}
               </div>
               <div className={style.second_age}>
@@ -199,7 +199,7 @@ const UserCard = ({
             {user.card.education}
           </div>
           <div className={style.small_text}>
-            {`${user.card.position}, ${user.card.workPlace}`}
+            {`${user.card.position ? user.card.position : ''}${user.card.position ? ',' : ''} ${user.card.workPlace ? user.card.workPlace : ''}`}
           </div>
           <div className={style.tags_container}>
             {
