@@ -15,6 +15,7 @@ import Title from "antd/es/typography/Title";
 import UserSettings from "../../../parts/UserSettings/UserSettings";
 import cc from "classnames";
 import History from "../../../parts/History/History";
+import {deleteNotLikeUserAC, setHasAddedUserInHistory} from "../../MainPage/MainPageAC";
 
 type IProps = {
   closeAnotherWindowMobile: VoidFunction,
@@ -29,6 +30,7 @@ export const MatchSideBar = ({
   const dispatch = useDispatch();
 
   const chat = useSelector((state: IState) => state.chat);
+  const hasAddedUserInHistory = useSelector((state: IState) => state.mainPage.hasAddedUserInHistory);
 
   const [isShowUserSettings, setIsShowUserSettings] = useState(false);
   const [isShowHistory, setIsShowHistory] = useState(false);
@@ -52,15 +54,27 @@ export const MatchSideBar = ({
   }
 
   const onClickLogout = () => {
+    if (hasAddedUserInHistory) {
+      dispatch(deleteNotLikeUserAC());
+    }
+    dispatch(setHasAddedUserInHistory(false));
     dispatch(logoutGetQuery());
   }
 
   const changeShowUserSettings = () => {
+    if (hasAddedUserInHistory) {
+      dispatch(deleteNotLikeUserAC());
+    }
+    dispatch(setHasAddedUserInHistory(false));
     setIsShowHistory(false);
     setIsShowUserSettings(prevState => !prevState);
   }
 
   const changeShowHistory = () => {
+    if (hasAddedUserInHistory) {
+      dispatch(deleteNotLikeUserAC());
+    }
+    dispatch(setHasAddedUserInHistory(false));
     setIsShowUserSettings(false);
     setIsShowHistory(prevState => !prevState);
   }

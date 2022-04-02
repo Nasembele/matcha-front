@@ -312,6 +312,7 @@ export default function MainPageReducer(state: IMainPage = initialState, action:
       return {
         ...state,
         users: addNewElemInArray(state.users, action.payload, true),
+        hasAddedUserInHistory: true,
         currentUser: {
           userData: action.payload,
           match: false
@@ -325,6 +326,11 @@ export default function MainPageReducer(state: IMainPage = initialState, action:
           userData: action.payload,
           match: false
         }
+      };
+    case constants.SET_HAS_ADDED_USER_IN_HISTORY:
+      return {
+        ...state,
+        hasAddedUserInHistory: action.payload,
       };
     case constants.SET_USER_STATUS:
       return {

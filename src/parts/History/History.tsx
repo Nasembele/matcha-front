@@ -11,6 +11,7 @@ import cc from "classnames";
 import {
   addUserFromLikesHistoryToUsersList,
   addUserFromVisitsHistoryToUsersList,
+  setHasAddedUserInHistory,
 } from "../../components/MainPage/MainPageAC";
 
 type Props = {
@@ -27,11 +28,13 @@ const History = ({
 
   const showUserInLikesHistory = (el: IMatches) => () => {
     changeChosenIndex(0);
+    dispatch(setHasAddedUserInHistory(true));
     dispatch(getUserByIdWithAction(el.userId, addUserFromLikesHistoryToUsersList));
   }
 
   const showUserInVisitsHistory = (el: IMatches) => () => {
     changeChosenIndex(0);
+    dispatch(setHasAddedUserInHistory(true));
     dispatch(getUserByIdWithAction(el.userId, addUserFromVisitsHistoryToUsersList));
   }
 

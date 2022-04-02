@@ -169,6 +169,11 @@ export const addUserFromLikesHistoryToUsersList = (user: IUserData) => ({
     payload: user
 });
 
+export const setHasAddedUserInHistory = (hasAddedUser: boolean) => ({
+    type: constants.SET_HAS_ADDED_USER_IN_HISTORY,
+    payload: hasAddedUser
+});
+
 export const addUserFromVisitsHistoryToUsersList = (user: IUserData) => ({
     type: constants.ADD_USER_TO_USERS_LIST_FROM_VISITS_HISTORY,
     payload: user

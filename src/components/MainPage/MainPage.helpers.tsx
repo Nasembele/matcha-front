@@ -80,6 +80,7 @@ export const initialState = {
     isValidEmailPassLink: null,
     isChangePass: null
   },
+  hasAddedUserInHistory: false,
   users: [],
   likeUsers: [],
   userFilters: initialUserFilter

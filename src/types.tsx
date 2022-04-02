@@ -93,6 +93,7 @@ export interface IMainPage {
     isChangePass: null | boolean
   },
   users: IUserData[],
+  hasAddedUserInHistory: boolean | null,
   likeUsers: IUserData[],
   userFilters: IUserFilter,
   currentUser?: IUserDataWithMatch,

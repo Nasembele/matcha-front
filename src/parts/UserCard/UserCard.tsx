@@ -18,7 +18,7 @@ import {
 import {Avatar, Tag} from "antd";
 import {getUserStatus, likeUserPutQuery, setVisitUserPutQuery} from "../../api";
 import {useDispatch, useSelector} from "react-redux";
-import {deleteNotLikeUserAC} from "../../components/MainPage/MainPageAC";
+import {deleteNotLikeUserAC, setHasAddedUserInHistory} from "../../components/MainPage/MainPageAC";
 import {setAction} from "../../components/Chat/Chat.reducer";
 import {Typography} from 'antd';
 import moment from "moment";
@@ -71,6 +71,7 @@ const UserCard = ({
 
   const onClickNotLikeUser = () => {
     dispatch(deleteNotLikeUserAC());
+    dispatch(setHasAddedUserInHistory(false));
   };
 
   const onClickTakeLikeUser = () => {

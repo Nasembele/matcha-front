@@ -28,6 +28,7 @@ import {sendNewMessage, startMessagesListening} from "../Chat/Chat.reducer";
 import {notification} from "antd";
 import {getDescriptionByAction, getNotificationTitleByAction} from "../../helpers";
 import History from "../../parts/History/History";
+import {deleteNotLikeUserAC, setHasAddedUserInHistory} from "./MainPageAC";
 
 const MainPage = () => {
 
@@ -45,9 +46,11 @@ const MainPage = () => {
 
   useEffect(() => {
     if (chosenIndex === 0 && countUsers === 0) {
-      dispatch(getUsersPostQuery());
+      if (!mainPage.hasAddedUserInHistory) {
+        dispatch(getUsersPostQuery());
+      }
     }
-  }, [dispatch, chosenIndex, countUsers]);
+  }, [dispatch, chosenIndex, countUsers, mainPage.hasAddedUserInHistory]);
 
   useEffect(() => {
     if (chat.isOpenChatRoom) {
@@ -121,6 +124,10 @@ const MainPage = () => {
     setChosenIndex(3);
     setIsShowUserCardMobile(prevState => !prevState);
     setIsShowMatchSideBarMobile(false);
+    if (mainPage.hasAddedUserInHistory) {
+      dispatch(deleteNotLikeUserAC());
+    }
+    dispatch(setHasAddedUserInHistory(false));
   }
 
   const changeShowMatchSideBarMobile = () => {
@@ -128,6 +135,10 @@ const MainPage = () => {
     setChosenIndex(2);
     setIsShowMatchSideBarMobile(prevState => !prevState);
     setIsShowUserCardMobile(false);
+    if (mainPage.hasAddedUserInHistory) {
+      dispatch(deleteNotLikeUserAC());
+    }
+    dispatch(setHasAddedUserInHistory(false));
   }
 
   const closeAnotherWindowMobile = () => {
@@ -136,6 +147,10 @@ const MainPage = () => {
   }
 
   const onClickLogout = () => {
+    if (mainPage.hasAddedUserInHistory) {
+      dispatch(deleteNotLikeUserAC());
+    }
+    dispatch(setHasAddedUserInHistory(false));
     dispatch(logoutGetQuery());
   }
 
@@ -146,6 +161,10 @@ const MainPage = () => {
       setChosenIndex(1);
     }
     closeAnotherWindowMobile();
+    if (mainPage.hasAddedUserInHistory) {
+      dispatch(deleteNotLikeUserAC());
+    }
+    dispatch(setHasAddedUserInHistory(false));
   }
 
   const changeShowHistory = () => {
@@ -155,6 +174,10 @@ const MainPage = () => {
       setChosenIndex(4);
     }
     closeAnotherWindowMobile();
+    if (mainPage.hasAddedUserInHistory) {
+      dispatch(deleteNotLikeUserAC());
+    }
+    dispatch(setHasAddedUserInHistory(false));
   }
 
   return (
