@@ -1,7 +1,7 @@
 import React, {useEffect, useRef} from 'react';
 import style from './History.module.css';
 import Title from "antd/es/typography/Title";
-import {getUserByIdWithAction, getUserMatch} from "../../api";
+import {getUserAnotherMatch, getUserByIdWithAction} from "../../api";
 import {setUserLikesAC, setUserVisitsAC} from "../../components/Chat/ChatAC";
 import {useDispatch, useSelector} from "react-redux";
 import {IMatches, IState} from "../../types";
@@ -43,22 +43,22 @@ const History = ({
   }
 
   useEffect(() => {
-    dispatch(getUserMatch('LIKE', setUserLikesAC));
-    dispatch(getUserMatch('VISIT', setUserVisitsAC));
+    dispatch(getUserAnotherMatch('LIKE', setUserLikesAC));
+    dispatch(getUserAnotherMatch('VISIT', setUserVisitsAC));
   }, [dispatch])
 
   const getNewLikes = () => {
     const numberLastId = chat.likes?.length - 1;
     const lastId = chat.likes[numberLastId]?.id;
 
-    dispatch(getUserMatch('LIKE', setUserLikesAC, lastId));
+    dispatch(getUserAnotherMatch('LIKE', setUserLikesAC, lastId));
   };
 
   const getNewVisits = () => {
     const numberLastId = chat.visits?.length - 1;
     const lastId = chat.visits[numberLastId]?.id;
 
-    dispatch(getUserMatch('VISIT', setUserVisitsAC, lastId));
+    dispatch(getUserAnotherMatch('VISIT', setUserVisitsAC, lastId));
   };
 
   const onScrollLikes = usePageableScroll(

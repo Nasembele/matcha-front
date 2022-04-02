@@ -12,7 +12,7 @@ import {
   setUserStatus,
   setValidNewEmailAC,
 } from "./components/MainPage/MainPageAC";
-import {IAuthData, IPhotos, IRegData, IUserCard, IUserFilter} from "./types";
+import {IAuthData, IMatches, IPhotos, IRegData, IUserCard, IUserFilter} from "./types";
 import {Dispatch} from "redux";
 import {
   changeLoginAC,
@@ -32,7 +32,9 @@ import {
   setUserInChatAC,
   setUserLikesAC,
   setUserMatchesAC,
-  setUserMessagesAC
+  setUserMatchesUpdateAC,
+  setUserMessagesAC,
+  setUserMessagesUpdateAC
 } from "./components/Chat/ChatAC";
 import {setAction} from "./components/Chat/Chat.reducer";
 
@@ -128,8 +130,8 @@ export const authGetUserQuery = () => (dispatch: any) => {
         dispatch(setIsAuthUserAC(true));
         dispatch(setUserDataAC(res.data));
         dispatch(setUserFiltersAC(res.data.filter));
-        dispatch(getUserMatch('MATCH', setUserMatchesAC));
-        dispatch(getUserMatch('MATCH', setUserMessagesAC));
+        dispatch(getUserMatch('MATCH', setUserMatchesAC, false));
+        dispatch(getUserMatch('MATCH', setUserMessagesAC, true));
         dispatch(getChatToken());
       }
     })
@@ -150,15 +152,15 @@ export const rerunGetUserQuery = () => (dispatch: any) => {
     });
 }
 
-export const signInPostQuery = (isAuthData: IAuthData) => (dispatch: any, getState: any) => {
+export const signInPostQuery = (isAuthData: IAuthData) => (dispatch: any) => {
   usersAPI.signIn(isAuthData)
     .then((res: any) => {
       if (res.data !== 'INVALID LOGIN OR PASSWORD' && res.data !== 'WRONG') {
         dispatch(setUserDataAC(res.data));
         dispatch(setUserFiltersAC(res.data.filter));
         dispatch(setIsAuthUserAC(true));
-        dispatch(getUserMatch('MATCH', setUserMatchesAC));
-        dispatch(getUserMatch('MATCH', setUserMessagesAC));
+        dispatch(getUserMatch('MATCH', setUserMatchesAC, false));
+        dispatch(getUserMatch('MATCH', setUserMessagesAC, true));
         dispatch(getChatToken());
       } else {
         dispatch(setIsAuthUserAC(false));
@@ -298,17 +300,17 @@ export const likeUserPutQuery = (userId: number, action: string) => (dispatch: a
   usersAPI.likeUser(data)
     .then((response: any) => { //валидация?
       if (action === 'LIKE') {
-        dispatch(getUserMatch('LIKE', setUserLikesAC));
+        dispatch(getUserAnotherMatch('LIKE', setUserLikesAC));
       }
       if (action === 'BLOCK') {
-        dispatch(getUserMatch('MATCH', setUserMatchesAC));
-        dispatch(getUserMatch('MATCH', setUserMessagesAC));
+        dispatch(getUserAnotherMatch('MATCH', setUserMatchesAC));
+        dispatch(getUserAnotherMatch('MATCH', setUserMessagesAC));
         dispatch(closeOpenChatRoom());
       }
       if (response.data === 'MATCH') {
         dispatch(setMatchCurrentUserAC());
-        dispatch(getUserMatch('MATCH', setUserMatchesAC));
-        dispatch(getUserMatch('MATCH', setUserMessagesAC));
+        dispatch(getUserAnotherMatch('MATCH', setUserMatchesAC));
+        dispatch(getUserAnotherMatch('MATCH', setUserMessagesAC));
         dispatch(setAction('MATCH', myId, userId));
       } else {
         dispatch(deleteNotLikeUserAC());
@@ -317,8 +319,8 @@ export const likeUserPutQuery = (userId: number, action: string) => (dispatch: a
         return;
       }
       if (action === 'TAKE_LIKE') {
-        dispatch(getUserMatch('MATCH', setUserMatchesAC));
-        dispatch(getUserMatch('MATCH', setUserMessagesAC));
+        dispatch(getUserAnotherMatch('MATCH', setUserMatchesAC));
+        dispatch(getUserAnotherMatch('MATCH', setUserMessagesAC));
       }
       dispatch(setAction(action, myId, userId));
     })
@@ -326,7 +328,7 @@ export const likeUserPutQuery = (userId: number, action: string) => (dispatch: a
     });
 }
 
-export const changeAccEmailPostQuery = () => (dispatch: Dispatch) => {
+export const changeAccEmailPostQuery = () => () => {
   const data = {"act": "emailRqSend"};
   usersAPI.changeEmail(data)
     .then(() => {
@@ -440,7 +442,30 @@ export const saveNewPassword = (id: string, linkId: string, token: string, pass:
     });
 }
 
-export const getUserMatch = (action: string, actionAfterSuccess: Function, lastId?: number) => (dispatch: Dispatch) => {
+export const getUserMatch = (action: string, actionAfterSuccess: Function, hasChatId: boolean, lastId?: number) => (dispatch: Dispatch) => {
+  usersAPI.getUserMatchGetQuery(action, lastId)
+    .then((response: any) => {
+      const result = hasChatId ?
+        response.data.filter((el: IMatches) => el.chatId) :
+        response.data.filter((el: IMatches) => !el.chatId);
+      dispatch(actionAfterSuccess(result));
+      // if (result?.length < 6) { todo убрать
+      //   const numberLastId = result?.length - 1;
+      //   const lastId = result[numberLastId]?.id;
+      //   if (hasChatId) {
+      //     // @ts-ignore
+      //     return dispatch(getUserMatch('MATCH', setUserMessagesAC, true, lastId));
+      //   } else {
+      //     // @ts-ignore
+      //     return dispatch(getUserMatch('MATCH', setUserMatchesAC, false, lastId));
+      //   }
+      // }
+    })
+    .catch(() => {
+    });
+}
+
+export const getUserAnotherMatch = (action: string, actionAfterSuccess: Function, lastId?: number) => (dispatch: Dispatch) => {
   usersAPI.getUserMatchGetQuery(action, lastId)
     .then((response: any) => {
       dispatch(actionAfterSuccess(response.data));
@@ -453,8 +478,8 @@ export const createChat = (toUser: number) => (dispatch: any) => {
   usersAPI.createChatPutQuery({'toUsr': toUser})
     .then((response: any) => {
       dispatch(setIsOpenChatRoom(true, response.data, toUser));
-      dispatch(getUserMatch('MATCH', setUserMatchesAC));
-      dispatch(getUserMatch('MATCH', setUserMessagesAC));
+      dispatch(getUserMatch('MATCH', setUserMatchesUpdateAC, false));
+      dispatch(getUserMatch('MATCH', setUserMessagesUpdateAC, true));
     })
     .catch(() => {
     });

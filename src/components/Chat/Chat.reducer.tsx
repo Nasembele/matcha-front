@@ -35,6 +35,16 @@ export default function ChatReducer(state: IChat = initialChatState, action: IAc
         ...state,
         messages: [...state.messages, ...action.payload]
       };
+    case constants.SET_USER_MATCHES_UPDATE:
+      return {
+        ...state,
+        pairs: action.payload
+      };
+    case constants.SET_USER_MESSAGES_UPDATE:
+      return {
+        ...state,
+        messages: action.payload
+      };
     case constants.SET_USER_LIKES:
       return {
         ...state,

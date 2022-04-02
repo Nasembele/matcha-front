@@ -44,14 +44,14 @@ export const MatchSideBar = ({
     const numberLastId = chat.pairs?.length - 1;
     const lastId = chat.pairs[numberLastId]?.id;
 
-    dispatch(getUserMatch('MATCH', setUserMatchesAC, lastId));
+    dispatch(getUserMatch('MATCH', setUserMatchesAC, false, lastId));
   };
 
   const getNewMessages = () => {
     const numberLastId = chat.messages?.length - 1;
     const lastId = chat.messages[numberLastId]?.id;
 
-    dispatch(getUserMatch('MATCH', setUserMessagesAC, lastId));
+    dispatch(getUserMatch('MATCH', setUserMessagesAC, true, lastId));
   };
 
   const showChatRoom = (el: any, hasChatId: boolean) => () => {
@@ -60,6 +60,7 @@ export const MatchSideBar = ({
     }
     if (!hasChatId) {
       dispatch(setIsOpenChatRoom(true, -1, el.userId));
+      return;
     }
     if (el.chatId) {
       dispatch(setIsOpenChatRoom(true, el.chatId, el.userId));
