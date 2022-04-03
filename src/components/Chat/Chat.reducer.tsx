@@ -4,7 +4,8 @@ import {
   addElemInArray,
   prepareNotificationForSave,
   setIsShowFalseInLastNotification,
-  setUserFiInLastNotificationHelp
+  setUserFiInLastNotificationHelp,
+  sortById
 } from "../../helpers";
 import {Dispatch} from "redux";
 import {setCurrentUserMessages, setReceivedNotice} from "./ChatAC";
@@ -60,7 +61,7 @@ export default function ChatReducer(state: IChat = initialChatState, action: IAc
         ...state,
         currentUserMessages: {
           ...state.currentUserMessages,
-          messages: []
+          messages: action.payload.chatId === -1 ? [] : state.currentUserMessages?.messages
         },
         isOpenChatRoom: action.payload.isOpenChatRoom,
         openChatId: action.payload.chatId ? action.payload.chatId : 0,
@@ -97,7 +98,7 @@ export default function ChatReducer(state: IChat = initialChatState, action: IAc
         ...state,
         currentUserMessages: {
           ...state.currentUserMessages,
-          messages: action.payload.reverse(),
+          messages: sortById(action.payload),
           oldestMessagesId: action.payload[0]?.id
         }
       }

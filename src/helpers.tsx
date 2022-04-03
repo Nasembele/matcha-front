@@ -1,4 +1,4 @@
-import {INotification, IUserData} from "./types";
+import {IMessage, INotification, IUserData} from "./types";
 import {RefObject, useCallback} from "react";
 import {debounce} from "@mui/material";
 
@@ -130,9 +130,14 @@ export const usePageableScroll = (
   deps: Array<any> = []
   // eslint-disable-next-line
 ) => useCallback(debounce(() => {
-  const { scrollTop, offsetHeight, scrollHeight } = ref.current!;
+  const {scrollTop, offsetHeight, scrollHeight} = ref.current!;
 
   if (Math.ceil(scrollTop + offsetHeight) >= Math.ceil(scrollHeight)) {
     callback();
   }
 }, 500), [debounce, ...deps]);
+
+export const sortById = (messages: IMessage[]) => {
+  messages.sort((a, b) => a.id > b.id ? 1 : -1);
+  return messages;
+}
