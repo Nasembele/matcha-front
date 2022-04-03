@@ -15,7 +15,7 @@ import {
 import Message from "../../../parts/Message/Message";
 import {MatchSideBar} from "../MatchSideBar/MatchSideBar";
 import {sendNewMessage} from "../Chat.reducer";
-import {actionDataForPhoto, forbiddenForText, getBase64, russianLetter} from "../../../helpers";
+import {actionDataForPhoto, englishLetter, forbiddenForChat, getBase64, russianLetter} from "../../../helpers";
 import cc from "classnames";
 
 type IProps = {
@@ -23,7 +23,6 @@ type IProps = {
   isShowMatchSideBarMobile: boolean,
   isShowUserCardMobile: boolean,
   closeAnotherWindowMobile: VoidFunction
-
 }
 
 export const ChatRoom = ({
@@ -187,7 +186,7 @@ export const ChatRoom = ({
   const disableButtonGetNewMessage = !Boolean(chat.currentUserMessages?.oldestMessagesId);
 
   const setNewMessage = ({target: {value}}: any) => {
-    if (value === '' || (value.match(russianLetter) && !value.match(forbiddenForText))) {
+    if (value === '' || ((value.match(russianLetter) || value.match(englishLetter)) && !value.match(forbiddenForChat))) {
       setMessage(value)
     }
   }

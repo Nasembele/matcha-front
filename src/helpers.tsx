@@ -11,6 +11,7 @@ export const russianLetter = new RegExp(/[А-Яа-яёЁ()-]/u);
 export const englishLetter = new RegExp(/[A-Za-z]/);
 export const forbiddenForLocation = new RegExp(/^[$%@#/^&*!?.0-9А-Яа-яёЁ()'"<>=+]$/u);
 export const forbiddenForText = new RegExp(/[0-9A-Za-z@'"<>=+/]/u);
+export const forbiddenForChat = new RegExp(/[@'"<>=+/]/u);
 
 export const getBase64 = (file: File) => {
   return new Promise((resolve, reject) => {
