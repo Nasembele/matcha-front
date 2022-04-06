@@ -56,6 +56,16 @@ export default function ChatReducer(state: IChat = initialChatState, action: IAc
         ...state,
         visits: [...state.visits, ...action.payload]
       };
+    case constants.UPDATE_USER_LIKES:
+      return {
+        ...state,
+        likes: action.payload
+      };
+    case constants.UPDATE_USER_VISITS:
+      return {
+        ...state,
+        visits: action.payload
+      };
     case constants.SET_IS_OPEN_CHAT_ROOM:
       return {
         ...state,

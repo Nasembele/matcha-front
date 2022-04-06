@@ -60,6 +60,7 @@ const MainPage = () => {
   }, [chat.isOpenChatRoom, chat.toUserId, chat.userInChat]);
 
   useEffect(() => {
+    //todo открывается канал
     if (sessionStorage.chatFingerprint) {
       const dateForChannel = {
         chatFingerprint: sessionStorage.chatFingerprint,

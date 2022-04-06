@@ -31,6 +31,16 @@ export const setUserVisitsAC = (visits: IMatches) => ({
   payload: visits
 });
 
+export const updateUserLikesAC = (likes: IMatches) => ({
+  type: constants.UPDATE_USER_LIKES,
+  payload: likes
+});
+
+export const updateUserVisitsAC = (visits: IMatches) => ({
+  type: constants.UPDATE_USER_VISITS,
+  payload: visits
+});
+
 export const setIsOpenChatRoom = (isOpenChatRoom: boolean, chatId?: number, toUserId?: number) => ({
   type: constants.SET_IS_OPEN_CHAT_ROOM,
   payload: {isOpenChatRoom, chatId, toUserId}

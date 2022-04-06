@@ -44,7 +44,7 @@ export const MatchSideBar = ({
     const numberLastId = chat.pairs?.length - 1;
     const lastId = chat.pairs[numberLastId]?.id;
 
-    dispatch(getUserMatch('MATCH', setUserMatchesAC, false, lastId));
+    dispatch(getUserMatch('PAIR', setUserMatchesAC, false, lastId));
   };
 
   const getNewMessages = () => {

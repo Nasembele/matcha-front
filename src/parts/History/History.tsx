@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import style from './History.module.css';
 import Title from "antd/es/typography/Title";
 import {getUserAnotherMatch, getUserByIdWithAction} from "../../api";
-import {setUserLikesAC, setUserVisitsAC} from "../../components/Chat/ChatAC";
+import {setUserLikesAC, setUserVisitsAC, updateUserLikesAC, updateUserVisitsAC} from "../../components/Chat/ChatAC";
 import {useDispatch, useSelector} from "react-redux";
 import {IMatches, IState} from "../../types";
 import {Avatar} from "antd";
@@ -43,8 +43,8 @@ const History = ({
   }
 
   useEffect(() => {
-    dispatch(getUserAnotherMatch('LIKE', setUserLikesAC));
-    dispatch(getUserAnotherMatch('VISIT', setUserVisitsAC));
+    dispatch(getUserAnotherMatch('LIKE', updateUserLikesAC));
+    dispatch(getUserAnotherMatch('VISIT', updateUserVisitsAC));
   }, [dispatch])
 
   const getNewLikes = () => {
