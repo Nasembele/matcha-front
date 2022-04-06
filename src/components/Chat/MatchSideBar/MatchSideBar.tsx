@@ -128,13 +128,13 @@ export const MatchSideBar = ({
         <div className={style.sidebar_content}>
           <div>
             <Title level={5} className={style.title}>Пары</Title>
-            <div className={style.message_pairs}
+            <div className={style.pair_users}
                  onScroll={onScrollMatches}
                  ref={pairsContainer}
             >
               {chat.pairs?.map((el: IMatches) => {
                 return !el.chatId &&
-                  <div className={style.message_pair} onClick={showChatRoom(el, false)} key={el.id}>
+                  <div className={style.pair_user} onClick={showChatRoom(el, false)} key={el.id}>
                     {el.icon?.content ?
                       <img height='60px'
                            width='60px'

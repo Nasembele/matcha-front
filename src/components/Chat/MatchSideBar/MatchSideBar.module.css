@@ -11,6 +11,10 @@
         display: flex;
         justify-content: space-between;
     }
+
+    .pair_users {
+        width: 291px;
+    }
 }
 
 @media (max-width: 950px) {
@@ -78,19 +82,20 @@
 
 @media (min-height: 600px) {
     .message_pairs {
-        max-height: 35vh;
+        max-height: 62vh;
         overflow-y: scroll;
     }
 
     .pair_users {
         display: flex;
         margin-bottom: 20px;
+        overflow-x: scroll;
     }
 }
 
 @media (max-height: 600px) {
     .message_pairs {
-        max-height: calc(35vh - 75px);
+        max-height: calc(62vh - 75px);
         overflow-y: scroll;
     }
 
@@ -98,6 +103,7 @@
         display: flex;
         margin-bottom: 20px;
         height: 60px;
+        overflow-x: scroll;
     }
 }
 
