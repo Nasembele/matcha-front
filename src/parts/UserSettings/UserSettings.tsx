@@ -238,11 +238,9 @@ const UserSettings = () => {
               <img height={'200px'}
                    src={`data:${userPhotos[photoIndex].format};base64,${userPhotos[photoIndex].content}`}
                    alt='фото'/>
-              {photoIndex === userPhotos.length - 1 &&
-               <div className={style.image_bucket}>
+              <div className={style.image_bucket}>
                 <DeleteOutlined onClick={deletePhoto(photoIndex)}/>
               </div>
-              }
             </div>
             :
             <div className={style.empty_image}>

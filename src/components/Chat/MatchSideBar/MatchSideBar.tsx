@@ -143,8 +143,8 @@ export const MatchSideBar = ({
                       <Avatar shape="square" size={50} icon={<UserOutlined/>}
                               style={{backgroundColor: '#fde3cf', height: '60px', width: '60px'}}/>
                     }
-                    <div className={style.text_container}>
-                      <div className={style.name}>
+                    <div>
+                      <div className={cc(style.name, style.pair_name)}>
                         {el.firstName}
                       </div>
                     </div>
