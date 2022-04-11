@@ -240,7 +240,7 @@ export const validateLink = (currentURL: string) => (dispatch: Dispatch) => {
     });
 }
 
-export const saveChangeAccPostQuery = (newCard: IUserCard) => () => {
+export const saveChangeAccPostQuery = (newCard: IUserCard, hasGetUser?: boolean) => (dispatch: any) => {
   const prepareNewCard = {
     biography: newCard.biography || '',
     workPlace: newCard.workPlace || '',
@@ -252,6 +252,9 @@ export const saveChangeAccPostQuery = (newCard: IUserCard) => () => {
   }
   usersAPI.saveAccountChanges(prepareNewCard)
     .then(() => {
+      if (hasGetUser) {
+        dispatch(getUsersPostQuery());
+      }
     })
     .catch(() => {
     });

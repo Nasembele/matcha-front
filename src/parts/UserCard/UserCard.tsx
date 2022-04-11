@@ -146,7 +146,10 @@ const UserCard = ({
           {
             status.status === 'OFFLINE' &&
             <Text italic className={style.last_action}>
-              {`Был(а) в сети ${moment(status.lastAction).format('ll')} в ${moment(status.lastAction).format('LT')}`}
+              {status.lastAction ?
+                `Был(а) в сети ${moment(status.lastAction).format('ll')} в ${moment(status.lastAction).format('LT')}` :
+                `Был(а) в сети давно`
+              }
             </Text>
           }
         </div>
@@ -197,10 +200,13 @@ const UserCard = ({
           <div className={style.tags_container}>
             {
               user.card.tags?.map((el: string) => {
-                return <Tag color="magenta" style={{marginTop: '5px'}} key={el}>
-                  {`#${el}`}
-                </Tag>
-              })
+                  if (el) {
+                    return <Tag color="magenta" style={{marginTop: '5px'}} key={el}>
+                      {`#${el}`}
+                    </Tag>
+                  } else return ''
+                }
+              )
             }
           </div>
           <div className={style.biography_text}>

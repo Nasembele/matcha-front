@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import style from './UserSettings.module.css';
 import {tagsArray} from "../../components/MainPage/MainPage.helpers";
 import {useDispatch, useSelector} from "react-redux";
@@ -86,19 +86,6 @@ const UserSettings = () => {
     }
   }
 
-  const selectProps = {
-    mode: 'multiple' as const,
-    style: {width: '100%'},
-    maxTagCount: 5,
-    size: 'small' as const,
-    tags: userAccount.card.tags,
-    value: userAccount.card.tags,
-    options,
-    onChange: (newValue: string[]) => changeTags(newValue),
-    onBlur: () => onClickSaveChangesAcc(),
-    placeholder: 'Интересы',
-  };
-
   const changePhotoIndex = (number: number) => () => {
     setPhotoIndex(prevState => prevState + number);
   };
@@ -127,8 +114,8 @@ const UserSettings = () => {
     }
   };
 
-  const onClickSaveChangesAcc = () => {
-    dispatch(saveChangeAccPostQuery(userAccount.card));
+  const onClickSaveChangesAcc = (hasGetUser: boolean) => () => {
+    dispatch(saveChangeAccPostQuery(userAccount.card, hasGetUser));
   };
 
   const changeGender = (gender: string) => {
@@ -138,6 +125,24 @@ const UserSettings = () => {
   const changeSexualPreference = (preference: string) => {
     dispatch(changeSexualPreferenceAC(preference));
   };
+
+  const selectProps = {
+    mode: 'multiple' as const,
+    style: {width: '100%'},
+    maxTagCount: 5,
+    size: 'small' as const,
+    tags: userAccount.card.tags,
+    value: userAccount.card.tags,
+    options,
+    onChange: (newValue: string[]) => changeTags(newValue),
+    onBlur: onClickSaveChangesAcc(false),
+    placeholder: 'Интересы',
+  };
+
+  useEffect(() => {
+    onClickSaveChangesAcc(false)();
+    // eslint-disable-next-line
+  }, [mainPage.account.card.tags]);
 
   const changePhoto = (number: number) => (e: any) => {
     if (e.file?.status === 'done' &&
@@ -274,7 +279,7 @@ const UserSettings = () => {
           size={'small'}
           defaultValue={userAccount.card.gender}
           className={style.elem}
-          onBlur={onClickSaveChangesAcc}
+          onBlur={onClickSaveChangesAcc(true)}
         >
           <Option value="male">М</Option>
           <Option value="female">Ж</Option>
@@ -285,7 +290,7 @@ const UserSettings = () => {
           size={'small'}
           style={{width: '90px', marginLeft: '10px'}}
           defaultValue={userAccount.card.sexualPreference}
-          onBlur={onClickSaveChangesAcc}
+          onBlur={onClickSaveChangesAcc(true)}
         >
           <Option value="getero">гетеро</Option>
           <Option value="bisexual">би</Option>
@@ -297,7 +302,7 @@ const UserSettings = () => {
         </Select>
         <TextArea
           onChange={changeEducation}
-          onBlur={onClickSaveChangesAcc}
+          onBlur={onClickSaveChangesAcc(false)}
           placeholder="Образование"
           autoSize={{minRows: 1, maxRows: 1}}
           value={userAccount?.card?.education}
@@ -305,7 +310,7 @@ const UserSettings = () => {
         />
         <TextArea
           onChange={changePosition}
-          onBlur={onClickSaveChangesAcc}
+          onBlur={onClickSaveChangesAcc(false)}
           placeholder="Должность"
           autoSize={{minRows: 1, maxRows: 1}}
           value={userAccount?.card?.position}
@@ -313,7 +318,7 @@ const UserSettings = () => {
         />
         <TextArea
           onChange={changeWorkPlace}
-          onBlur={onClickSaveChangesAcc}
+          onBlur={onClickSaveChangesAcc(false)}
           placeholder="Место работы"
           autoSize={{minRows: 1, maxRows: 1}}
           value={userAccount?.card?.workPlace}
@@ -321,7 +326,7 @@ const UserSettings = () => {
         />
         <TextArea
           onChange={changeBiography}
-          onBlur={onClickSaveChangesAcc}
+          onBlur={onClickSaveChangesAcc(false)}
           placeholder="Биография"
           autoSize={{minRows: 2, maxRows: 3}}
           value={userAccount?.card?.biography}
