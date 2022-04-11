@@ -21,6 +21,7 @@
 
     .side_bar_container {
         display: none;
+        width: 100%;
     }
 }
 

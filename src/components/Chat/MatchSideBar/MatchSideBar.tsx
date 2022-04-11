@@ -130,6 +130,7 @@ export const MatchSideBar = ({
             <Title level={5} className={style.title}>Пары</Title>
             <div className={style.pair_users}
                  onScroll={onScrollMatches}
+                 onWheel={onScrollMatches}
                  ref={pairsContainer}
             >
               {chat.pairs?.map((el: IMatches) => {

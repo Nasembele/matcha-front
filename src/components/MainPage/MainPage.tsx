@@ -60,8 +60,7 @@ const MainPage = () => {
   }, [chat.isOpenChatRoom, chat.toUserId, chat.userInChat]);
 
   useEffect(() => {
-    //todo открывается канал
-    if (sessionStorage.chatFingerprint) {
+    if (sessionStorage.chatFingerprint && sessionStorage.chatToken && sessionStorage.userId) {
       const dateForChannel = {
         chatFingerprint: sessionStorage.chatFingerprint,
         chatToken: sessionStorage.chatToken,
@@ -70,7 +69,7 @@ const MainPage = () => {
       dispatch(startMessagesListening(dateForChannel));
     }
     // eslint-disable-next-line
-  }, [dispatch, sessionStorage.chatFingerprint]);
+  }, [dispatch, sessionStorage.chatFingerprint, sessionStorage.chatToken, sessionStorage.userId]);
 
   const notificationContainer = document.getElementById("not-cont");
 

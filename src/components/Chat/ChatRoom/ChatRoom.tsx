@@ -75,8 +75,7 @@ export const ChatRoom = ({
   }
 
   const sendPhoto = (e: any) => {
-    if (e.file?.status === 'done' &&
-      (e.file?.type === 'image/jpeg' || e.file?.type === 'image/png' || e.file?.type === 'image/jpg')) {
+    if (e.file?.status === 'done') {
       getBase64(e.file.originFileObj).then(
         res => {
           const newMessage = {

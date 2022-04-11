@@ -1,8 +1,3 @@
-.match_side_bar {
-    height: 100%;
-    width: 100%;
-}
-
 @media (min-width: 950px) {
     .menu {
         height: 75px;
@@ -13,13 +8,23 @@
     }
 
     .pair_users {
-        width: 291px;
+        width: 100%;
+    }
+
+    .match_side_bar {
+        height: 100%;
+        width: 25vw;
     }
 }
 
 @media (max-width: 950px) {
     .menu {
         display: none;
+    }
+
+    .match_side_bar {
+        height: 100%;
+        width: 100%;
     }
 }
 
