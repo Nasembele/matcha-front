@@ -7,10 +7,6 @@
         justify-content: space-between;
     }
 
-    .pair_users {
-        width: 100%;
-    }
-
     .match_side_bar {
         height: 100%;
         width: 25vw;
@@ -88,30 +84,23 @@
     margin-bottom: 5px;
 }
 
-@media (min-height: 600px) {
+@media (min-height: 740px) {
     .message_pairs {
         max-height: 62vh;
         overflow-y: scroll;
     }
-
-    .pair_users {
-        display: flex;
-        margin-bottom: 20px;
-        overflow-x: scroll;
-    }
 }
 
-@media (max-height: 600px) {
+.pair_users {
+    margin-bottom: 20px;
+    max-height: 130px;
+    overflow-y: scroll;
+}
+
+@media (max-height: 740px) {
     .message_pairs {
         max-height: calc(62vh - 75px);
         overflow-y: scroll;
-    }
-
-    .pair_users {
-        display: flex;
-        margin-bottom: 20px;
-        height: 60px;
-        overflow-x: scroll;
     }
 }
 

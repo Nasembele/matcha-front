@@ -130,12 +130,11 @@ export const MatchSideBar = ({
             <Title level={5} className={style.title}>Пары</Title>
             <div className={style.pair_users}
                  onScroll={onScrollMatches}
-                 onWheel={onScrollMatches}
                  ref={pairsContainer}
             >
               {chat.pairs?.map((el: IMatches) => {
                 return !el.chatId &&
-                  <div className={style.pair_user} onClick={showChatRoom(el, false)} key={el.id}>
+                  <div className={style.message_pair} onClick={showChatRoom(el, false)} key={el.id}>
                     {el.icon?.content ?
                       <img height='60px'
                            width='60px'
@@ -144,8 +143,8 @@ export const MatchSideBar = ({
                       <Avatar shape="square" size={50} icon={<UserOutlined/>}
                               style={{backgroundColor: '#fde3cf', height: '60px', width: '60px'}}/>
                     }
-                    <div>
-                      <div className={cc(style.name, style.pair_name)}>
+                    <div className={style.text_container}>
+                      <div className={style.name}>
                         {el.firstName}
                       </div>
                     </div>
