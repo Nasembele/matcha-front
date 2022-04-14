@@ -75,7 +75,10 @@ export const ChatRoom = ({
   }
 
   const sendPhoto = (e: any) => {
-    if (e.file?.status === 'done') {
+    if (e.file?.status === 'done' &&
+      (e.file?.type === 'image/png' || e.file?.type === 'image/tiff' || e.file?.type === 'image/psd'
+        || e.file?.type === 'image/bmp' || e.file?.type === 'image/hdr'|| e.file?.type === 'image/jpeg'
+        || e.file?.type === 'image/tga' || e.file?.type === 'image/webp' || e.file?.type === 'image/sgi' || e.file?.type === 'image/jpg')) {
       getBase64(e.file.originFileObj).then(
         res => {
           const newMessage = {
