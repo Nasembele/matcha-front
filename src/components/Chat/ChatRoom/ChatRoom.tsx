@@ -90,7 +90,7 @@ export const ChatRoom = ({
                 fromId: fromUserId,
                 toId: chat.toUserId,
                 type: "IMAGE",
-                typeInfo: e.file.type,
+                typeInfo: e.file.type.substr(6),
                 content: res
               }
             }
